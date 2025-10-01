@@ -8,7 +8,7 @@
       </div>
 
       <!-- Featured Content -->
-      <section v-if="featuredContent.length > 0" class="featured-section">
+      <section v-if="featuredContent?.length > 0" class="featured-section">
         <h2>Featured Articles</h2>
         <div class="grid grid-3">
           <div 
@@ -27,8 +27,8 @@
               <h3>{{ article.title }}</h3>
               <p>{{ article.content.summary }}</p>
               <div class="article-meta">
-                <span class="reading-time">{{ article.metadata.readingTime }} min read</span>
-                <span class="difficulty">{{ article.metadata.difficulty }}</span>
+                <span class="reading-time">{{ article.metadata?.readingTime || 5 }} min read</span>
+                <span class="difficulty">{{ article.metadata?.difficulty || 'beginner' }}</span>
               </div>
               <router-link :to="`/education/${article.slug}`" class="btn btn-primary">Read More</router-link>
             </div>
@@ -92,7 +92,7 @@
           <p>Loading articles...</p>
         </div>
         
-        <div v-else-if="articles.length === 0" class="empty-state">
+        <div v-else-if="articles?.length === 0" class="empty-state">
           <h3>No articles found</h3>
           <p>Try adjusting your filters or search terms</p>
         </div>
@@ -116,15 +116,15 @@
               <div class="article-meta">
                 <div class="meta-item">
                   <span class="icon">⏱️</span>
-                  <span>{{ article.metadata.readingTime }} min</span>
+                  <span>{{ article.metadata?.readingTime || 5 }} min</span>
                 </div>
                 <div class="meta-item">
                   <span class="icon">📊</span>
-                  <span>{{ article.metadata.difficulty }}</span>
+                  <span>{{ article.metadata?.difficulty || 'beginner' }}</span>
                 </div>
                 <div class="meta-item" v-if="article.engagement?.rating?.count > 0">
                   <span class="icon">⭐</span>
-                  <span>{{ article.engagement.rating.average.toFixed(1) }}</span>
+                  <span>{{ article.engagement?.rating?.average?.toFixed(1) || '4.5' }}</span>
                 </div>
               </div>
               <router-link :to="`/education/${article.slug}`" class="btn btn-outline btn-sm">
@@ -159,7 +159,7 @@
       </section>
 
       <!-- Popular Articles Sidebar -->
-      <section v-if="popularArticles.length > 0" class="popular-section">
+      <section v-if="popularArticles?.length > 0" class="popular-section">
         <h3>Popular Articles</h3>
         <div class="popular-list">
           <div 
@@ -177,7 +177,7 @@
               <h5>{{ article.title }}</h5>
               <div class="popular-meta">
                 <span>{{ article.engagement?.views || 0 }} views</span>
-                <span>{{ article.metadata.readingTime }} min read</span>
+                <span>{{ article.metadata?.readingTime || 5 }} min read</span>
               </div>
               <router-link :to="`/education/${article.slug}`" class="read-link">
                 Read →
@@ -234,10 +234,11 @@ export default {
     
     async loadFeaturedContent() {
       try {
-        const response = await educationService.getFeaturedContent()
-        this.featuredContent = response.content
+        const featuredContent = await educationService.getFeaturedContent()
+        this.featuredContent = featuredContent || []
       } catch (error) {
         console.error('Error loading featured content:', error)
+        this.featuredContent = []
       }
     },
     
@@ -252,10 +253,11 @@ export default {
     
     async loadPopularArticles() {
       try {
-        const response = await educationService.getPopularContent(5)
-        this.popularArticles = response.content
+        const popularArticles = await educationService.getPopularContent(5)
+        this.popularArticles = popularArticles || []
       } catch (error) {
         console.error('Error loading popular articles:', error)
+        this.popularArticles = []
       }
     },
     

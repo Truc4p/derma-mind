@@ -86,7 +86,7 @@ const userSchema = new mongoose.Schema({
 })
 
 // Index for better performance
-userSchema.index({ email: 1 })
+// Note: email index is automatically created by unique: true
 userSchema.index({ 'skinProfile.skinType': 1 })
 
 // Hash password before saving

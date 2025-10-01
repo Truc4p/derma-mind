@@ -161,7 +161,7 @@ const educationContentSchema = new mongoose.Schema({
 })
 
 // Indexes for better performance
-educationContentSchema.index({ slug: 1 })
+// Note: slug index is automatically created by unique: true
 educationContentSchema.index({ category: 1, subcategory: 1 })
 educationContentSchema.index({ status: 1, publishDate: -1 })
 educationContentSchema.index({ tags: 1 })

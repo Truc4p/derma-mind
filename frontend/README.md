@@ -100,7 +100,7 @@ npm run preview
 ```
 
 ### Available Scripts
-- `npm run dev` - Start development server (http://localhost:5173)
+- `npm run dev` - Start development server (http://localhost:5175)
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
@@ -277,7 +277,7 @@ Create `.env` files for different environments:
 
 ```env
 # .env.development
-VITE_API_BASE_URL=http://localhost:3000/api
+VITE_API_BASE_URL=http://localhost:3004/api
 
 # .env.production
 VITE_API_BASE_URL=https://api.skinstudy.com/api

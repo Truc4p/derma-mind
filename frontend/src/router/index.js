@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import SkinAnalysis from '../views/SkinAnalysis.vue'
 import Education from '../views/Education.vue'
+import EducationArticle from '../views/EducationArticle.vue'
 import SkincareRoutines from '../views/SkincareRoutines.vue'
 import Ingredients from '../views/Ingredients.vue'
 import About from '../views/About.vue'
@@ -21,6 +22,11 @@ const routes = [
     path: '/education',
     name: 'Education',
     component: Education
+  },
+  {
+    path: '/education/:slug',
+    name: 'EducationArticle',
+    component: EducationArticle
   },
   {
     path: '/routines',

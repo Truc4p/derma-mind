@@ -14,7 +14,7 @@ const analyzeSkin = (responses) => {
   
   // Determine skin type based on responses
   const oilyIndicators = ['oily', 'shiny', 'large']
-  const dryIndicators = ['tight', 'flaky', 'rough', 'small']
+  const dryIndicators = ['tight', 'flaky', 'rough', 'dull', 'small']
   const sensitiveIndicators = ['moderate', 'severe']
   
   let oilyScore = 0

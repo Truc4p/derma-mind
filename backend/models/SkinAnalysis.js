@@ -19,7 +19,7 @@ const skinAnalysisSchema = new mongoose.Schema({
     },
     skinAppearance: {
       type: String,
-      enum: ['shiny', 'matte', 'patchy', 'smooth', 'rough'],
+      enum: ['shiny', 'matte', 'patchy', 'dull', 'smooth', 'rough'],
       required: true
     },
     poreSize: {
@@ -139,8 +139,8 @@ const skinAnalysisSchema = new mongoose.Schema({
 })
 
 // Indexes for better performance
+// Note: sessionId index is automatically created by unique: true
 skinAnalysisSchema.index({ user: 1, analysisDate: -1 })
-skinAnalysisSchema.index({ sessionId: 1 })
 skinAnalysisSchema.index({ 'results.skinType': 1 })
 skinAnalysisSchema.index({ analysisDate: -1 })
 

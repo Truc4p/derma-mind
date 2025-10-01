@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3004/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -110,17 +110,17 @@ export const educationService = {
 
   async getContentBySlug(slug) {
     const response = await api.get(`/education/${slug}`)
-    return response.data
+    return response.data.content
   },
 
   async getPopularContent(limit = 6) {
     const response = await api.get('/education/popular', { params: { limit } })
-    return response.data
+    return response.data.content
   },
 
   async getFeaturedContent() {
     const response = await api.get('/education/featured')
-    return response.data
+    return response.data.content
   },
 
   async getRecommendations(skinType, concerns = []) {

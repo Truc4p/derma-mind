@@ -394,7 +394,7 @@ Create a `.env` file with the following variables:
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=3004
 NODE_ENV=development
 
 # Database
@@ -405,7 +405,7 @@ JWT_SECRET=your-super-secret-jwt-key-here
 JWT_EXPIRES_IN=7d
 
 # CORS
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+ALLOWED_ORIGINS=http://localhost:5175,http://localhost:3004
 
 # Rate Limiting (optional)
 RATE_LIMIT_WINDOW_MS=900000
@@ -543,7 +543,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 COPY . .
-EXPOSE 3000
+EXPOSE 3004
 CMD ["npm", "start"]
 ```
 

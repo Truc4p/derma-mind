@@ -409,6 +409,25 @@ export default {
       }
     }
   },
+  created() {
+    // Create debounced search function with proper context
+    this.debouncedSearchInput = utils.debounce(async () => {
+      if (this.searchQuery && this.searchQuery.length >= 2) {
+        try {
+          const response = await ingredientsService.getSearchSuggestions(this.searchQuery)
+          this.searchSuggestions = response.suggestions
+          this.showSuggestions = true
+        } catch (error) {
+          console.error('Error getting search suggestions:', error)
+        }
+      } else {
+        this.searchSuggestions = []
+        this.showSuggestions = false
+      }
+      
+      this.loadIngredients(1)
+    }, 300)
+  },
   mounted() {
     this.loadInitialData()
   },
@@ -474,22 +493,10 @@ export default {
       }
     },
     
-    onSearchInput: utils.debounce(async function() {
-      if (this.searchQuery.length >= 2) {
-        try {
-          const response = await ingredientsService.getSearchSuggestions(this.searchQuery)
-          this.searchSuggestions = response.suggestions
-          this.showSuggestions = true
-        } catch (error) {
-          console.error('Error getting search suggestions:', error)
-        }
-      } else {
-        this.searchSuggestions = []
-        this.showSuggestions = false
-      }
-      
-      this.loadIngredients(1)
-    }, 300),
+    onSearchInput() {
+      // Call the debounced function created in the created lifecycle
+      this.debouncedSearchInput()
+    },
     
     async selectIngredient(name) {
       this.showSuggestions = false
