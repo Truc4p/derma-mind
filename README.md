@@ -131,15 +131,15 @@ skin-study/
    ```
 
 4. **Access the application**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:3000
+   - Frontend: http://localhost:5175
+   - Backend API: http://localhost:3004
 
 ### Environment Configuration
 
 Create a `.env` file in the backend directory:
 
 ```env
-PORT=3000
+PORT=3004
 MONGODB_URI=mongodb://localhost:27017/skinstudy
 JWT_SECRET=your-super-secret-jwt-key
 NODE_ENV=development
