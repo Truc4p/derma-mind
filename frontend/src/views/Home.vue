@@ -103,13 +103,40 @@ export default {
 </script>
 
 <style scoped>
+/* Hero gradient background */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
   padding: 4rem 0;
   min-height: 80vh;
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--primary-950);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(251, 249, 251, 0.3);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(243, 176, 250, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(230, 120, 249, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(252, 248, 252, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .hero-content {
@@ -123,13 +150,17 @@ export default {
   font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: white;
+  color: var(--primary-950);
+  background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-600) 50%, var(--primary-700) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-description {
   font-size: 1.25rem;
   margin-bottom: 2rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--primary-800);
 }
 
 .hero-buttons {
@@ -171,7 +202,7 @@ export default {
   left: 50px;
   width: 100px;
   height: 100px;
-  background: rgba(255, 107, 157, 0.3);
+  background: rgba(201, 127, 152, 0.3);
   animation-delay: 0s;
 }
 
@@ -180,7 +211,7 @@ export default {
   right: 20px;
   width: 80px;
   height: 80px;
-  background: rgba(78, 205, 196, 0.3);
+  background: rgba(164, 74, 107, 0.25);
   animation-delay: 1s;
 }
 
@@ -189,7 +220,7 @@ export default {
   left: 20px;
   width: 120px;
   height: 120px;
-  background: rgba(247, 231, 206, 0.3);
+  background: rgba(240, 215, 204, 0.4);
   animation-delay: 2s;
 }
 
@@ -227,7 +258,7 @@ export default {
 
 .stats {
   padding: 4rem 0;
-  background: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
 }
 
@@ -239,16 +270,18 @@ export default {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  color: white;
 }
 
 .stat-label {
   font-size: 1.1rem;
-  opacity: 0.9;
+  opacity: 0.95;
+  color: white;
 }
 
 .cta {
   padding: 6rem 0;
-  background: var(--text-dark);
+  background: var(--primary-950);
   color: white;
 }
 

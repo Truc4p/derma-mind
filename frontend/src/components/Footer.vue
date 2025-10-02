@@ -59,10 +59,36 @@ export default {
 
 <style scoped>
 .footer {
-  background: var(--text-dark);
-  color: white;
+  background: var(--gradient-hero);
+  color: var(--primary-950);
   padding: 3rem 0 1rem;
   margin-top: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(251, 249, 251, 0.3);
+}
+
+.footer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(243, 176, 250, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(230, 120, 249, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(252, 248, 252, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .footer-content {
@@ -70,16 +96,19 @@ export default {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
 }
 
 .footer-section h4 {
-  color: white;
+  color: var(--primary-800);
   margin-bottom: 1rem;
   font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .footer-section p {
-  color: #a0aec0;
+  color: var(--primary-700);
   margin-bottom: 1rem;
 }
 
@@ -93,14 +122,15 @@ export default {
 
 .footer-links a,
 .footer-links router-link {
-  color: #a0aec0;
+  color: var(--primary-700);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .footer-links a:hover,
 .footer-links router-link:hover {
-  color: var(--primary-color);
+  color: var(--primary-900);
+  transform: translateX(5px);
 }
 
 .social-links {
@@ -115,26 +145,31 @@ export default {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: var(--primary-color);
+  background: var(--gradient-primary);
   border-radius: 50%;
   text-decoration: none;
   font-size: 1.2rem;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-soft);
 }
 
 .social-link:hover {
   transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
 .footer-bottom {
-  border-top: 1px solid #4a5568;
+  border-top: 1px solid var(--primary-300);
   padding-top: 1rem;
   text-align: center;
-  color: #a0aec0;
+  color: var(--primary-700);
+  position: relative;
+  z-index: 10;
 }
 
 .footer-bottom p {
   margin-bottom: 0.5rem;
+  color: var(--primary-700);
 }
 
 @media (max-width: 768px) {
