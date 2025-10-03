@@ -1178,7 +1178,7 @@ Understanding the science behind skincare helps you make informed decisions and 
 ]
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skinstudy')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')
   .then(async () => {
     console.log('✅ Connected to MongoDB')
     

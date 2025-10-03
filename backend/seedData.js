@@ -363,7 +363,7 @@ const ingredientsData = [
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skinstudy')
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')
     console.log('✅ Connected to MongoDB')
 
     // Clear existing ingredients
@@ -375,13 +375,21 @@ async function seedDatabase() {
     console.log(`✅ Inserted ${insertedIngredients.length} ingredients`)
 
     // Create text index for search functionality
-    await Ingredient.collection.createIndex({ 
-      name: "text", 
-      alternativeNames: "text", 
-      description: "text",
-      "benefits.benefit": "text"
-    })
-    console.log('✅ Created text search index')
+    try {
+      await Ingredient.collection.createIndex({ 
+        name: "text", 
+        alternativeNames: "text", 
+        description: "text",
+        "benefits.benefit": "text"
+      })
+      console.log('✅ Created text search index')
+    } catch (indexError) {
+      if (indexError.code === 85) {
+        console.log('ℹ️  Text search index already exists (skipping)')
+      } else {
+        throw indexError
+      }
+    }
 
     console.log('🎉 Database seeding completed successfully!')
     

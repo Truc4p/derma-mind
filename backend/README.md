@@ -398,7 +398,7 @@ PORT=3004
 NODE_ENV=development
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/skinstudy
+MONGODB_URI=mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority
 
 # Authentication
 JWT_SECRET=your-super-secret-jwt-key-here
