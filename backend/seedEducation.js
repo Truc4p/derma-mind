@@ -113,7 +113,7 @@ Understanding your skin type is just the beginning. Each type requires different
     },
     media: {
       featuredImage: {
-        url: "/images/skin-types-guide.jpg",
+        url: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         alt: "Different skin types illustrated",
         caption: "Visual guide to the five main skin types"
       }
@@ -289,7 +289,7 @@ Remember: consistency is key, and results typically become visible after 12-16 w
     },
     media: {
       featuredImage: {
-        url: "/images/retinol-science.jpg",
+        url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         alt: "Molecular structure of retinol",
         caption: "The molecular structure and conversion pathway of retinol"
       }
@@ -523,7 +523,7 @@ Focus on protecting your skin's barrier, staying consistent, and adjusting as ne
     },
     media: {
       featuredImage: {
-        url: "/images/skincare-routine-steps.jpg",
+        url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         alt: "Skincare products arranged in application order",
         caption: "The proper order for applying skincare products"
       }
@@ -830,7 +830,7 @@ With the right approach and consistency, most people can achieve significant imp
     },
     media: {
       featuredImage: {
-        url: "/images/acne-types.jpg",
+        url: "https://images.unsplash.com/photo-1576426863848-c21f53c60b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         alt: "Different types of acne lesions",
         caption: "Visual guide to identifying different types of acne"
       }
@@ -1141,7 +1141,7 @@ Understanding the science behind skincare helps you make informed decisions and 
     },
     media: {
       featuredImage: {
-        url: "/images/skincare-myths.jpg",
+        url: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         alt: "Common skincare myths vs facts",
         caption: "Separating skincare fact from fiction"
       }
