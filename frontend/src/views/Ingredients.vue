@@ -9,7 +9,7 @@
 
       <!-- Search and Filters -->
       <section class="search-section">
-        <div class="search-container card">
+        <div class="search-container">
           <div class="search-box">
             <input 
               v-model="searchQuery"
@@ -596,9 +596,11 @@ export default {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-lg);
-  z-index: 100;
-  max-height: 300px;
+  z-index: 1000;
+  max-height: 400px;
   overflow-y: auto;
+  width: 100%;
+  max-width: 500px;
 }
 
 .suggestion-item {
@@ -649,7 +651,7 @@ export default {
 }
 
 .top-rated-card:hover {
-  transform: translateY(-4px);
+  border-color: var(--primary-color);
 }
 
 .ingredient-header {

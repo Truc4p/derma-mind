@@ -618,7 +618,6 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   display: flex;
   align-items: center;
   justify-content: center;

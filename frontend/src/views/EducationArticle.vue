@@ -34,7 +34,7 @@
         
         <div class="article-info">
           <div class="author-info">
-            <span class="author">By {{ article.author }}</span>
+            <span class="author">By {{ formatAuthor(article.author) }}</span>
             <span class="date">{{ formatDate(article.publishDate || article.metadata?.lastUpdated) }}</span>
           </div>
           
@@ -53,8 +53,8 @@
       </div>
 
       <!-- Article Image -->
-      <div v-if="article.media?.featuredImage" class="article-image">
-        <img :src="article.media.featuredImage" :alt="article.title" />
+      <div v-if="article.media?.featuredImage?.url" class="article-image">
+        <img :src="article.media.featuredImage.url" :alt="article.media.featuredImage.alt || article.title" />
       </div>
 
       <!-- Article Body -->
@@ -229,16 +229,129 @@ export default {
     },
 
     formatContent(content) {
-      // Convert line breaks to HTML and add basic formatting
+      // Convert markdown-style content to HTML
       if (!content || typeof content !== 'string') {
         return '<p>Content not available</p>'
       }
       
-      return content
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>')
-        .replace(/^/, '<p>')
-        .replace(/$/, '</p>')
+      let formatted = content
+        // Convert bold text **text** to <strong>text</strong>
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Convert headers
+        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+      
+      // Split content into lines for better processing
+      const lines = formatted.split('\n')
+      const processedLines = []
+      let currentListType = null // 'ol', 'ul', or null
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim()
+        
+        if (!line) {
+          // Empty line - close any open list and start new paragraph
+          if (currentListType) {
+            processedLines.push(`</${currentListType}>`)
+            currentListType = null
+          }
+          // Add paragraph break only if we're not already ending with a closing tag
+          if (processedLines.length > 0 && !processedLines[processedLines.length - 1].includes('</')) {
+            processedLines.push('</p>')
+          }
+          continue
+        } 
+        
+        if (line.match(/^\d+\./)) {
+          // Numbered list item
+          const text = line.replace(/^\d+\.\s*/, '')
+          if (currentListType !== 'ol') {
+            if (currentListType) processedLines.push(`</${currentListType}>`)
+            processedLines.push('<ol>')
+            currentListType = 'ol'
+          }
+          processedLines.push(`<li>${text}</li>`)
+        } 
+        else if (line.match(/^[•-]\s/) || line.match(/^\s*[•-]\s/)) {
+          // Bullet point
+          const text = line.replace(/^\s*[•-]\s*/, '')
+          if (currentListType !== 'ul') {
+            if (currentListType) processedLines.push(`</${currentListType}>`)
+            processedLines.push('<ul>')
+            currentListType = 'ul'
+          }
+          processedLines.push(`<li>${text}</li>`)
+        } 
+        else if (line.match(/^<h[1-6]>/)) {
+          // Header - close any open lists
+          if (currentListType) {
+            processedLines.push(`</${currentListType}>`)
+            currentListType = null
+          }
+          processedLines.push(line)
+        } 
+        else if (line.includes('<strong>')) {
+          // Bold text (like Results: or Observations:) - close lists and treat as standalone
+          if (currentListType) {
+            processedLines.push(`</${currentListType}>`)
+            currentListType = null
+          }
+          processedLines.push(`<p>${line}</p>`)
+        }
+        else {
+          // Regular text - close lists and start paragraph
+          if (currentListType) {
+            processedLines.push(`</${currentListType}>`)
+            currentListType = null
+          }
+          processedLines.push(`<p>${line}</p>`)
+        }
+      }
+      
+      // Close any remaining open list
+      if (currentListType) {
+        processedLines.push(`</${currentListType}>`)
+      }
+      
+      return processedLines.join('\n')
+    },
+
+    closeOpenLists(processedLines) {
+      if (processedLines.length > 0) {
+        const lastLine = processedLines[processedLines.length - 1]
+        if (lastLine.includes('<li>') && !lastLine.includes('</ul>') && !lastLine.includes('</ol>')) {
+          if (processedLines.some(line => line.includes('<ul>') && !line.includes('</ul>'))) {
+            processedLines.push('</ul>')
+          } else if (processedLines.some(line => line.includes('<ol>') && !line.includes('</ol>'))) {
+            processedLines.push('</ol>')
+          }
+        }
+      }
+    },
+
+    closeOpenTags(processedLines) {
+      if (processedLines.length > 0) {
+        const lastLine = processedLines[processedLines.length - 1]
+        if (lastLine.includes('<li>')) {
+          if (processedLines.some(line => line.includes('<ul>') && !line.includes('</ul>'))) {
+            processedLines.push('</ul>')
+          } else if (processedLines.some(line => line.includes('<ol>') && !line.includes('</ol>'))) {
+            processedLines.push('</ol>')
+          }
+        } else if (!lastLine.includes('<h') && !lastLine.includes('</p>') && lastLine.trim()) {
+          processedLines[processedLines.length - 1] += '</p>'
+        }
+      }
+    },
+
+    formatAuthor(author) {
+      if (!author) return 'Unknown Author'
+      if (typeof author === 'string') return author
+      if (typeof author === 'object' && author.name) {
+        return author.name + (author.credentials ? `, ${author.credentials}` : '')
+      }
+      return 'Unknown Author'
     }
   }
 }
@@ -366,6 +479,59 @@ export default {
 
 .content :deep(p) {
   margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.content :deep(ol) {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  color: var(--color-text-primary);
+}
+
+.content :deep(ul) {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  list-style-type: disc !important;
+  color: var(--color-text-primary);
+}
+
+.content :deep(li) {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  list-style-type: disc !important;
+  color: var(--color-text-primary);
+}
+
+/* Prevent any nested styling */
+.content :deep(ul ul),
+.content :deep(ol ol),
+.content :deep(ul ol),
+.content :deep(ol ul) {
+  display: none;
+}
+
+.content :deep(h1),
+.content :deep(h2),
+.content :deep(h3) {
+  margin: 2rem 0 1rem 0;
+  color: var(--color-text-primary);
+}
+
+.content :deep(h2) {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.content :deep(h3) {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.content :deep(strong) {
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
 .key-points,
@@ -441,11 +607,9 @@ export default {
   border-radius: 0.5rem;
   padding: 1.5rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .article-card:hover {
-  transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 

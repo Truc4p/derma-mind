@@ -86,13 +86,11 @@ p {
   background: var(--background-white);
   border-radius: var(--border-radius);
   padding: 24px;
-  box-shadow: var(--shadow);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
 }
 
 .grid {

@@ -14,7 +14,8 @@
           <div 
             v-for="article in featuredContent" 
             :key="article._id"
-            class="featured-card card"
+            @click="navigateToArticle(article.slug)"
+            class="featured-card card clickable-card"
           >
             <div class="featured-image">
               <img 
@@ -30,7 +31,6 @@
                 <span class="reading-time">{{ article.metadata?.readingTime || 5 }} min read</span>
                 <span class="difficulty">{{ article.metadata?.difficulty || 'beginner' }}</span>
               </div>
-              <router-link :to="`/education/${article.slug}`" class="btn btn-primary">Read More</router-link>
             </div>
           </div>
         </div>
@@ -101,7 +101,8 @@
           <div 
             v-for="article in articles" 
             :key="article._id"
-            class="article-card card"
+            @click="navigateToArticle(article.slug)"
+            class="article-card card clickable-card"
           >
             <div class="article-image">
               <img 
@@ -127,9 +128,6 @@
                   <span>{{ article.engagement?.rating?.average?.toFixed(1) || '4.5' }}</span>
                 </div>
               </div>
-              <router-link :to="`/education/${article.slug}`" class="btn btn-outline btn-sm">
-                Read Article
-              </router-link>
             </div>
           </div>
         </div>
@@ -165,6 +163,7 @@
           <div 
             v-for="article in popularArticles" 
             :key="article._id"
+            @click="navigateToArticle(article.slug)"
             class="popular-item"
           >
             <div class="popular-image">
@@ -179,9 +178,6 @@
                 <span>{{ article.engagement?.views || 0 }} views</span>
                 <span>{{ article.metadata?.readingTime || 5 }} min read</span>
               </div>
-              <router-link :to="`/education/${article.slug}`" class="read-link">
-                Read →
-              </router-link>
             </div>
           </div>
         </div>
@@ -302,6 +298,10 @@ export default {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     },
+
+    navigateToArticle(slug) {
+      this.$router.push(`/education/${slug}`)
+    },
     
     formatCategory(category) {
       const categories = {
@@ -419,11 +419,18 @@ export default {
 
 .article-card {
   overflow: hidden;
-  transition: transform 0.3s ease;
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+.clickable-card:hover {
+  border-color: var(--primary-color);
 }
 
 .article-card:hover {
-  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .article-image {
@@ -463,6 +470,7 @@ export default {
   color: var(--text-light);
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -518,11 +526,13 @@ export default {
   padding: 1rem;
   background: white;
   border-radius: var(--border-radius);
-  transition: transform 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .popular-item:hover {
-  transform: translateX(4px);
+  border-color: var(--primary-color);
 }
 
 .popular-image {
