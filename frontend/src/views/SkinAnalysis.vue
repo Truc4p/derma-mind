@@ -433,6 +433,7 @@ export default {
 .analysis-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding-top: 2rem;
 }
 
 .progress-bar {

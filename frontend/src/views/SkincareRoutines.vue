@@ -389,6 +389,7 @@ export default {
 .routines-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding-top: 2rem;
 }
 
 .customizer-section {

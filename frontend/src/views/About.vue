@@ -513,7 +513,6 @@ export default {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -570,10 +569,6 @@ export default {
   text-align: center;
   padding: 2rem;
   transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-8px);
 }
 
 .feature-icon {
@@ -902,11 +897,8 @@ export default {
   margin-bottom: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-}
+  }
 
-.faq-item:hover {
-  transform: translateY(-2px);
-}
 
 .faq-question {
   display: flex;

@@ -108,8 +108,7 @@ export default {
   background: var(--gradient-hero);
   position: relative;
   overflow: hidden;
-  padding: 4rem 0;
-  min-height: 80vh;
+  min-height: 60vh;
   display: flex;
   align-items: center;
   color: var(--primary-950);
@@ -202,7 +201,7 @@ export default {
   left: 50px;
   width: 100px;
   height: 100px;
-  background: rgba(201, 127, 152, 0.3);
+  background: rgba(250, 248, 247, 0.4);
   animation-delay: 0s;
 }
 
@@ -211,16 +210,16 @@ export default {
   right: 20px;
   width: 80px;
   height: 80px;
-  background: rgba(164, 74, 107, 0.25);
+  background: rgba(250, 248, 247, 0.4);
   animation-delay: 1s;
 }
 
 .layer-3 {
-  bottom: 50px;
+  bottom: 10px;
   left: 20px;
   width: 120px;
   height: 120px;
-  background: rgba(240, 215, 204, 0.4);
+  background: rgba(250, 248, 247, 0.4);
   animation-delay: 2s;
 }
 

@@ -565,6 +565,7 @@ export default {
 .ingredients-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding-top: 2rem;
 }
 
 .search-section {
@@ -717,10 +718,6 @@ export default {
   cursor: pointer;
   transition: transform 0.3s ease;
   height: fit-content;
-}
-
-.ingredient-card:hover {
-  transform: translateY(-4px);
 }
 
 .ingredient-meta {

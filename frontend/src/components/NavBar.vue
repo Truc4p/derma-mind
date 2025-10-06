@@ -145,7 +145,7 @@ export default {
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--background-white);
+    background: white;
     flex-direction: column;
     padding: 2rem;
     box-shadow: var(--shadow-lg);
