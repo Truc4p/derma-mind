@@ -241,7 +241,7 @@ a:hover {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-6);
+  padding: 0 var(--spacing-6) var(--spacing-20) var(--spacing-6);
 }
 
 .container-fluid {

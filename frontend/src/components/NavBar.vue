@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <div class="container">
+    <div class="container-lg">
       <div class="nav-content">
         <router-link to="/" class="nav-logo">
           <span class="logo-icon">🌸</span>

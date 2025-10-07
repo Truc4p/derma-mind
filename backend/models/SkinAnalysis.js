@@ -153,6 +153,7 @@ skinAnalysisSchema.virtual('analysisAge').get(function() {
 skinAnalysisSchema.methods.getSummary = function() {
   return {
     id: this._id,
+    sessionId: this.sessionId,
     skinType: this.results.skinType,
     confidence: this.results.skinTypeConfidence,
     score: this.results.overallScore,

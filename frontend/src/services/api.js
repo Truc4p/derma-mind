@@ -85,7 +85,7 @@ export const authService = {
 
 // Skin analysis services
 export const skinAnalysisService = {
-  async analyzeSkib(responses) {
+  async analyzeSkin(responses) {
     const response = await api.post('/skin-analysis/analyze', { responses })
     return response.data
   },

@@ -5,25 +5,36 @@
       <div class="analysis-header">
         <h1>Skin Analysis Quiz</h1>
         <p>Answer a few questions to discover your skin type and get personalized recommendations</p>
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: `${progress}%` }"></div>
+        
+        <!-- Existing Results Alert -->
+        <div v-if="hasExistingResults && !showResults" class="existing-results-alert">
+          <div class="alert alert-info">
+            <h4>📋 Previous Results Found</h4>
+            <p>You have previous skin analysis results saved. Would you like to view them or take the quiz again?</p>
+            <div class="alert-actions">
+              <button @click="loadExistingResults" class="btn btn-primary btn-sm">View Previous Results</button>
+              <button @click="startNewAnalysis" class="btn btn-outline btn-sm">Take New Quiz</button>
+            </div>
+          </div>
         </div>
-        <span class="progress-text">{{ currentStep }} of {{ totalSteps }}</span>
+
+        <div v-if="!showResults && !hasExistingResults" class="progress-section">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: `${progress}%` }"></div>
+          </div>
+          <span class="progress-text">{{ currentStep }} of {{ totalSteps }}</span>
+        </div>
       </div>
 
       <!-- Quiz Questions -->
-      <div v-if="!showResults" class="quiz-container">
+      <div v-if="!showResults && !hasExistingResults" class="quiz-container">
         <div class="question-card card">
           <h3>{{ currentQuestion.title }}</h3>
           <p>{{ currentQuestion.description }}</p>
-          
+
           <div class="options">
-            <button 
-              v-for="option in currentQuestion.options" 
-              :key="option.value"
-              @click="selectOption(option.value)"
-              :class="['option-btn', { 'selected': responses[currentQuestion.key] === option.value }]"
-            >
+            <button v-for="option in currentQuestion.options" :key="option.value" @click="selectOption(option.value)"
+              :class="['option-btn', { 'selected': responses[currentQuestion.key] === option.value }]">
               <span class="option-icon">{{ option.icon }}</span>
               <div class="option-content">
                 <strong>{{ option.label }}</strong>
@@ -31,20 +42,12 @@
               </div>
             </button>
           </div>
-          
+
           <div class="navigation-buttons">
-            <button 
-              @click="previousQuestion" 
-              :disabled="currentStep === 1"
-              class="btn btn-outline"
-            >
+            <button @click="previousQuestion" :disabled="currentStep === 1" class="btn btn-outline">
               Previous
             </button>
-            <button 
-              @click="nextQuestion" 
-              :disabled="!responses[currentQuestion.key]"
-              class="btn btn-primary"
-            >
+            <button @click="nextQuestion" :disabled="!responses[currentQuestion.key]" class="btn btn-primary">
               {{ currentStep === totalSteps ? 'Get Results' : 'Next' }}
             </button>
           </div>
@@ -78,11 +81,7 @@
           <div class="result-card card">
             <h3>Primary Concerns</h3>
             <div class="concerns-list">
-              <div 
-                v-for="concern in analysisResults.primaryConcerns" 
-                :key="concern.concern"
-                class="concern-item"
-              >
+              <div v-for="concern in analysisResults.primaryConcerns" :key="concern.concern" class="concern-item">
                 <span class="concern-name">{{ formatConcern(concern.concern) }}</span>
                 <span class="concern-severity" :class="concern.severity">{{ concern.severity }}</span>
               </div>
@@ -95,25 +94,10 @@
             <div class="score-display">
               <div class="score-circle">
                 <svg viewBox="0 0 100 100">
-                  <circle 
-                    cx="50" 
-                    cy="50" 
-                    r="45" 
-                    fill="none" 
-                    stroke="#e2e8f0" 
-                    stroke-width="8"
-                  />
-                  <circle 
-                    cx="50" 
-                    cy="50" 
-                    r="45" 
-                    fill="none" 
-                    stroke="#ff6b9d" 
-                    stroke-width="8"
-                    :stroke-dasharray="`${analysisResults.overallScore * 2.83} 283`"
-                    stroke-linecap="round"
-                    transform="rotate(-90 50 50)"
-                  />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" stroke-width="8" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#ff6b9d" stroke-width="8"
+                    :stroke-dasharray="`${analysisResults.overallScore * 2.83} 283`" stroke-linecap="round"
+                    transform="rotate(-90 50 50)" />
                 </svg>
                 <div class="score-text">
                   <span class="score-number">{{ analysisResults.overallScore }}</span>
@@ -128,16 +112,13 @@
         <!-- Recommendations -->
         <div class="recommendations">
           <h3>Your Personalized Skincare Routine</h3>
-          
+
           <!-- Morning Routine -->
           <div class="routine-section">
             <h4>☀️ Morning Routine</h4>
             <div class="routine-steps">
-              <div 
-                v-for="step in analysisResults.recommendations.routine.morning" 
-                :key="step.step"
-                class="routine-step"
-              >
+              <div v-for="step in analysisResults.recommendations.routine.morning" :key="step.step"
+                class="routine-step">
                 <div class="step-number">{{ step.step }}</div>
                 <div class="step-content">
                   <strong>{{ step.product }}</strong>
@@ -152,11 +133,8 @@
           <div class="routine-section">
             <h4>🌙 Evening Routine</h4>
             <div class="routine-steps">
-              <div 
-                v-for="step in analysisResults.recommendations.routine.evening" 
-                :key="step.step"
-                class="routine-step"
-              >
+              <div v-for="step in analysisResults.recommendations.routine.evening" :key="step.step"
+                class="routine-step">
                 <div class="step-number">{{ step.step }}</div>
                 <div class="step-content">
                   <strong>{{ step.product }}</strong>
@@ -174,26 +152,20 @@
               <div class="ingredients-group">
                 <h5>✅ Beneficial Ingredients</h5>
                 <div class="ingredient-list">
-                  <div 
-                    v-for="ingredient in analysisResults.recommendations.ingredients.beneficial" 
-                    :key="ingredient.name"
-                    class="ingredient-item"
-                  >
+                  <div v-for="ingredient in analysisResults.recommendations.ingredients.beneficial"
+                    :key="ingredient.name" class="ingredient-item">
                     <strong>{{ ingredient.name }}</strong>
                     <p>{{ ingredient.purpose }}</p>
                     <small>Recommended: {{ ingredient.concentration }}</small>
                   </div>
                 </div>
               </div>
-              
+
               <div class="ingredients-group">
                 <h5>❌ Ingredients to Avoid</h5>
                 <div class="ingredient-list">
-                  <div 
-                    v-for="ingredient in analysisResults.recommendations.ingredients.avoid" 
-                    :key="ingredient.name"
-                    class="ingredient-item avoid"
-                  >
+                  <div v-for="ingredient in analysisResults.recommendations.ingredients.avoid" :key="ingredient.name"
+                    class="ingredient-item avoid">
                     <strong>{{ ingredient.name }}</strong>
                     <p>{{ ingredient.reason }}</p>
                   </div>
@@ -206,11 +178,7 @@
           <div class="lifestyle-section">
             <h4>🌟 Lifestyle Recommendations</h4>
             <div class="lifestyle-tips">
-              <div 
-                v-for="tip in analysisResults.recommendations.lifestyle" 
-                :key="tip.category"
-                class="lifestyle-tip"
-              >
+              <div v-for="tip in analysisResults.recommendations.lifestyle" :key="tip.category" class="lifestyle-tip">
                 <h5>{{ tip.category }}</h5>
                 <p>{{ tip.recommendation }}</p>
                 <small>Impact: {{ tip.impact }}</small>
@@ -222,7 +190,9 @@
         <!-- Actions -->
         <div class="result-actions">
           <button @click="restartAnalysis" class="btn btn-outline">Take Quiz Again</button>
-          <button @click="saveResults" class="btn btn-primary">Save Results</button>
+          <button @click="saveResults" class="btn btn-primary" :disabled="isAnalyzing">
+            {{ isAnalyzing ? 'Saving...' : 'Save Results' }}
+          </button>
           <router-link to="/routines" class="btn btn-secondary">Explore Routines</router-link>
         </div>
       </div>
@@ -232,6 +202,7 @@
 
 <script>
 import axios from 'axios'
+import { authService, skinAnalysisService } from '../services/api'
 
 export default {
   name: 'SkinAnalysis',
@@ -242,6 +213,8 @@ export default {
       isAnalyzing: false,
       showResults: false,
       analysisResults: null,
+      sessionId: null,
+      hasExistingResults: false,
       questions: [
         {
           key: 'skinFeeling',
@@ -325,6 +298,9 @@ export default {
       return this.questions[this.currentStep - 1]
     }
   },
+  async mounted() {
+    await this.checkForExistingResults()
+  },
   methods: {
     selectOption(value) {
       this.responses[this.currentQuestion.key] = value
@@ -343,7 +319,7 @@ export default {
     },
     async analyzeResults() {
       this.isAnalyzing = true
-      
+
       try {
         // Add additional responses for comprehensive analysis
         const analysisData = {
@@ -359,42 +335,53 @@ export default {
             }
           }
         }
-        
+
+        // Add user ID if authenticated
+        const currentUser = authService.getCurrentUser()
+        if (currentUser) {
+          analysisData.userId = currentUser._id
+        }
+
         const response = await axios.post('/api/skin-analysis/analyze', analysisData)
-        
+
         this.analysisResults = response.data.results
+        this.sessionId = response.data.sessionId
         this.showResults = true
-        
+
+        // Save to localStorage for immediate access
+        this.saveToLocalStorage()
+
       } catch (error) {
         console.error('Analysis error:', error)
         // Show error message to user
+        alert('Error performing analysis. Please try again.')
       } finally {
         this.isAnalyzing = false
       }
     },
     inferConcerns() {
       const concerns = []
-      
+
       if (['often', 'always'].includes(this.responses.breakoutFrequency)) {
         concerns.push('acne')
       }
-      
+
       if (['large', 'varied'].includes(this.responses.poreSize)) {
         concerns.push('large_pores')
       }
-      
+
       if (['tight', 'flaky'].includes(this.responses.skinFeeling)) {
         concerns.push('dryness')
       }
-      
+
       if (['moderate', 'severe'].includes(this.responses.skinReaction)) {
         concerns.push('sensitivity')
       }
-      
+
       if (['thirties', 'forties', 'fifties_plus'].includes(this.responses.ageGroup)) {
         concerns.push('aging')
       }
-      
+
       return concerns.length > 0 ? concerns : ['general']
     },
     formatConcern(concern) {
@@ -420,10 +407,112 @@ export default {
       this.responses = {}
       this.showResults = false
       this.analysisResults = null
+      this.sessionId = null
+      this.hasExistingResults = false
     },
     async saveResults() {
-      // Implementation for saving results to user account
-      console.log('Saving results...')
+      if (!this.analysisResults) return
+
+      try {
+        this.isAnalyzing = true
+        
+        // Results are already saved to backend during analysis
+        // Just show success message
+        alert('Results saved successfully! You can view them anytime by returning to this page.')
+        
+      } catch (error) {
+        console.error('Save results error:', error)
+        alert('Error saving results. Please try again.')
+      } finally {
+        this.isAnalyzing = false
+      }
+    },
+    async checkForExistingResults() {
+      try {
+        // Check localStorage first
+        const savedResults = localStorage.getItem('skinAnalysisResults')
+        if (savedResults) {
+          const parsedResults = JSON.parse(savedResults)
+          // Check if results are recent (within 30 days)
+          const resultDate = new Date(parsedResults.date)
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+          
+          if (resultDate > thirtyDaysAgo) {
+            this.hasExistingResults = true
+            return
+          }
+        }
+
+        // If user is authenticated, check backend for recent results
+        if (authService.isAuthenticated()) {
+          const response = await skinAnalysisService.getAnalysisHistory()
+          if (response.success && response.analyses && response.analyses.length > 0) {
+            // Check if the most recent analysis is within 30 days
+            const mostRecent = response.analyses[0]
+            const resultDate = new Date(mostRecent.date)
+            const thirtyDaysAgo = new Date()
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+            
+            if (resultDate > thirtyDaysAgo) {
+              this.hasExistingResults = true
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking for existing results:', error)
+      }
+    },
+    async loadExistingResults() {
+      try {
+        // Try localStorage first
+        const savedResults = localStorage.getItem('skinAnalysisResults')
+        if (savedResults) {
+          const parsedResults = JSON.parse(savedResults)
+          this.analysisResults = parsedResults.results
+          this.sessionId = parsedResults.sessionId
+          this.showResults = true
+          this.hasExistingResults = false
+          return
+        }
+
+        // If not in localStorage, try to get from backend
+        if (authService.isAuthenticated()) {
+          const response = await skinAnalysisService.getAnalysisHistory()
+          if (response.success && response.analyses && response.analyses.length > 0) {
+            const mostRecent = response.analyses[0]
+            // Get full results for the most recent analysis
+            const fullResults = await skinAnalysisService.getAnalysisById(mostRecent.sessionId)
+            if (fullResults.success) {
+              this.analysisResults = fullResults.analysis.results
+              this.sessionId = fullResults.analysis.sessionId
+              this.showResults = true
+              this.hasExistingResults = false
+              
+              // Save to localStorage for future quick access
+              this.saveToLocalStorage()
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading existing results:', error)
+        alert('Error loading previous results. Please take the quiz again.')
+        this.startNewAnalysis()
+      }
+    },
+    startNewAnalysis() {
+      this.hasExistingResults = false
+      this.restartAnalysis()
+    },
+    saveToLocalStorage() {
+      if (this.analysisResults && this.sessionId) {
+        const dataToSave = {
+          results: this.analysisResults,
+          sessionId: this.sessionId,
+          date: new Date().toISOString()
+        }
+        localStorage.setItem('skinAnalysisResults', JSON.stringify(dataToSave))
+      }
     }
   }
 }
@@ -454,6 +543,48 @@ export default {
 .progress-text {
   color: var(--text-light);
   font-size: 0.9rem;
+}
+
+.existing-results-alert {
+  margin: 2rem 0;
+}
+
+.alert {
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+}
+
+.alert-info {
+  background: #e6f3ff;
+  border: 1px solid #b3d9ff;
+  color: #0066cc;
+}
+
+.alert h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.alert p {
+  margin: 0 0 1rem 0;
+  color: #004499;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.progress-section {
+  margin-top: 1rem;
 }
 
 .question-card {
@@ -527,8 +658,13 @@ export default {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .results-header {
@@ -569,7 +705,9 @@ export default {
 }
 
 .concerns-list {
-  space-y: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .concern-item {
@@ -721,23 +859,27 @@ export default {
   .option-btn {
     padding: 0.75rem;
   }
-  
+
   .option-icon {
     font-size: 1.5rem;
     margin-right: 0.75rem;
   }
-  
+
   .navigation-buttons {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .results-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .result-actions {
     flex-direction: column;
+  }
+
+  .result-card {
+    padding: 3rem;
   }
 }
 </style>
