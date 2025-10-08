@@ -422,6 +422,7 @@ a:hover {
   background: linear-gradient(135deg, var(--secondary-dark), var(--secondary-color));
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  color: var(--text-inverse);
 }
 
 .btn-outline {

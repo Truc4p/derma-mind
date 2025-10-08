@@ -282,7 +282,7 @@
                     :key="concern.concern"
                     class="concern-item"
                   >
-                    <span class="concern-name">{{ formatConcern(concern.concern) }}</span>
+                    <span class="concern-name">{{ formatConcern(concern.concern) }}: </span>
                     <span class="effectiveness-level" :class="concern.effectiveness">
                       {{ concern.effectiveness }} effectiveness
                     </span>

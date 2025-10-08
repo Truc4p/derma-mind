@@ -107,6 +107,130 @@ router.get('/categories', async (req, res) => {
   }
 })
 
+// @route   GET /api/ingredients/search
+// @desc    Search ingredients by name (for ingredient analysis)
+// @access  Public
+router.get('/search', async (req, res) => {
+  try {
+    const { q, limit = 5 } = req.query
+    
+    if (!q || q.trim().length === 0) {
+      return res.json({
+        success: true,
+        ingredients: []
+      })
+    }
+    
+    const searchTerm = q.trim()
+    
+    // Try exact match first
+    let ingredients = await Ingredient.find({
+      $or: [
+        { name: { $regex: new RegExp(`^${searchTerm}$`, 'i') } },
+        { alternativeNames: { $regex: new RegExp(`^${searchTerm}$`, 'i') } }
+      ]
+    }).limit(parseInt(limit))
+    
+    // If no exact match, try partial matches
+    if (ingredients.length === 0) {
+      ingredients = await Ingredient.find({
+        $or: [
+          { name: { $regex: new RegExp(searchTerm, 'i') } },
+          { alternativeNames: { $regex: new RegExp(searchTerm, 'i') } }
+        ]
+      }).limit(parseInt(limit))
+    }
+    
+    // If still no match, try text search
+    if (ingredients.length === 0) {
+      ingredients = await Ingredient.find({
+        $text: { $search: searchTerm }
+      }).limit(parseInt(limit))
+    }
+    
+    res.json({
+      success: true,
+      ingredients
+    })
+  } catch (error) {
+    console.error('Search ingredients error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Error searching ingredients',
+      error: error.message
+    })
+  }
+})
+
+// @route   POST /api/ingredients/batch-search
+// @desc    Search multiple ingredients at once (for ingredient analysis)
+// @access  Public
+router.post('/batch-search', async (req, res) => {
+  try {
+    const { ingredients: ingredientNames } = req.body
+    
+    if (!ingredientNames || !Array.isArray(ingredientNames)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Ingredients array is required'
+      })
+    }
+    
+    const results = await Promise.all(
+      ingredientNames.map(async (name) => {
+        if (!name || name.trim().length === 0) {
+          return { query: name, ingredient: null }
+        }
+        
+        const searchTerm = name.trim()
+        
+        // Try exact match first
+        let ingredient = await Ingredient.findOne({
+          $or: [
+            { name: { $regex: new RegExp(`^${searchTerm}$`, 'i') } },
+            { alternativeNames: { $regex: new RegExp(`^${searchTerm}$`, 'i') } }
+          ]
+        })
+        
+        // If no exact match, try partial matches
+        if (!ingredient) {
+          ingredient = await Ingredient.findOne({
+            $or: [
+              { name: { $regex: new RegExp(searchTerm, 'i') } },
+              { alternativeNames: { $regex: new RegExp(searchTerm, 'i') } }
+            ]
+          })
+        }
+        
+        // If still no match, try text search
+        if (!ingredient) {
+          const textResults = await Ingredient.find({
+            $text: { $search: searchTerm }
+          }).limit(1)
+          ingredient = textResults.length > 0 ? textResults[0] : null
+        }
+        
+        return {
+          query: name,
+          ingredient: ingredient
+        }
+      })
+    )
+    
+    res.json({
+      success: true,
+      results
+    })
+  } catch (error) {
+    console.error('Batch search ingredients error:', error)
+    res.status(500).json({
+      success: false,
+      message: 'Error batch searching ingredients',
+      error: error.message
+    })
+  }
+})
+
 // @route   GET /api/ingredients/top-rated
 // @desc    Get top-rated ingredients
 // @access  Public

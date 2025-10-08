@@ -21,7 +21,20 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3004',
   credentials: true
 }))
-app.use(morgan('combined'))
+
+// Conditional logging - less verbose in development
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'))
+} else {
+  // Only log errors and important requests in development
+  app.use(morgan('dev', {
+    skip: function (req, res) {
+      // Skip logging for successful API requests to reduce noise
+      return res.statusCode < 400 && req.url.startsWith('/api/')
+    }
+  }))
+}
+
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
 

@@ -707,6 +707,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1.5rem;
 }
 
 .concern-item {
@@ -772,6 +773,10 @@ export default {
 .score-label {
   font-size: 1rem;
   color: var(--text-light);
+}
+
+.recommendations {
+  margin-top: 3rem;
 }
 
 .routine-section {
@@ -843,7 +848,7 @@ export default {
 }
 
 .ingredient-item.avoid {
-  border-left-color: #ef4444;
+  border-left-color: #f27d7d;
 }
 
 .result-actions {
@@ -852,6 +857,11 @@ export default {
   gap: 1rem;
   margin-top: 3rem;
   flex-wrap: wrap;
+}
+
+.result-card h3 {
+  padding: 1rem 1.5rem 0.5rem 1.5rem;
+  margin: 0;
 }
 
 @media (max-width: 768px) {

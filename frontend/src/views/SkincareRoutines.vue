@@ -124,7 +124,7 @@
                     <span v-if="step.time" class="time">{{ step.time }}</span>
                   </div>
                   <div v-if="step.ingredients" class="ingredients">
-                    <strong>Key ingredients:</strong>
+                    <strong>Key ingredients: </strong>
                     <span v-for="ingredient in step.ingredients" :key="ingredient" class="ingredient-tag">
                       {{ ingredient }}
                     </span>
@@ -152,7 +152,7 @@
                     <span v-if="step.time" class="time">{{ step.time }}</span>
                   </div>
                   <div v-if="step.ingredients" class="ingredients">
-                    <strong>Key ingredients:</strong>
+                    <strong>Key ingredients: </strong>
                     <span v-for="ingredient in step.ingredients" :key="ingredient" class="ingredient-tag">
                       {{ ingredient }}
                     </span>
@@ -547,6 +547,10 @@ export default {
 
 .insights-grid {
   margin-bottom: 2rem;
+}
+
+.insight-card {
+  padding: 1.5rem;
 }
 
 .insight-card ul {

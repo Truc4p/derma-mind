@@ -13,6 +13,7 @@
           <router-link to="/education" class="nav-link" @click="closeMenu">Education</router-link>
           <router-link to="/routines" class="nav-link" @click="closeMenu">Routines</router-link>
           <router-link to="/ingredients" class="nav-link" @click="closeMenu">Ingredients</router-link>
+          <router-link to="/ingredient-study" class="nav-link" @click="closeMenu">Product Study</router-link>
           <router-link to="/about" class="nav-link" @click="closeMenu">About</router-link>
         </div>
         
