@@ -9,7 +9,7 @@
         <!-- Existing Results Alert -->
         <div v-if="hasExistingResults && !showResults" class="existing-results-alert">
           <div class="alert alert-info">
-            <h4>📋 Previous Results Found</h4>
+            <h4>Previous Results Found</h4>
             <p>You have previous skin analysis results saved. Would you like to view them or take the quiz again?</p>
             <div class="alert-actions">
               <button @click="loadExistingResults" class="btn btn-primary btn-sm">View Previous Results</button>
@@ -556,9 +556,8 @@ export default {
 }
 
 .alert-info {
-  background: #e6f3ff;
-  border: 1px solid #b3d9ff;
-  color: #0066cc;
+  background: var(--info-light);
+  color: var(--info-color);
 }
 
 .alert h4 {
@@ -569,7 +568,7 @@ export default {
 
 .alert p {
   margin: 0 0 1rem 0;
-  color: #004499;
+  color: var(--info-color);
 }
 
 .alert-actions {
