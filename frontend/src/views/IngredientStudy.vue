@@ -200,12 +200,12 @@
                             <!-- Concerns -->
                             <div class="col-concerns">
                                 <div v-if="ingredient.data?.concerns?.length > 0" class="concerns-compact">
-                                    <span v-for="concern in ingredient.data.concerns.slice(0, 2)" :key="concern.concern"
+                                    <span v-for="concern in ingredient.data.concerns.slice(0, 3)" :key="concern.concern"
                                         class="concern-tag-compact" :class="concern.effectiveness">
                                         {{ formatConcern(concern.concern) }}
                                     </span>
-                                    <span v-if="ingredient.data.concerns.length > 2" class="more-concerns">
-                                        +{{ ingredient.data.concerns.length - 2 }}
+                                    <span v-if="ingredient.data.concerns.length > 3" class="more-concerns">
+                                        +{{ ingredient.data.concerns.length - 3 }}
                                     </span>
                                 </div>
                                 <span v-else class="text-muted">-</span>
@@ -1061,8 +1061,8 @@ export default {
 }
 
 .badge-mini.active {
-    background: #fecaca;
-    color: #991b1b;
+    background: #e5feca;
+    color: #2e924a;
 }
 
 .category-badge-compact {
