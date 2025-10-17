@@ -20,9 +20,10 @@
   --primary-color: var(--primary-600);
   --primary-dark: var(--primary-800);
   --primary-light: var(--primary-400);
-  --secondary-color: var(--primary-500);
-  --secondary-dark: var(--primary-700);
-  --secondary-light: var(--primary-300);
+  
+  --secondary-color: var(--gray-500);
+  --secondary-dark: var(--gray-700);
+  --secondary-light: var(--gray-300);
   
   /* Neutral Colors */
   --white: #ffffff;
@@ -423,6 +424,7 @@ a:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
   color: var(--text-inverse);
+  border-color: var(--secondary-color);
 }
 
 .btn-outline {

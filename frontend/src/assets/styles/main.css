@@ -66,11 +66,6 @@ p {
   color: white;
 }
 
-.btn-secondary:hover {
-  background: #45b7aa;
-  transform: translateY(-2px);
-}
-
 .btn-outline {
   background: transparent;
   border: 2px solid var(--primary-color);

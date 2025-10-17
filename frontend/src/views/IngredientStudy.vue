@@ -28,6 +28,48 @@
                         </small>
                     </div>
 
+                    <!-- Photo Upload Section -->
+                    <div class="form-group">
+                        <label>Or Upload Photo of Ingredient List</label>
+                        <div class="photo-upload-area" 
+                             :class="{ 'dragging': isDragging, 'has-image': uploadedImage }"
+                             @dragover.prevent="handleDragOver" 
+                             @dragleave.prevent="handleDragLeave"
+                             @drop.prevent="handleDrop">
+                            
+                            <!-- Upload Zone -->
+                            <div v-if="!uploadedImage" class="upload-zone">
+                                <div class="upload-icon">📷</div>
+                                <p class="upload-text">Drag & drop an image here, or</p>
+                                <button type="button" @click="triggerFileInput" class="btn-upload">
+                                    Choose Photo
+                                </button>
+                                <small class="upload-hint">
+                                    Supports JPG, PNG, WebP. Best results with clear, well-lit photos.
+                                </small>
+                            </div>
+
+                            <!-- Image Preview -->
+                            <div v-else class="image-preview">
+                                <img :src="uploadedImage" alt="Uploaded ingredient list" class="preview-image" />
+                                <div class="preview-actions">
+                                    <button type="button" @click="removeImage" class="btn-remove">
+                                        Remove Image
+                                    </button>
+                                    <button type="button" @click="extractTextFromImage" 
+                                            :disabled="extractingText" class="btn-extract">
+                                        <span v-if="extractingText" class="loading-spinner small"></span>
+                                        {{ extractingText ? 'Extracting...' : 'Extract Text' }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Hidden file input -->
+                            <input ref="fileInput" type="file" accept="image/*" 
+                                   @change="handleFileSelect" class="hidden-file-input" />
+                        </div>
+                    </div>
+
                     <div class="form-actions">
                         <button @click="analyzeIngredients" :disabled="!ingredientsList.trim() || loading"
                             class="btn btn-primary">
@@ -329,6 +371,11 @@ export default {
             activeFilter: 'all',
             expandedRows: [], // Track which rows are expanded
 
+            // Photo upload related data
+            uploadedImage: null,
+            isDragging: false,
+            extractingText: false,
+
             // Sample product data
             sampleProduct: {
                 name: 'WOWSKIN TRANEXAMIC SERUM 30ml',
@@ -408,6 +455,141 @@ export default {
     },
 
     methods: {
+        // Photo upload methods
+        handleDragOver() {
+            this.isDragging = true
+        },
+
+        handleDragLeave() {
+            this.isDragging = false
+        },
+
+        handleDrop(e) {
+            this.isDragging = false
+            const files = e.dataTransfer.files
+            if (files.length > 0) {
+                this.handleFile(files[0])
+            }
+        },
+
+        triggerFileInput() {
+            this.$refs.fileInput.click()
+        },
+
+        handleFileSelect(e) {
+            const file = e.target.files[0]
+            if (file) {
+                this.handleFile(file)
+            }
+        },
+
+        handleFile(file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file (JPG, PNG, WebP)')
+                return
+            }
+
+            // Validate file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB')
+                return
+            }
+
+            // Create image preview
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                this.uploadedImage = e.target.result
+            }
+            reader.readAsDataURL(file)
+
+            // Store the file for OCR processing
+            this.selectedFile = file
+        },
+
+        removeImage() {
+            this.uploadedImage = null
+            this.selectedFile = null
+            this.$refs.fileInput.value = ''
+        },
+
+        async extractTextFromImage() {
+            if (!this.selectedFile) return
+
+            this.extractingText = true
+            try {
+                // Use Tesseract.js for OCR
+                const { createWorker } = await import('tesseract.js')
+                const worker = await createWorker('eng')
+                
+                const { data: { text } } = await worker.recognize(this.selectedFile)
+                await worker.terminate()
+
+                // Clean up the extracted text
+                const cleanedText = this.cleanExtractedText(text)
+                
+                if (cleanedText) {
+                    // Set the extracted text to the ingredients list
+                    this.ingredientsList = cleanedText
+                    this.showExtractionNotification('Text extracted successfully!')
+                } else {
+                    this.showExtractionNotification('No text found in the image. Please try a clearer photo.', 'warning')
+                }
+
+            } catch (error) {
+                console.error('Error extracting text:', error)
+                this.showExtractionNotification('Failed to extract text. Please try again.', 'error')
+            } finally {
+                this.extractingText = false
+            }
+        },
+
+        cleanExtractedText(text) {
+            // Remove extra whitespace and clean up the text
+            return text
+                .replace(/\n+/g, ', ') // Replace newlines with commas
+                .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+                .replace(/,\s*,+/g, ',') // Remove duplicate commas
+                .replace(/^,\s*|,\s*$/g, '') // Remove leading/trailing commas
+                .trim()
+        },
+
+        showExtractionNotification(message, type = 'success') {
+            // Create a notification element
+            const notification = document.createElement('div')
+            notification.className = `extraction-notification ${type}`
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span>${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '❌'} ${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="close-btn">×</button>
+                </div>
+            `
+
+            // Add styles
+            const bgColor = type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : '#ef4444'
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `
+
+            document.body.appendChild(notification)
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification && notification.parentElement) {
+                    notification.remove()
+                }
+            }, 5000)
+        },
+
         // Persistent storage methods
         saveAnalysis() {
             try {
@@ -473,6 +655,13 @@ export default {
             this.analyzedIngredients = []
             this.activeFilter = 'all'
             this.expandedRows = []
+
+            // Clear uploaded image data
+            this.uploadedImage = null
+            this.selectedFile = null
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = ''
+            }
 
             // Clear saved data from localStorage
             this.clearSavedAnalysis()
@@ -1428,6 +1617,186 @@ export default {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Photo Upload Styles */
+.photo-upload-area {
+    border: 1px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    position: relative;
+}
+
+.photo-upload-area.dragging {
+    border-color: var(--primary-color);
+    background: var(--primary-50);
+    transform: scale(1.02);
+}
+
+.photo-upload-area.has-image {
+    border-style: solid;
+    border-color: var(--primary-color);
+    background: white;
+    padding: 1rem;
+}
+
+.upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    opacity: 0.6;
+}
+
+.upload-text {
+    color: #6b7280;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.btn-upload {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-upload:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+}
+
+.upload-hint {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.image-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-remove {
+    background: var(--secondary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.btn-extract {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-extract:hover:not(:disabled) {
+    background: var(--primary-600);
+}
+
+.btn-extract:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Notification styles */
+.extraction-notification .notification-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.extraction-notification .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.extraction-notification .close-btn:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for photo upload */
+@media (max-width: 768px) {
+    .photo-upload-area {
+        padding: 1.5rem;
+    }
+    
+    .upload-icon {
+        font-size: 2rem;
+    }
+    
+    .preview-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .btn-remove,
+    .btn-extract {
+        width: 100%;
+        justify-content: center;
     }
 }
 </style>

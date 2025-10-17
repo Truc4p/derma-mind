@@ -166,7 +166,7 @@ export default {
 }
 
 .social-link:hover {
-  background: var(--primary-300);
+  background: var(--primary-50);
   color: var(--primary-800);
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
