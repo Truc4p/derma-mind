@@ -6,6 +6,7 @@ import EducationArticle from '../views/EducationArticle.vue'
 import SkincareRoutines from '../views/SkincareRoutines.vue'
 import Ingredients from '../views/Ingredients.vue'
 import IngredientStudy from '../views/IngredientStudy.vue'
+import AIDermatologist from '../views/AIDermatologist.vue'
 import About from '../views/About.vue'
 
 const routes = [
@@ -43,6 +44,11 @@ const routes = [
     path: '/ingredient-study',
     name: 'IngredientStudy',
     component: IngredientStudy
+  },
+  {
+    path: '/ai-dermatologist',
+    name: 'AIDermatologist',
+    component: AIDermatologist
   },
   {
     path: '/about',
