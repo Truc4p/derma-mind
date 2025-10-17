@@ -690,7 +690,7 @@ What would you like to know more about?`
 }
 
 .new-chat-btn:hover {
-    background: var(--primary-light);
+    background: white;
 }
 
 .clear-chat-btn {
