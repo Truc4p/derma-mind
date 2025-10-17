@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import api from '@/services/api'
+
 export default {
     name: 'AIDermatologist',
     data() {
@@ -191,17 +193,30 @@ export default {
         },
 
         async getAIResponse(userMessage) {
-            // Simulate API call delay
-            await new Promise(resolve => setTimeout(resolve, 1500))
+            try {
+                // Call the real Gemini AI API
+                const response = await api.post('/ai-dermatologist/chat', {
+                    message: userMessage,
+                    conversationHistory: this.messages.slice(-10) // Send last 10 messages for context
+                })
 
-            // Generate contextual response based on keywords
-            let response = this.generateContextualResponse(userMessage)
-
-            this.messages.push({
-                role: 'assistant',
-                content: response,
-                timestamp: new Date()
-            })
+                this.messages.push({
+                    role: 'assistant',
+                    content: response.data.response,
+                    sources: response.data.sources,
+                    timestamp: new Date()
+                })
+            } catch (error) {
+                console.error('Error calling AI API:', error)
+                
+                // Fallback to local response if API fails
+                let response = this.generateContextualResponse(userMessage)
+                this.messages.push({
+                    role: 'assistant',
+                    content: response + '\n\n*Note: Using offline knowledge base. For best results, ensure backend is running.*',
+                    timestamp: new Date()
+                })
+            }
         },
 
         generateContextualResponse(message) {
