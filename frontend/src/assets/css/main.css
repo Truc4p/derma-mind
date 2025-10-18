@@ -1,3 +1,7 @@
+/* Remove default blue focus outline for all elements */
+*:focus, *:focus-visible {
+  outline: none !important;
+}
 /* Enhanced Global Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -242,7 +246,7 @@ a:hover {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-6) var(--spacing-20) var(--spacing-6);
+  padding: var(--spacing-10) var(--spacing-6) var(--spacing-10) var(--spacing-6);
 }
 
 .container-fluid {
