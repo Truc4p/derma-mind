@@ -6,18 +6,29 @@
           <span class="logo-icon">🌸</span>
           <span class="logo-text">SkinStudy</span>
         </router-link>
-        
+
         <div class="nav-menu" :class="{ 'nav-menu-open': isMenuOpen }">
           <router-link to="/" class="nav-link" @click="closeMenu">Home</router-link>
-          <router-link to="/analysis" class="nav-link" @click="closeMenu">Skin Analysis</router-link>
           <router-link to="/ai-dermatologist" class="nav-link" @click="closeMenu">AI Doctor</router-link>
-          <router-link to="/education" class="nav-link" @click="closeMenu">Education</router-link>
+          <router-link to="/analysis" class="nav-link" @click="closeMenu">Skin Analysis</router-link>
           <router-link to="/routines" class="nav-link" @click="closeMenu">Routines</router-link>
           <router-link to="/ingredients" class="nav-link" @click="closeMenu">Ingredients</router-link>
           <router-link to="/ingredient-study" class="nav-link" @click="closeMenu">Product Study</router-link>
+          <router-link to="/education" class="nav-link" @click="closeMenu">Education</router-link>
           <router-link to="/about" class="nav-link" @click="closeMenu">About</router-link>
+          
+          <!-- Auth Section -->
+          <div class="nav-auth">
+            <template v-if="isLoggedIn">
+              <span class="user-name">{{ userName }}</span>
+              <button @click="handleLogout" class="btn-logout">Logout</button>
+            </template>
+            <template v-else>
+              <router-link to="/auth" class="btn-login" @click="closeMenu">Login</router-link>
+            </template>
+          </div>
         </div>
-        
+
         <button class="nav-toggle" @click="toggleMenu">
           <span></span>
           <span></span>
@@ -33,7 +44,9 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      isMenuOpen: false
+      isMenuOpen: false,
+      isLoggedIn: false,
+      userName: ''
     }
   },
   methods: {
@@ -42,6 +55,45 @@ export default {
     },
     closeMenu() {
       this.isMenuOpen = false
+    },
+    checkAuthStatus() {
+      const token = localStorage.getItem('token')
+      const user = localStorage.getItem('user')
+      
+      this.isLoggedIn = !!token
+      
+      if (user) {
+        try {
+          const userObj = JSON.parse(user)
+          this.userName = userObj.name || 'User'
+        } catch (e) {
+          this.userName = 'User'
+        }
+      }
+    },
+    handleLogout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        this.isLoggedIn = false
+        this.userName = ''
+        this.$router.push('/')
+        this.closeMenu()
+      }
+    }
+  },
+  mounted() {
+    this.checkAuthStatus()
+    
+    // Listen for storage changes (login/logout in other tabs)
+    window.addEventListener('storage', this.checkAuthStatus)
+  },
+  beforeUnmount() {
+    window.removeEventListener('storage', this.checkAuthStatus)
+  },
+  watch: {
+    $route() {
+      this.checkAuthStatus()
     }
   }
 }
@@ -123,6 +175,55 @@ export default {
   width: 100%;
 }
 
+/* Auth Section */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--border-color);
+}
+
+.user-name {
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-login,
+.btn-logout {
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-login {
+  background: var(--gradient-primary);
+  color: white;
+  display: inline-block;
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-logout {
+  background: #f5f5f5;
+  color: var(--text-dark);
+}
+
+.btn-logout:hover {
+  background: #ffebee;
+  color: #c62828;
+}
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -155,21 +256,46 @@ export default {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    gap: 0.5rem;
   }
-  
+
   .nav-menu-open {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
   }
-  
+
   .nav-toggle {
     display: flex;
   }
-  
+
   .nav-link {
     padding: 0.5rem 0;
     font-size: 1.1rem;
+  }
+
+  .nav-auth {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-login,
+  .btn-logout {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .user-name {
+    text-align: center;
+    padding: 0.5rem 0;
   }
 }
 </style>

@@ -4,7 +4,7 @@
     <main class="main-content">
       <router-view />
     </main>
-    <Footer />
+  <Footer v-if="$route.name !== 'AIDermatologist'" />
   </div>
 </template>
 
@@ -15,8 +15,8 @@ import Footer from './components/Footer.vue'
 export default {
   name: 'App',
   components: {
-    NavBar,
-    Footer
+  NavBar,
+  Footer
   }
 }
 </script>

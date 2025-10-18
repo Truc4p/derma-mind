@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Auth from '../views/Auth.vue'
 import SkinAnalysis from '../views/SkinAnalysis.vue'
 import Education from '../views/Education.vue'
 import EducationArticle from '../views/EducationArticle.vue'
@@ -16,9 +17,15 @@ const routes = [
     component: Home
   },
   {
+    path: '/auth',
+    name: 'Auth',
+    component: Auth
+  },
+  {
     path: '/analysis',
     name: 'SkinAnalysis',
-    component: SkinAnalysis
+    component: SkinAnalysis,
+    meta: { requiresAuth: true }
   },
   {
     path: '/education',
@@ -48,7 +55,8 @@ const routes = [
   {
     path: '/ai-dermatologist',
     name: 'AIDermatologist',
-    component: AIDermatologist
+    component: AIDermatologist,
+    meta: { requiresAuth: true }
   },
   {
     path: '/about',
@@ -60,6 +68,21 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// Navigation guard to check authentication
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  
+  if (to.meta.requiresAuth && !token) {
+    // Redirect to auth page if route requires authentication
+    next('/auth')
+  } else if (to.path === '/auth' && token) {
+    // Redirect to home if already logged in
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router

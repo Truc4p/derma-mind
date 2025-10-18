@@ -674,7 +674,7 @@ export default {
 .skin-type-badge {
   display: inline-block;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: var(--gradient-primary);
   color: white;
   border-radius: 50px;
   font-size: 1.5rem;
@@ -699,7 +699,7 @@ export default {
 
 .score-fill {
   height: 100%;
-  background: var(--secondary-color);
+  background: var(--primary-color);
   transition: width 0.8s ease;
 }
 
