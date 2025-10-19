@@ -91,7 +91,7 @@
 │                    GOOGLE Gemini API                        │
 │                 (ai.google.dev)                                 │
 │                                                                 │
-│  API Key: AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w             │
+│  API Key: AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ             │
 │  Model: gemini-pro                                             │
 │  Rate: 60 requests/minute (FREE)                               │
 │  Context: ~30k tokens                                          │

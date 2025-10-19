@@ -121,7 +121,7 @@ Returns to user with:
 
 Your Gemini API key is already configured:
 ```
-GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
+GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ
 ```
 
 **Gemini Features:**

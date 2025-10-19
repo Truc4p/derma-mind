@@ -99,7 +99,7 @@ node addKnowledge.js
 ## 🔑 API Configuration
 
 ```env
-GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
+GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ
 ```
 
 **Features:**
@@ -284,7 +284,7 @@ node tools/scrapeDermNet.js
 
 3. **Check API key:**
    - Open `backend/.env`
-   - Verify: `GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w`
+   - Verify: `GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ`
 
 4. **Check logs:**
    - Backend terminal for errors

@@ -111,7 +111,7 @@ This will install:
 
 The `.env` file has been updated with:
 ```
-GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
+GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ
 ```
 
 ### 3. Seed the Knowledge Base

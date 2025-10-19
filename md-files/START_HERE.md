@@ -64,7 +64,7 @@ root/
 ## 🔑 API Configuration
 
 ```env
-GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
+GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ
 ```
 
 **Status:** ✅ Configured and ready to use
@@ -358,7 +358,7 @@ The system automatically:
 
 ### Problem: "API key error"
 **Solution:**
-1. Check `.env` file has: `GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w`
+1. Check `.env` file has: `GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ`
 2. Restart backend server
 3. Verify key is valid at https://ai.google.dev/
 

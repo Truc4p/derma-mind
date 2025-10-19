@@ -155,7 +155,7 @@ await knowledge.save();
 ### Error: "GEMINI_API_KEY not found"
 **Solution:** Check `.env` file in backend folder:
 ```
-GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
+GEMINI_API_KEY=AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ
 ```
 
 ### Error: "Cannot find module '@google/generative-ai'"
