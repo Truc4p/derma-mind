@@ -93,7 +93,20 @@ class PDFProcessor {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }); // 250 req/day limit
 
-        const prompt = `You are a dermatology knowledge extraction assistant extracting from "Skin Care: Beyond the Basics (4th Edition)" - a professional esthetics textbook.
+        // Build context string if available
+        let contextStr = '';
+        if (context.lastChapterNumber || context.lastChapterTitle || context.lastPageReference) {
+            const parts = [];
+            if (context.lastChapterNumber || context.lastChapterTitle) {
+                parts.push(`Chapter ${context.lastChapterNumber || '?'}: ${context.lastChapterTitle || 'Unknown'}`);
+            }
+            if (context.lastPageReference) {
+                parts.push(`Last known page: ${context.lastPageReference}`);
+            }
+            contextStr = `\n\nCONTEXT FROM PREVIOUS CHUNK: ${parts.join(', ')}. If you cannot detect explicit page/chapter info in this chunk, use the context values above.`;
+        }
+
+        const prompt = `You are a dermatology knowledge extraction assistant extracting from "Skin Care: Beyond the Basics (4th Edition)" - a professional esthetics textbook.${contextStr}
 
 IMPORTANT - Book Structure:
 - SIDEBAR DEFINITIONS: Key terms with brief definitions (left margin)
@@ -233,6 +246,13 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
         console.log('\n🤖 Extracting knowledge with Gemini AI...');
         const allKnowledge = [];
         
+        // Track chapter and page context across chunks
+        let chapterContext = {
+            lastChapterNumber: null,
+            lastChapterTitle: null,
+            lastPageReference: null
+        };
+        
         for (let i = 0; i < chunksToProcess.length; i++) {
             const actualChunkIndex = startFromChunk + i;
             console.log(`   Processing chunk ${actualChunkIndex + 1}/${chunks.length}...`);
@@ -241,12 +261,25 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
                 const extracted = await this.extractKnowledgeWithAI(
                     chunksToProcess[i], 
                     actualChunkIndex, 
-                    chunks.length
+                    chunks.length,
+                    chapterContext
                 );
                 
                 if (extracted.length > 0) {
-                    // Add source reference and verification status
+                    // Update chapter and page context from extracted entries
+                    for (const item of extracted) {
+                        if (item.chapterNumber) chapterContext.lastChapterNumber = item.chapterNumber;
+                        if (item.chapterTitle) chapterContext.lastChapterTitle = item.chapterTitle;
+                        if (item.pageReference) chapterContext.lastPageReference = item.pageReference;
+                    }
+                    
+                    // Fill in missing page references using context
                     const enriched = extracted.map(item => {
+                        // If pageReference is null, use the last known page reference
+                        if (!item.pageReference && chapterContext.lastPageReference) {
+                            item.pageReference = chapterContext.lastPageReference;
+                        }
+                        
                         // Build detailed source reference
                         let sourceRef = 'Skin Care: Beyond the Basics (4th Edition)';
                         
@@ -385,7 +418,7 @@ async function main() {
             saveToDatabase: false, // Set to true to save directly to DB
             outputFile: outputPath,
             startFromChunk: 0, // Start from beginning
-            maxChunks: 240 // Full day extraction (within 250 quota)
+            maxChunks: 100 // Today: 211 remaining - 10 buffer = 200 safe chunks
         });
 
         console.log('\n📊 Processing Summary:');
