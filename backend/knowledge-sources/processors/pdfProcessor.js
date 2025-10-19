@@ -384,8 +384,8 @@ async function main() {
             useAI: true,
             saveToDatabase: false, // Set to true to save directly to DB
             outputFile: outputPath,
-            startFromChunk: 0, // Change this to resume from a specific chunk
-            maxChunks: 240 // Process 240 chunks per day (within 250 quota with buffer)
+            startFromChunk: 0, // Start from beginning
+            maxChunks: 240 // Full day extraction (within 250 quota)
         });
 
         console.log('\n📊 Processing Summary:');
