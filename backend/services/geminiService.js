@@ -103,11 +103,25 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
             const response = await result.response;
             const text = response.text();
 
+            // Format sources with detailed references
+            const sources = relevantKnowledge.map(k => {
+                let sourceText = `"${k.title}" - ${k.sourceReference}`;
+                return sourceText;
+            });
+
+            // Append sources to response if any were used
+            let finalResponse = text;
+            if (sources.length > 0) {
+                finalResponse += '\n\n**Sources:**\n' + sources.map((s, i) => `${i + 1}. ${s}`).join('\n');
+            }
+
             return {
-                response: text,
+                response: finalResponse,
                 knowledgeSources: relevantKnowledge.map(k => ({
                     title: k.title,
-                    source: k.sourceReference
+                    source: k.sourceReference,
+                    chapter: k.chapterTitle || null,
+                    page: k.pageReference || null
                 }))
             };
         } catch (error) {

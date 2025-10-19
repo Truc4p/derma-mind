@@ -8,38 +8,56 @@
  */
 
 const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
-const pdf = require('pdf-parse');
+const { PDFParse } = require('pdf-parse');
 const DermatologyKnowledge = require('../../models/DermatologyKnowledge');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 class PDFProcessor {
     constructor() {
-        this.chunkSize = 2000; // Characters per chunk for processing
-        this.overlapSize = 200; // Overlap between chunks to maintain context
+        // Optimized for quality extraction with plenty of quota available
+        // Smaller chunks = more precise extraction, better attribution, more detailed entries
+        // With 1500 req/day limit and ~935 chunks, we have plenty of headroom
+        this.chunkSize = 3000; // Sweet spot: detailed but not too fragmented
+        this.overlapSize = 300; // 10% overlap maintains context between chunks
     }
 
     /**
-     * Read and parse PDF file
+     * Read and parse PDF file using pdf-parse v2 API
      */
     async readPDF(pdfPath) {
+        let parser;
         try {
-            const dataBuffer = await fs.readFile(pdfPath);
-            const data = await pdf(dataBuffer);
+            const dataBuffer = fsSync.readFileSync(pdfPath);
+            parser = new PDFParse({ data: dataBuffer });
+            
+            // Get document info (metadata)
+            const info = await parser.getInfo();
+            
+            // Extract all text
+            const textResult = await parser.getText();
             
             console.log(`📄 PDF Info:`);
-            console.log(`   Pages: ${data.numpages}`);
-            console.log(`   Text length: ${data.text.length} characters`);
+            console.log(`   Pages: ${info.total}`);
+            console.log(`   Title: ${info.info?.Title || 'N/A'}`);
+            console.log(`   Text length: ${textResult.text.length} characters`);
             
             return {
-                text: data.text,
-                numPages: data.numpages,
-                info: data.info
+                text: textResult.text,
+                numPages: info.total,
+                info: info.info,
+                metadata: info
             };
         } catch (error) {
             console.error('Error reading PDF:', error);
             throw error;
+        } finally {
+            // Always destroy parser to free memory
+            if (parser) {
+                await parser.destroy();
+            }
         }
     }
 
@@ -67,40 +85,46 @@ class PDFProcessor {
 
     /**
      * Use Gemini AI to extract structured information from text chunks
+     * Detects chapter numbers and page references automatically
      */
-    async extractKnowledgeWithAI(textChunk, chunkIndex, totalChunks) {
+    async extractKnowledgeWithAI(textChunk, chunkIndex, totalChunks, context = {}) {
         const { GoogleGenerativeAI } = require('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
 
-        const prompt = `You are a dermatology knowledge extraction assistant. Extract key dermatological information from this text chunk (${chunkIndex + 1}/${totalChunks}) from the book "Skin Care: Beyond the Basics (4th Edition)".
+        const prompt = `You are a dermatology knowledge extraction assistant extracting from "Skin Care: Beyond the Basics (4th Edition)" - a professional esthetics textbook.
 
-Extract and structure the information as JSON array with multiple entries (if applicable):
+IMPORTANT - Book Structure:
+- SIDEBAR DEFINITIONS: Key terms with brief definitions (left margin)
+- MAIN TEXT: Detailed explanations and clinical information (main body)
+- FIGURES: Diagrams referenced like "Figure 1-1" (with labels like "Nucleus", "Mitochondrion")
+
+EXTRACTION RULES:
+1. COMBINE sidebar definitions WITH their main text explanations into coherent entries
+2. Include figure references when relevant (e.g., "as shown in Figure 1-1")
+3. Skip: copyright notices, page markers, pure diagram labels, table of contents
+4. Extract ONLY significant clinical/professional knowledge
+5. When you see a term defined in sidebar + explained in main text, merge them into one comprehensive entry
+
+Extract and structure as JSON array (chunk ${chunkIndex + 1}/${totalChunks}):
 
 [
   {
     "category": "one of: skin-conditions, ingredients, treatments, routines, cosmetics, procedures, general-advice",
-    "subcategory": "specific subcategory (e.g., acne, retinoids, anti-aging, etc.)",
+    "subcategory": "specific subcategory (e.g., acne, retinoids, cell-biology, etc.)",
     "title": "Clear, descriptive title",
-    "content": "Detailed, well-structured content. Include: key points, mechanisms, usage guidelines, contraindications, evidence",
+    "content": "Detailed, well-structured content. Combine definitions with explanations. Include mechanisms, usage guidelines, contraindications, and evidence.",
     "keywords": ["keyword1", "keyword2", "keyword3", ...],
-    "chapter": "chapter name or section if identifiable",
-    "pageReference": "approximate page or chapter reference"
+    "chapterNumber": "X" or null,
+    "chapterTitle": "Chapter name" or null,
+    "pageReference": "Page X" or "Pages X-Y" if identifiable
   }
 ]
-
-IMPORTANT:
-- Only extract significant, clinically relevant information
-- Skip introductory text, table of contents, references pages
-- Combine related information into comprehensive entries
-- If chunk contains no valuable information, return empty array []
-- Focus on actionable dermatology knowledge
-- Maintain scientific accuracy
 
 Text chunk:
 ${textChunk}
 
-Respond ONLY with valid JSON array.`;
+Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`;
 
         try {
             const result = await model.generateContent(prompt);
@@ -136,10 +160,20 @@ Respond ONLY with valid JSON array.`;
         // Read PDF
         const pdfData = await this.readPDF(pdfPath);
         
-        // Clean text (remove excessive whitespace, page numbers, etc.)
+        // Clean text - remove boilerplate that adds noise to extraction
+        // This textbook has copyright notices on every page and page markers
         const cleanedText = pdfData.text
-            .replace(/\n\s*\n\s*\n/g, '\n\n') // Remove excessive newlines
-            .replace(/^\d+\s*$/gm, '') // Remove standalone page numbers
+            // Remove copyright notices (appears on every page)
+            .replace(/Copyright \d{4} Cengage Learning.*?restrictions require it\./gs, '')
+            // Remove page markers like "-- 16 of 528 --"
+            .replace(/--\s*\d+\s*of\s*\d+\s*--/g, '')
+            // Remove excessive newlines
+            .replace(/\n\s*\n\s*\n+/g, '\n\n')
+            // Remove standalone page numbers
+            .replace(/^\d+\s*$/gm, '')
+            // Normalize spaces
+            .replace(/\s+/g, ' ')
+            .replace(/\n /g, '\n')
             .trim();
 
         // Split into chunks
@@ -162,19 +196,37 @@ Respond ONLY with valid JSON array.`;
             
             if (extracted.length > 0) {
                 // Add source reference and verification status
-                const enriched = extracted.map(item => ({
-                    ...item,
-                    sourceReference: `Skin Care: Beyond the Basics (4th Edition) - ${item.pageReference || 'Chapter: ' + (item.chapter || 'N/A')}`,
-                    verified: true // Book content is verified
-                }));
+                const enriched = extracted.map(item => {
+                    // Build detailed source reference
+                    let sourceRef = 'Skin Care: Beyond the Basics (4th Edition)';
+                    
+                    if (item.chapterNumber && item.chapterTitle) {
+                        sourceRef += ` - Chapter ${item.chapterNumber}: ${item.chapterTitle}`;
+                    } else if (item.chapterTitle) {
+                        sourceRef += ` - ${item.chapterTitle}`;
+                    } else if (item.chapterNumber) {
+                        sourceRef += ` - Chapter ${item.chapterNumber}`;
+                    }
+                    
+                    if (item.pageReference) {
+                        sourceRef += ` (${item.pageReference})`;
+                    }
+                    
+                    return {
+                        ...item,
+                        sourceReference: sourceRef,
+                        verified: true // Book content is verified
+                    };
+                });
                 
                 allKnowledge.push(...enriched);
                 console.log(`   ✓ Extracted ${extracted.length} knowledge entries`);
             }
             
             // Rate limiting (Gemini API has limits)
+            // Reduced delay since we're well within quota limits
             if (i < chunks.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay
+                await new Promise(resolve => setTimeout(resolve, 1500)); // 1.5 second delay
             }
         }
 

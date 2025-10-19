@@ -33,6 +33,19 @@ const dermatologyKnowledgeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // Optional: More detailed source tracking
+    chapterNumber: {
+        type: String,
+        required: false
+    },
+    chapterTitle: {
+        type: String,
+        required: false
+    },
+    pageReference: {
+        type: String,
+        required: false
+    },
     verified: {
         type: Boolean,
         default: false
