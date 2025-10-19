@@ -14,7 +14,7 @@ This implementation creates a **Board-Certified Virtual Dermatologist** powered 
    - Full-text search indexing for efficient retrieval
 
 2. **Gemini Service** (`services/geminiService.js`)
-   - Integrates Google Gemini Pro AI
+   - Integrates Google Gemini AI
    - Retrieves relevant knowledge from database based on user queries
    - Builds context-aware prompts combining AI with knowledge base
    - Generates evidence-based responses
@@ -165,7 +165,7 @@ System Context: "You are a Board-Certified Virtual Dermatologist..."
 ```
 
 ### 4. AI Generation
-Gemini Pro generates response based on:
+Gemini generates response based on:
 - Professional dermatologist persona
 - Retrieved knowledge base information
 - Conversation context
@@ -326,7 +326,7 @@ const routine = await fetch('http://localhost:3004/api/ai-dermatologist/routine'
 1. **Image Analysis**
    - Upload skin photos
    - AI-powered skin condition detection
-   - Use Gemini Pro Vision
+   - Use Gemini Vision
 
 2. **User Profiles**
    - Save skin type and concerns
@@ -379,7 +379,7 @@ const filterHarmfulContent = (text) => {
 ## Cost Optimization
 
 ### Gemini API Pricing
-- Gemini Pro is free up to 60 requests/minute
+- Gemini is free up to 60 requests/minute
 - Consider caching common queries
 - Implement query similarity detection
 
@@ -486,7 +486,7 @@ Ensure compliance with:
 ---
 
 **Built with:**
-- Google Gemini Pro AI
+- Google Gemini AI
 - Node.js + Express
 - MongoDB
 - Vue.js

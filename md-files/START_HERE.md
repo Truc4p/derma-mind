@@ -7,7 +7,7 @@
 ## ✅ What Has Been Delivered
 
 ### 1. Full Gemini AI Integration
-- ✅ Google Gemini Pro API integrated
+- ✅ Google Gemini API integrated
 - ✅ Your API key configured
 - ✅ Professional dermatologist persona
 - ✅ Context-aware conversations
@@ -73,7 +73,7 @@ GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
 - Free tier: 60 requests/minute
 - Context window: ~30k tokens
 - Max output: 2048 tokens
-- Model: Gemini Pro
+- Model: Gemini
 
 ---
 
@@ -229,7 +229,7 @@ API (/api/ai-dermatologist/chat)
 Gemini Service
      ├→ 1. Search MongoDB for relevant knowledge
      ├→ 2. Build context with knowledge + history
-     ├→ 3. Call Gemini Pro AI
+     ├→ 3. Call Gemini AI
      └→ 4. Generate professional response
           ↓
 Response with Sources
@@ -425,7 +425,7 @@ The system automatically:
 4. Implement user feedback
 
 ### Long Term (Future):
-1. Image analysis with Gemini Pro Vision
+1. Image analysis with Gemini Vision
 2. User profiles and personalization
 3. Product recommendation engine
 4. Mobile app
@@ -436,13 +436,13 @@ The system automatically:
 ## 💰 Cost Analysis
 
 ### Current Setup:
-- **Gemini Pro API:** FREE (up to 60 req/min)
+- **Gemini API:** FREE (up to 60 req/min)
 - **MongoDB:** Already using existing account
 - **Hosting:** Local (dev) or deploy costs
 - **Total:** $0/month for development
 
 ### At Scale:
-- Gemini Pro: Still free for reasonable usage
+- Gemini: Still free for reasonable usage
 - Consider caching to reduce API calls
 - MongoDB: Current plan should handle 10k+ users
 - Hosting: ~$10-50/month depending on traffic
@@ -500,6 +500,6 @@ You now have a fully functional, AI-powered dermatologist that:
 
 ---
 
-*Built with Google Gemini Pro, MongoDB, Node.js, and Vue.js*
+*Built with Google Gemini, MongoDB, Node.js, and Vue.js*
 *Knowledge from peer-reviewed dermatology sources*
 *For educational and informational purposes*

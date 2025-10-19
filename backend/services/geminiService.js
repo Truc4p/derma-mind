@@ -8,12 +8,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 class GeminiService {
     constructor() {
         this.model = genAI.getGenerativeModel({ 
-            model: 'gemini-2.0-flash',
+            model: 'gemini-2.5-pro',
             generationConfig: {
                 temperature: 0.7,
                 topP: 0.8,
                 topK: 40,
-                maxOutputTokens: 2048,
+                maxOutputTokens: 8192, // Increased to allow longer responses
             }
         });
         

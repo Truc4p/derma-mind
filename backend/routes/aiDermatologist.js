@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
  * POST /api/ai-dermatologist/chat
  * Send a message to the AI Dermatologist
  */
-router.post('/chat', auth, async (req, res) => {
+router.post('/chat', async (req, res) => {
     try {
         const { message, conversationHistory } = req.body;
 

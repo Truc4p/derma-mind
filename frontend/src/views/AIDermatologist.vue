@@ -108,6 +108,15 @@
 
 <script>
 import api from '@/services/api'
+import { marked } from 'marked'
+
+// Configure marked for better rendering
+marked.setOptions({
+    breaks: true,
+    gfm: true, // GitHub Flavored Markdown
+    headerIds: false,
+    mangle: false
+})
 
 export default {
     name: 'AIDermatologist',
@@ -381,13 +390,17 @@ What would you like to know more about?`
         },
 
         formatMessage(content) {
-            // Convert markdown-like formatting to HTML
-            return content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>')
-                .replace(/^/, '<p>')
-                .replace(/$/, '</p>')
+            // Use marked to parse markdown properly
+            try {
+                return marked.parse(content)
+            } catch (error) {
+                console.error('Error parsing markdown:', error)
+                // Fallback to simple formatting
+                return content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>')
+            }
         },
 
         formatTime(timestamp) {
@@ -608,6 +621,86 @@ What would you like to know more about?`
 .message-text {
     line-height: 1.6;
     word-wrap: break-word;
+}
+
+/* Markdown elements styling */
+.message-text :deep(h1),
+.message-text :deep(h2),
+.message-text :deep(h3),
+.message-text :deep(h4) {
+    margin: 1rem 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--primary-800);
+}
+
+.message.user .message-text :deep(h1),
+.message.user .message-text :deep(h2),
+.message.user .message-text :deep(h3),
+.message.user .message-text :deep(h4) {
+    color: white;
+}
+
+.message-text :deep(h1) { font-size: 1.5rem; }
+.message-text :deep(h2) { font-size: 1.3rem; }
+.message-text :deep(h3) { font-size: 1.1rem; }
+.message-text :deep(h4) { font-size: 1rem; }
+
+.message-text :deep(ul),
+.message-text :deep(ol) {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.message-text :deep(li) {
+    margin: 0.25rem 0;
+}
+
+.message-text :deep(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.message-text :deep(table th),
+.message-text :deep(table td) {
+    border: 1px solid var(--primary-200);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.message-text :deep(table th) {
+    background-color: var(--primary-100);
+    font-weight: 600;
+    color: var(--primary-800);
+}
+
+.message.user .message-text :deep(table th) {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.message.user .message-text :deep(table td) {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.message-text :deep(code) {
+    background-color: var(--primary-100);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.message.user .message-text :deep(code) {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.message-text :deep(blockquote) {
+    border-left: 3px solid var(--primary-400);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--primary-700);
 }
 
 .message-text :deep(p) {

@@ -88,7 +88,7 @@
 └─────────────────────────────────────────────────────────────────┘
                             ↑
 ┌─────────────────────────────────────────────────────────────────┐
-│                    GOOGLE GEMINI PRO API                        │
+│                    GOOGLE Gemini API                        │
 │                 (ai.google.dev)                                 │
 │                                                                 │
 │  API Key: AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w             │
@@ -156,7 +156,7 @@ Step 4: Build context
 
 Step 5: Send to Gemini
    ↓
-   Gemini Pro API Call
+   Gemini API Call
    ↓
    AI generates structured response based on:
    - Dermatologist persona
@@ -242,7 +242,7 @@ Step 7: Display to user
 ┌─────────────────────────────────────────────────────────────┐
 │                      EXTERNAL API                           │
 ├─────────────────────────────────────────────────────────────┤
-│  Google Gemini Pro     - AI language model                  │
+│  Google Gemini     - AI language model                  │
 │  Rate: 60 req/min      - Free tier                          │
 │  Context: 30k tokens   - Large context window               │
 └─────────────────────────────────────────────────────────────┘
@@ -463,7 +463,7 @@ Phase 1 (Weeks 1-2):
 └─ Improve error handling
 
 Phase 2 (Weeks 3-4):
-└─ Image upload (Gemini Pro Vision)
+└─ Image upload (Gemini Vision)
 └─ User skin profiles
 └─ Feedback mechanism
 └─ Response rating

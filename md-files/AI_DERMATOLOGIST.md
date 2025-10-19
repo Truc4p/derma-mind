@@ -8,7 +8,7 @@ A **Board-Certified Virtual Dermatologist** powered by Google Gemini AI and trai
 
 ## ✅ Status: COMPLETE & OPERATIONAL
 
-- ✅ Google Gemini Pro AI integrated
+- ✅ Google Gemini AI integrated
 - ✅ 15 medical-grade knowledge articles seeded
 - ✅ MongoDB knowledge base configured
 - ✅ Real-time AI chat working
@@ -104,7 +104,7 @@ GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
 
 **Features:**
 - Free tier: 60 requests/minute
-- Model: Gemini Pro
+- Model: Gemini
 - Context: ~30k tokens
 - Max output: 2048 tokens
 
@@ -160,7 +160,7 @@ API (/api/ai-dermatologist/chat)
 Gemini Service
      ├→ Search MongoDB for knowledge
      ├→ Build context
-     └→ Call Gemini Pro AI
+     └→ Call Gemini AI
           ↓
      Generate Response
           ↓
@@ -259,7 +259,7 @@ node tools/scrapeDermNet.js
 4. Response rating
 
 ### Long Term:
-1. Image analysis (Gemini Pro Vision)
+1. Image analysis (Gemini Vision)
 2. User profiles
 3. Product recommendations
 4. Mobile app
@@ -297,12 +297,12 @@ node tools/scrapeDermNet.js
 ## 💰 Cost
 
 ### Development:
-- **Gemini Pro:** FREE (60 req/min)
+- **Gemini:** FREE (60 req/min)
 - **MongoDB:** Using existing account
 - **Total:** $0/month
 
 ### Production:
-- Gemini Pro: Still free for reasonable usage
+- Gemini: Still free for reasonable usage
 - MongoDB: Current plan handles 10k+ users
 - Hosting: ~$10-50/month
 - **Total:** ~$10-50/month
@@ -326,7 +326,7 @@ The AI learns from:
 1. **System Prompt** - Professional dermatologist persona
 2. **Knowledge Base** - 15+ medical articles (expandable)
 3. **Conversation History** - Last 10 messages
-4. **Gemini Pro** - Google's language model
+4. **Gemini** - Google's language model
 
 **To improve responses:**
 - Add more knowledge articles
@@ -360,7 +360,7 @@ Your AI Dermatologist is:
 
 ## 📄 License & Attribution
 
-- Google Gemini Pro: Subject to Google AI terms
+- Google Gemini: Subject to Google AI terms
 - Medical knowledge: Properly cited from sources
 - Code: MIT License (or your choice)
 - For educational purposes
@@ -387,7 +387,7 @@ Want to expand? You can:
 - Dermatology textbooks
 
 **Technology:**
-- Google Gemini Pro AI
+- Google Gemini AI
 - MongoDB
 - Node.js + Express
 - Vue.js

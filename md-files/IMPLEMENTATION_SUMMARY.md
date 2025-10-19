@@ -72,7 +72,7 @@ Backend (geminiService.js):
      - System prompt (Board-Certified Dermatologist persona)
      - Knowledge base content
      - Conversation history
-  4. Calls Gemini Pro AI
+  4. Calls Gemini AI
          ↓
 Gemini generates response based on:
   - Professional dermatologist guidelines
@@ -124,7 +124,7 @@ Your Gemini API key is already configured:
 GEMINI_API_KEY=AIzaSyD45yKmp57ntK9UmtJOSii5Shky32FuO0w
 ```
 
-**Gemini Pro Features:**
+**Gemini Features:**
 - ✅ Free tier: 60 requests/minute
 - ✅ No credit card required
 - ✅ 2048 max output tokens
@@ -300,7 +300,7 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
 3. Add product categories (cleansers, moisturizers)
 
 ### Medium Term:
-1. Image upload for skin analysis (use Gemini Pro Vision)
+1. Image upload for skin analysis (use Gemini Vision)
 2. User profiles for personalized advice
 3. Product recommendation database
 4. Routine generator based on skin profile
@@ -363,7 +363,7 @@ curl http://localhost:3004/api/health
 ## 🎉 You're All Set!
 
 Your AI Dermatologist is:
-- ✅ Powered by Google Gemini Pro
+- ✅ Powered by Google Gemini
 - ✅ Trained on 15 comprehensive dermatology articles
 - ✅ Ready to answer questions
 - ✅ Cites medical sources

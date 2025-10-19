@@ -3,7 +3,7 @@ import axios from 'axios'
 // Create axios instance with base configuration
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3004/api',
-  timeout: 10000,
+  timeout: 60000, // Increased to 60 seconds for AI responses
   headers: {
     'Content-Type': 'application/json'
   }
@@ -12,7 +12,8 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
+    // Check both 'token' and 'authToken' in localStorage
+    const token = localStorage.getItem('authToken') || localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
