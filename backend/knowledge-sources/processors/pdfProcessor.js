@@ -86,11 +86,12 @@ class PDFProcessor {
     /**
      * Use Gemini AI to extract structured information from text chunks
      * Detects chapter numbers and page references automatically
+     * Implements retry logic for rate limiting
      */
     async extractKnowledgeWithAI(textChunk, chunkIndex, totalChunks, context = {}) {
         const { GoogleGenerativeAI } = require('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }); // 250 req/day limit
 
         const prompt = `You are a dermatology knowledge extraction assistant extracting from "Skin Care: Beyond the Basics (4th Edition)" - a professional esthetics textbook.
 
@@ -140,6 +141,34 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
             
             return [];
         } catch (error) {
+            // Handle rate limiting with exponential backoff
+            if (error.message.includes('429') || error.message.includes('quota')) {
+                console.error(`   ⚠️  Rate limit hit on chunk ${chunkIndex + 1}`);
+                
+                // Extract retry delay if available
+                const retryMatch = error.message.match(/retry in ([\d.]+)s/);
+                const retryDelay = retryMatch ? Math.ceil(parseFloat(retryMatch[1]) * 1000) : 60000;
+                
+                console.log(`   ⏱️  Waiting ${Math.ceil(retryDelay/1000)}s before retry...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay + 2000)); // Add 2s buffer
+                
+                // Retry once
+                try {
+                    const retryResult = await model.generateContent(prompt);
+                    const retryResponse = await retryResult.response;
+                    const retryText = retryResponse.text();
+                    const jsonMatch = retryText.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) {
+                        const extracted = JSON.parse(jsonMatch[0]);
+                        return Array.isArray(extracted) ? extracted : [];
+                    }
+                    return [];
+                } catch (retryError) {
+                    console.error(`   ❌ Retry failed for chunk ${chunkIndex + 1}`);
+                    throw error; // Throw original error to stop processing
+                }
+            }
+            
             console.error(`Error processing chunk ${chunkIndex + 1}:`, error.message);
             return [];
         }
@@ -147,12 +176,15 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
 
     /**
      * Process entire PDF and extract all knowledge
+     * Supports resuming from a specific chunk
      */
     async processPDF(pdfPath, options = {}) {
         const {
             useAI = true,
             saveToDatabase = false,
-            outputFile = null
+            outputFile = null,
+            startFromChunk = 0, // Resume from this chunk
+            maxChunks = null // Limit chunks to process (for testing)
         } = options;
 
         console.log(`\n🔄 Processing PDF: ${path.basename(pdfPath)}`);
@@ -179,6 +211,18 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
         // Split into chunks
         const chunks = this.splitIntoChunks(cleanedText);
         console.log(`📚 Split into ${chunks.length} chunks`);
+        
+        // Apply chunk limits if specified
+        const chunksToProcess = maxChunks 
+            ? chunks.slice(startFromChunk, startFromChunk + maxChunks)
+            : chunks.slice(startFromChunk);
+        
+        if (startFromChunk > 0) {
+            console.log(`📍 Resuming from chunk ${startFromChunk + 1}/${chunks.length}`);
+        }
+        if (maxChunks) {
+            console.log(`⚡ Processing ${maxChunks} chunks (chunks ${startFromChunk + 1}-${startFromChunk + chunksToProcess.length})`);
+        }
 
         if (!useAI) {
             console.log('\n⚠️  AI extraction disabled. Returning raw chunks.');
@@ -189,44 +233,66 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
         console.log('\n🤖 Extracting knowledge with Gemini AI...');
         const allKnowledge = [];
         
-        for (let i = 0; i < chunks.length; i++) {
-            console.log(`   Processing chunk ${i + 1}/${chunks.length}...`);
+        for (let i = 0; i < chunksToProcess.length; i++) {
+            const actualChunkIndex = startFromChunk + i;
+            console.log(`   Processing chunk ${actualChunkIndex + 1}/${chunks.length}...`);
             
-            const extracted = await this.extractKnowledgeWithAI(chunks[i], i, chunks.length);
-            
-            if (extracted.length > 0) {
-                // Add source reference and verification status
-                const enriched = extracted.map(item => {
-                    // Build detailed source reference
-                    let sourceRef = 'Skin Care: Beyond the Basics (4th Edition)';
-                    
-                    if (item.chapterNumber && item.chapterTitle) {
-                        sourceRef += ` - Chapter ${item.chapterNumber}: ${item.chapterTitle}`;
-                    } else if (item.chapterTitle) {
-                        sourceRef += ` - ${item.chapterTitle}`;
-                    } else if (item.chapterNumber) {
-                        sourceRef += ` - Chapter ${item.chapterNumber}`;
-                    }
-                    
-                    if (item.pageReference) {
-                        sourceRef += ` (${item.pageReference})`;
-                    }
-                    
-                    return {
-                        ...item,
-                        sourceReference: sourceRef,
-                        verified: true // Book content is verified
-                    };
-                });
+            try {
+                const extracted = await this.extractKnowledgeWithAI(
+                    chunksToProcess[i], 
+                    actualChunkIndex, 
+                    chunks.length
+                );
                 
-                allKnowledge.push(...enriched);
-                console.log(`   ✓ Extracted ${extracted.length} knowledge entries`);
-            }
-            
-            // Rate limiting (Gemini API has limits)
-            // Reduced delay since we're well within quota limits
-            if (i < chunks.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 1500)); // 1.5 second delay
+                if (extracted.length > 0) {
+                    // Add source reference and verification status
+                    const enriched = extracted.map(item => {
+                        // Build detailed source reference
+                        let sourceRef = 'Skin Care: Beyond the Basics (4th Edition)';
+                        
+                        if (item.chapterNumber && item.chapterTitle) {
+                            sourceRef += ` - Chapter ${item.chapterNumber}: ${item.chapterTitle}`;
+                        } else if (item.chapterTitle) {
+                            sourceRef += ` - ${item.chapterTitle}`;
+                        } else if (item.chapterNumber) {
+                            sourceRef += ` - Chapter ${item.chapterNumber}`;
+                        }
+                        
+                        if (item.pageReference) {
+                            sourceRef += ` (${item.pageReference})`;
+                        }
+                        
+                        return {
+                            ...item,
+                            sourceReference: sourceRef,
+                            verified: true // Book content is verified
+                        };
+                    });
+                    
+                    allKnowledge.push(...enriched);
+                    console.log(`   ✓ Extracted ${extracted.length} knowledge entries`);
+                }
+                
+                // Increased delay to respect rate limits
+                // 10 req/min = 6 seconds between requests minimum
+                if (i < chunksToProcess.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 7000)); // 7 second delay for safety
+                }
+            } catch (error) {
+                console.error(`\n❌ Fatal error on chunk ${actualChunkIndex + 1}: ${error.message}`);
+                console.log(`\n💾 Saving ${allKnowledge.length} entries extracted so far...`);
+                
+                // Save progress before exiting
+                if (outputFile && allKnowledge.length > 0) {
+                    await fs.writeFile(
+                        outputFile.replace('.json', `-progress-chunk${actualChunkIndex}.json`),
+                        JSON.stringify(allKnowledge, null, 2),
+                        'utf-8'
+                    );
+                    console.log(`💾 Progress saved! Resume with: startFromChunk: ${actualChunkIndex + 1}`);
+                }
+                
+                throw error; // Re-throw to stop execution
             }
         }
 
@@ -316,8 +382,10 @@ async function main() {
     try {
         const result = await processor.processPDF(pdfPath, {
             useAI: true,
-            saveToDatabase: true, // Set to true to save directly to DB
-            outputFile: outputPath
+            saveToDatabase: false, // Set to true to save directly to DB
+            outputFile: outputPath,
+            startFromChunk: 0, // Change this to resume from a specific chunk
+            maxChunks: 240 // Process 240 chunks per day (within 250 quota with buffer)
         });
 
         console.log('\n📊 Processing Summary:');
