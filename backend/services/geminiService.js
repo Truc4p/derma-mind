@@ -11,10 +11,10 @@ class GeminiService {
             // model: 'gemini-2.5-pro',
             model: 'gemini-2.5-flash',
             generationConfig: {
-                temperature: 0.7,
-                topP: 0.8,
-                topK: 40,
-                maxOutputTokens: 8192, // Increased to allow longer responses
+                temperature: 0.8,  // Increased for more comprehensive responses
+                topP: 0.9,         // Increased to consider more tokens
+                topK: 50,          // Increased for broader vocabulary
+                maxOutputTokens: 8192,
             }
         });
         
@@ -27,8 +27,17 @@ class GeminiService {
 - Product recommendations based on skin type and concerns
 
 You provide professional, evidence-based advice while being empathetic and easy to understand.
-Always cite the knowledge base when providing specific information.
-If unsure, recommend consulting an in-person dermatologist for proper diagnosis.`;
+
+IMPORTANT RESPONSE RULES:
+1. Use ALL the information provided in the "Relevant Knowledge Base Information" section below
+2. Synthesize information from multiple sources when available to provide comprehensive answers
+3. If multiple knowledge entries are provided, integrate insights from each one
+4. Provide detailed, thorough responses that cover all aspects found in the knowledge base
+5. At the end of your response, add: "SOURCES_USED: [list ALL titles from the knowledge base that you referenced]"
+6. Format: SOURCES_USED: Title 1, Title 2, Title 3, Title 4, Title 5
+
+Always strive to be comprehensive by utilizing all available knowledge base information.
+If unsure about something not in the knowledge base, recommend consulting an in-person dermatologist for proper diagnosis.`;
     }
 
     /**
@@ -66,12 +75,23 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
             return '';
         }
 
-        let context = '\n\nRelevant Knowledge Base Information:\n';
+        let context = '\n\n=== RELEVANT KNOWLEDGE BASE INFORMATION ===\n';
+        context += `You have ${knowledgeItems.length} knowledge sources below. USE ALL OF THEM in your response.\n\n`;
+        
         knowledgeItems.forEach((item, index) => {
-            context += `\n${index + 1}. ${item.title} (${item.category})\n`;
-            context += `${item.content}\n`;
-            context += `Source: ${item.sourceReference}\n`;
+            context += `--- SOURCE ${index + 1}: "${item.title}" (Category: ${item.category}) ---\n`;
+            context += `Content: ${item.content}\n`;
+            context += `Reference: ${item.sourceReference}\n`;
+            // Check if keywords exist before joining
+            if (item.keywords && Array.isArray(item.keywords) && item.keywords.length > 0) {
+                context += `Keywords: ${item.keywords.join(', ')}\n\n`;
+            } else {
+                context += `\n`;
+            }
         });
+        
+        context += `=== END OF KNOWLEDGE BASE (${knowledgeItems.length} sources) ===\n`;
+        context += `Remember: Integrate information from ALL ${knowledgeItems.length} sources above into your comprehensive response.\n`;
 
         return context;
     }
@@ -83,10 +103,18 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
         try {
             // Get relevant knowledge from database
             const relevantKnowledge = await this.getRelevantKnowledge(userMessage);
+            console.log(`📚 Retrieved ${relevantKnowledge.length} knowledge entries for query: "${userMessage}"`);
+            relevantKnowledge.forEach((k, i) => console.log(`   ${i + 1}. ${k.title}`));
+            
             const knowledgeContext = this.buildContextFromKnowledge(relevantKnowledge);
 
-            // Build conversation context
+            // Build conversation context with emphasis on using all sources
             let fullPrompt = this.systemContext + knowledgeContext + '\n\n';
+            
+            // Add explicit instruction to use all sources
+            if (relevantKnowledge.length > 0) {
+                fullPrompt += `IMPORTANT: I have provided ${relevantKnowledge.length} knowledge base entries above. Please use information from ALL of them to create a comprehensive response. Integrate insights from each source to give the most complete answer possible.\n\n`;
+            }
             
             // Add conversation history
             if (conversationHistory.length > 0) {
@@ -101,10 +129,43 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
             // Generate response
             const result = await this.model.generateContent(fullPrompt);
             const response = await result.response;
-            const text = response.text();
+            let text = response.text();
 
-            // Format sources with detailed references
-            const sources = relevantKnowledge.map(k => {
+            // Extract sources used from AI response
+            let usedSourceTitles = [];
+            const sourcesMatch = text.match(/SOURCES_USED:\s*(.+?)(?:\n|$)/i);
+            
+            if (sourcesMatch) {
+                // Remove the SOURCES_USED line from the response
+                text = text.replace(/SOURCES_USED:\s*(.+?)(?:\n|$)/i, '').trim();
+                
+                // Parse the used source titles
+                const sourcesText = sourcesMatch[1].trim();
+                if (sourcesText.toLowerCase() !== 'none') {
+                    usedSourceTitles = sourcesText
+                        .split(',')
+                        .map(title => title.trim())
+                        .filter(title => title.length > 0);
+                }
+            }
+
+            // Filter knowledge to only include sources that were actually used
+            let usedKnowledge = relevantKnowledge;
+            if (usedSourceTitles.length > 0) {
+                usedKnowledge = relevantKnowledge.filter(k => 
+                    usedSourceTitles.some(usedTitle => 
+                        k.title.toLowerCase().includes(usedTitle.toLowerCase()) ||
+                        usedTitle.toLowerCase().includes(k.title.toLowerCase())
+                    )
+                );
+                console.log(`✅ AI used ${usedKnowledge.length} out of ${relevantKnowledge.length} sources`);
+                usedKnowledge.forEach((k, i) => console.log(`   ${i + 1}. ${k.title}`));
+            } else {
+                console.log(`ℹ️  Could not determine which sources were used, including all ${relevantKnowledge.length} sources`);
+            }
+
+            // Format sources with detailed references (only used sources)
+            const sources = usedKnowledge.map(k => {
                 let sourceText = `"${k.title}" - ${k.sourceReference}`;
                 return sourceText;
             });
@@ -117,7 +178,7 @@ If unsure, recommend consulting an in-person dermatologist for proper diagnosis.
 
             return {
                 response: finalResponse,
-                knowledgeSources: relevantKnowledge.map(k => ({
+                knowledgeSources: usedKnowledge.map(k => ({
                     title: k.title,
                     source: k.sourceReference,
                     chapter: k.chapterTitle || null,

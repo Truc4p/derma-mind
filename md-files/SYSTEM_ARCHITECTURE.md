@@ -56,7 +56,7 @@
 │                            ↓                                    │
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │ 4. Call Gemini API                                       │  │
-│  │    - Model: gemini-pro                                   │  │
+│  │    - Model: gemini-2.5-flash                                   │  │
 │  │    - Temperature: 0.7                                    │  │
 │  │    - Max tokens: 2048                                    │  │
 │  └──────────────────────────────────────────────────────────┘  │
@@ -92,7 +92,7 @@
 │                 (ai.google.dev)                                 │
 │                                                                 │
 │  API Key: AIzaSyA02nsG75qUblT_aiS8r8x2iLcIg9k18mQ             │
-│  Model: gemini-pro                                             │
+│  Model: gemini-2.5-flash                                             │
 │  Rate: 60 requests/minute (FREE)                               │
 │  Context: ~30k tokens                                          │
 └─────────────────────────────────────────────────────────────────┘
