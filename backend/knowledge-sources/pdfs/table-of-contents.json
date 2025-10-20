@@ -1,0 +1,1122 @@
+[
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "1",
+    "title": "Advanced Anatomy and Physiology of the Skin",
+    "page": 1,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Structure of the Cell",
+    "page": 2,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "A Day in the Life of a Cell",
+    "page": 3,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Nucleus",
+    "page": 4,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Cell Specialization",
+    "page": 5,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Physiology of the Skin",
+    "page": 6,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Epidermis",
+    "page": 8,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Barrier Function of the Skin",
+    "page": 11,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Specialized Cells and Pigmentation",
+    "page": 13,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Skin Penetration",
+    "page": 14,
+    "parent": "1"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 20,
+    "parent": "1"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "2",
+    "title": "Hygiene and Sterilization Techniques",
+    "page": 23,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Sterilization",
+    "page": 26,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Disposable Materials",
+    "page": 29,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Nondisposable Items",
+    "page": 29,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "General Cleaning",
+    "page": 32,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About OSHA",
+    "page": 33,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Protecting You and Your\nClients from Disease",
+    "page": 34,
+    "parent": "2"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 37,
+    "parent": "2"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "3",
+    "title": "The Immune System",
+    "page": 43,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Components of the Immune\nSystem",
+    "page": 44,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "How Medicine Helps\nthe Immune System",
+    "page": 46,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Immunity Role of the Skin",
+    "page": 46,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "How the Immune System\nCommunicates with Itself",
+    "page": 48,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About Cancer",
+    "page": 49,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Infl ammation and Free Radicals",
+    "page": 50,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Autoimmune Diseases",
+    "page": 52,
+    "parent": "3"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 56,
+    "parent": "3"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "4",
+    "title": "Communicable Diseases",
+    "page": 57,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Common Diseases that Affect\nthe Skin Care Practice",
+    "page": 58,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "MRSA",
+    "page": 60,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About AIDS",
+    "page": 61,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "How People Get Infected\nwith AIDS",
+    "page": 61,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Testing for the AIDS Virus",
+    "page": 62,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Symptoms of HIV Infection",
+    "page": 63,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Treatment of AIDS and HIV Infection",
+    "page": 64,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Prevention of AIDS",
+    "page": 65,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Personal Precautions",
+    "page": 66,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Dispelling Myths about AIDS",
+    "page": 66,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "AIDS and the Esthetician",
+    "page": 66,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Skin Symptoms Associated\nwith AIDS",
+    "page": 67,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Skin Cancers Associated with AIDS",
+    "page": 70,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Mental and Emotional\nState of Persons with AIDS",
+    "page": 71,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Handling Client Questions\nabout AIDS",
+    "page": 72,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "AIDS and the Future",
+    "page": 72,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About Hepatitis",
+    "page": 72,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "AIDS/HIV Knowledge Quiz",
+    "page": 74,
+    "parent": "4"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 75,
+    "parent": "4"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "5",
+    "title": "Hormones",
+    "page": 77,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Endocrine Glands",
+    "page": 78,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Hormones Produced by the\nOvaries and Testes",
+    "page": 82,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Hormonal Phases of Life",
+    "page": 83,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Pregnancy",
+    "page": 87,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Premenstrual Syndrome",
+    "page": 90,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Birth Control Pills",
+    "page": 92,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Menopause",
+    "page": 93,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Skin Conditions Associated\nwith Menopause",
+    "page": 94,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About Hirsutism",
+    "page": 97,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Obesity, Anorexia, and Hormones",
+    "page": 97,
+    "parent": "5"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 97,
+    "parent": "5"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "6",
+    "title": "Skin Analysis",
+    "page": 99,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Fitzpatrick Skin Typing",
+    "page": 100,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Esthetic Skin Typing",
+    "page": 101,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Skin Types versus Skin\nConditions",
+    "page": 104,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "The Skin Analysis Procedure",
+    "page": 104,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Dehydration",
+    "page": 107,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Pore or Follicle-Related\nConditions",
+    "page": 109,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Redness Conditions",
+    "page": 113,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Pigmentation Conditions",
+    "page": 113,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Aging and Sun Damage",
+    "page": 116,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Medical Conditions of the Skin",
+    "page": 118,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Prioritizing Analysis Observations",
+    "page": 119,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Client Confidentiality",
+    "page": 119,
+    "parent": "6"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 120,
+    "parent": "6"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "7",
+    "title": "Recognize and Refer Medical Conditions",
+    "page": 121,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Primary and Secondary Lesions",
+    "page": 122,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Acne",
+    "page": 123,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Common Infections of the Skin",
+    "page": 123,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Common Reactions, Rashes,\nand Irritations",
+    "page": 131,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Vascular Lesions",
+    "page": 135,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Growths",
+    "page": 136,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Commonly Used Prescription\nDermatological Drugs",
+    "page": 137,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Cortisone",
+    "page": 138,
+    "parent": "7"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 139,
+    "parent": "7"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "8",
+    "title": "Essential Knowledge of Chemistry",
+    "page": 141,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Principles of Chemistry",
+    "page": 142,
+    "parent": "8"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "How Chemical Reactions\nTake Place",
+    "page": 147,
+    "parent": "8"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Chemicals Found in the Skin\nand Body",
+    "page": 147,
+    "parent": "8"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Ph, Acids, and Bases",
+    "page": 148,
+    "parent": "8"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Chemical Terms Estheticians\nShould Know",
+    "page": 151,
+    "parent": "8"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 152,
+    "parent": "8"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "9",
+    "title": "Cosmetic Chemistry and Functional Ingredients",
+    "page": 153,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About Water",
+    "page": 154,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Emollients",
+    "page": 155,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Fatty Acids",
+    "page": 156,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Fatty Alcohols",
+    "page": 157,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Fatty Esters",
+    "page": 157,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Surfactants",
+    "page": 158,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Emulsifi ers",
+    "page": 159,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Physical Emulsions",
+    "page": 161,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Solvents",
+    "page": 162,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Antimicrobials and Preservatives",
+    "page": 162,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Other Types of Preservatives",
+    "page": 164,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Chelating Agents",
+    "page": 165,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Buffering Agents",
+    "page": 165,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Gellants and Thickening Agents",
+    "page": 165,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Coloring Agents",
+    "page": 165,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "High-Tech Vehicles",
+    "page": 166,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Micelles",
+    "page": 167,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Liposomes and Microencapsulation",
+    "page": 167,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Other Innovative Vehicles",
+    "page": 169,
+    "parent": "9"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 169,
+    "parent": "9"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "10",
+    "title": "Performance Ingredients and Active Ingredients",
+    "page": 171,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "“Cosmeceutical” Ingredients",
+    "page": 172,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Cleansing Agents",
+    "page": 172,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Performance Agents in Toners",
+    "page": 174,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "A Word about Alcohol",
+    "page": 174,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Performance Ingredients\nfor Dehydrated Skin",
+    "page": 175,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Hydrating Ingredients",
+    "page": 175,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Other Humectants",
+    "page": 176,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Occlusives",
+    "page": 177,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Emollients",
+    "page": 177,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Products for Dry Skin",
+    "page": 178,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Ingredients for Aging Skin",
+    "page": 179,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Alpha Hydroxy Acids",
+    "page": 179,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "More Antiaging Ingredients",
+    "page": 182,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Combining Antiaging Ingredients",
+    "page": 186,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Plant Extracts",
+    "page": 187,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Performance Ingredients\nfor Sensitive Skin",
+    "page": 187,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Over-the-Counter Drugs",
+    "page": 189,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Performance Ingredients for\nOily and Acne-Prone Skin",
+    "page": 192,
+    "parent": "10"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "In Conclusion",
+    "page": 193,
+    "parent": "10"
+  },
+  {
+    "type": "chapter",
+    "level": 1,
+    "number": "11",
+    "title": "Skin Care Products",
+    "page": 195,
+    "parent": null
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "A Visit to the Product Stockroom",
+    "page": 196,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Cleansers",
+    "page": 196,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Toners",
+    "page": 201,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Day Creams and Treatments",
+    "page": 203,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Night Creams and Treatments",
+    "page": 205,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "About Ampoules and Serums",
+    "page": 209,
+    "parent": "11"
+  },
+  {
+    "type": "section",
+    "level": 2,
+    "number": null,
+    "title": "Special Creams and Treatments",
+    "page": 210,
+    "parent": "11"
+  }
+]
