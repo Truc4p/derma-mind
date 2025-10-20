@@ -9,6 +9,7 @@
     "seed": "node seedData.js",
     "seed:education": "node seedEducation.js",
     "seed:knowledge": "node seedKnowledgeBase.js",
+    "seed:extracted": "node seedExtractedKnowledge.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
