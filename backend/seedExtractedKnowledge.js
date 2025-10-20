@@ -45,16 +45,31 @@ async function seedExtractedKnowledge() {
             const batch = extractedKnowledge.slice(i, i + BATCH_SIZE);
             
             try {
-                await DermatologyKnowledge.insertMany(batch, { ordered: false });
-                imported += batch.length;
+                const result = await DermatologyKnowledge.insertMany(batch, { ordered: false });
+                imported += result.length; // Count actual insertions
                 
                 // Progress indicator
                 const progress = Math.round((i + batch.length) / extractedKnowledge.length * 100);
                 process.stdout.write(`\r   Progress: ${progress}% (${imported}/${extractedKnowledge.length})`);
             } catch (error) {
-                // Some entries might fail due to validation or duplicates
-                failed += batch.length;
-                console.error(`\n   ⚠️  Batch ${i}-${i + batch.length} had errors:`, error.message);
+                // insertMany with ordered:false can partially succeed
+                // Check if error has insertedDocs property
+                if (error.insertedDocs) {
+                    imported += error.insertedDocs.length;
+                    failed += batch.length - error.insertedDocs.length;
+                    console.error(`\n   ⚠️  Batch ${i}-${i + batch.length}: ${error.insertedDocs.length} inserted, ${batch.length - error.insertedDocs.length} failed`);
+                } else {
+                    failed += batch.length;
+                    console.error(`\n   ⚠️  Batch ${i}-${i + batch.length} failed:`, error.message);
+                }
+                
+                // Log detailed error info
+                if (error.writeErrors && error.writeErrors.length > 0) {
+                    console.log(`   📋 First few errors:`);
+                    error.writeErrors.slice(0, 3).forEach(err => {
+                        console.log(`      - Index ${err.index}: ${err.errmsg}`);
+                    });
+                }
             }
         }
 

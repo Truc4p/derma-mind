@@ -22,12 +22,10 @@ require('dotenv').config();
 
 class PDFProcessor {
     constructor() {
-        // Optimized for quality extraction with plenty of quota available
-        // Smaller chunks = more precise extraction, better attribution, more detailed entries
-        // With 1500 req/day limit and ~935 chunks, we have plenty of headroom
-        this.chunkSize = 3000; // Sweet spot: detailed but not too fragmented
-        this.overlapSize = 300; // 10% overlap maintains context between chunks
         this.tocCache = null; // Cache for table of contents
+        // Page offset: TOC pages vs actual PDF pages
+        // Chapter 1 lists as page 1 in TOC, but is actually page 15 in PDF
+        this.pageOffset = 14; // Offset for front matter (title, copyright, TOC, etc.)
     }
 
     /**
@@ -84,7 +82,7 @@ class PDFProcessor {
         const { GoogleGenerativeAI } = require('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ 
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.5-flash',
             generationConfig: {
                 temperature: 0.1,
                 responseMimeType: "application/json"
@@ -290,335 +288,227 @@ Return ONLY valid JSON. If no TOC found, return {"toc": []}.`;
         }
     }
 
+
+
     /**
-     * Find which chapter/section a piece of text belongs to based on TOC
+     * Extract text for a specific page range from PDF using page markers
+     * Must be called BEFORE cleaning (while page markers still exist)
      */
-    findContextFromTOC(textChunk, toc) {
-        // Look for chapter markers in the text
-        const chapterMatch = textChunk.match(/CHAPTER\s+(\d+)/i);
-        if (chapterMatch) {
-            const chapterNum = chapterMatch[1];
-            const chapter = toc.find(e => e.number === chapterNum && e.type === 'chapter');
-            if (chapter) {
-                return {
-                    chapterNumber: chapter.number,
-                    chapterTitle: chapter.title,
-                    pageReference: `Page ${chapter.page}`
-                };
-            }
+    getTextForPageRange(rawText, startPage, endPage) {
+        // Build a map of page numbers to text positions
+        const pageMarkers = [];
+        const pagePattern = /--\s*(\d+)\s*of\s*\d+\s*--/g;
+        let match;
+        
+        while ((match = pagePattern.exec(rawText)) !== null) {
+            pageMarkers.push({
+                page: parseInt(match[1]),
+                position: match.index
+            });
         }
         
-        // Look for page numbers in the text
-        const pageMatch = textChunk.match(/--\s*(\d+)\s*of\s*\d+\s*--/);
-        if (pageMatch) {
-            const pageNum = parseInt(pageMatch[1]);
-            // Find the chapter/section that this page belongs to
-            const relevantEntries = toc
-                .filter(e => e.page <= pageNum)
-                .sort((a, b) => b.page - a.page);
-            
-            if (relevantEntries.length > 0) {
-                const entry = relevantEntries[0];
-                if (entry.type === 'chapter') {
-                    return {
-                        chapterNumber: entry.number,
-                        chapterTitle: entry.title,
-                        pageReference: `Page ${pageNum}`
-                    };
-                } else {
-                    // Find the parent chapter
-                    const chapter = toc.find(e => e.number === entry.parent && e.type === 'chapter');
-                    return {
-                        chapterNumber: chapter?.number || null,
-                        chapterTitle: chapter?.title || entry.title,
-                        pageReference: `Page ${pageNum}`,
-                        section: entry.title
-                    };
-                }
-            }
+        if (pageMarkers.length === 0) {
+            // Fallback: estimate based on average page length
+            console.log('      ⚠️  No page markers found, using estimation');
+            const avgCharsPerPage = rawText.length / 528; // Total pages in book
+            const estimatedStart = Math.floor((startPage - 1) * avgCharsPerPage);
+            const estimatedEnd = Math.floor(endPage * avgCharsPerPage);
+            return rawText.substring(estimatedStart, estimatedEnd);
         }
         
-        return null;
+        // Find the marker closest to startPage
+        const startMarker = pageMarkers.find(m => m.page >= startPage) || pageMarkers[0];
+        
+        // Find the marker closest to endPage (or slightly after)
+        const endMarker = pageMarkers.find(m => m.page > endPage) || pageMarkers[pageMarkers.length - 1];
+        
+        const extractedText = rawText.substring(startMarker.position, endMarker.position);
+        
+        // Clean the extracted text
+        return extractedText
+            .replace(/Copyright \d{4} Cengage Learning.*?restrictions require it\./gs, '')
+            .replace(/--\s*\d+\s*of\s*\d+\s*--/g, '')
+            .replace(/\n\s*\n\s*\n+/g, '\n\n')
+            .replace(/^\d+\s*$/gm, '')
+            .replace(/\s+/g, ' ')
+            .replace(/\n /g, '\n')
+            .trim();
     }
 
     /**
-     * Split text into manageable chunks with overlap
+     * Process PDF by extracting knowledge section-by-section based on TOC
+     * This provides much better context and attribution than arbitrary chunking
      */
-    splitIntoChunks(text, chunkSize = this.chunkSize, overlap = this.overlapSize) {
-        const chunks = [];
-        let start = 0;
-
-        while (start < text.length) {
-            const end = Math.min(start + chunkSize, text.length);
-            const chunk = text.substring(start, end);
-            chunks.push(chunk);
-            
-            // Move start position, accounting for overlap
-            start = end - overlap;
-            
-            // Prevent infinite loop at the end
-            if (start + overlap >= text.length) break;
-        }
-
-        return chunks;
-    }
-
-    /**
-     * Use Gemini AI to extract structured information from text chunks
-     * Detects chapter numbers and page references automatically
-     * Implements retry logic for rate limiting
-     */
-    async extractKnowledgeWithAI(textChunk, chunkIndex, totalChunks, context = {}) {
-        const { GoogleGenerativeAI } = require('@google/generative-ai');
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }); // 250 req/day limit
-
-        // Build context string if available
-        let contextStr = '';
-        if (context.lastChapterNumber || context.lastChapterTitle || context.lastPageReference) {
-            const parts = [];
-            if (context.lastChapterNumber || context.lastChapterTitle) {
-                parts.push(`Chapter ${context.lastChapterNumber || '?'}: ${context.lastChapterTitle || 'Unknown'}`);
-            }
-            if (context.lastPageReference) {
-                parts.push(`Last known page: ${context.lastPageReference}`);
-            }
-            contextStr = `\n\nCONTEXT FROM PREVIOUS CHUNK: ${parts.join(', ')}. If you cannot detect explicit page/chapter info in this chunk, use the context values above.`;
-        }
-
-        const prompt = `You are a dermatology knowledge extraction assistant extracting from "Skin Care: Beyond the Basics (4th Edition)" - a professional esthetics textbook.${contextStr}
-
-IMPORTANT - Book Structure:
-- SIDEBAR DEFINITIONS: Key terms with brief definitions (left margin)
-- MAIN TEXT: Detailed explanations and clinical information (main body)
-- FIGURES: Diagrams referenced like "Figure 1-1" (with labels like "Nucleus", "Mitochondrion")
-
-EXTRACTION RULES:
-1. COMBINE sidebar definitions WITH their main text explanations into coherent entries
-2. Include figure references when relevant (e.g., "as shown in Figure 1-1")
-3. Skip: copyright notices, page markers, pure diagram labels, table of contents
-4. Extract ONLY significant clinical/professional knowledge
-5. When you see a term defined in sidebar + explained in main text, merge them into one comprehensive entry
-
-Extract and structure as JSON array (chunk ${chunkIndex + 1}/${totalChunks}):
-
-[
-  {
-    "category": "one of: skin-conditions, ingredients, treatments, routines, cosmetics, procedures, general-advice",
-    "subcategory": "specific subcategory (e.g., acne, retinoids, cell-biology, etc.)",
-    "title": "Clear, descriptive title",
-    "content": "Detailed, well-structured content. Combine definitions with explanations. Include mechanisms, usage guidelines, contraindications, and evidence.",
-    "keywords": ["keyword1", "keyword2", "keyword3", ...],
-    "chapterNumber": "X" or null,
-    "chapterTitle": "Chapter name" or null,
-    "pageReference": "Page X" or "Pages X-Y" if identifiable
-  }
-]
-
-Text chunk:
-${textChunk}
-
-Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`;
-
-        try {
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-            
-            // Extract JSON from response
-            const jsonMatch = text.match(/\[[\s\S]*\]/);
-            if (jsonMatch) {
-                const extracted = JSON.parse(jsonMatch[0]);
-                return Array.isArray(extracted) ? extracted : [];
-            }
-            
-            return [];
-        } catch (error) {
-            // Handle rate limiting with exponential backoff
-            if (error.message.includes('429') || error.message.includes('quota')) {
-                console.error(`   ⚠️  Rate limit hit on chunk ${chunkIndex + 1}`);
-                
-                // Extract retry delay if available
-                const retryMatch = error.message.match(/retry in ([\d.]+)s/);
-                const retryDelay = retryMatch ? Math.ceil(parseFloat(retryMatch[1]) * 1000) : 60000;
-                
-                console.log(`   ⏱️  Waiting ${Math.ceil(retryDelay/1000)}s before retry...`);
-                await new Promise(resolve => setTimeout(resolve, retryDelay + 2000)); // Add 2s buffer
-                
-                // Retry once
-                try {
-                    const retryResult = await model.generateContent(prompt);
-                    const retryResponse = await retryResult.response;
-                    const retryText = retryResponse.text();
-                    const jsonMatch = retryText.match(/\[[\s\S]*\]/);
-                    if (jsonMatch) {
-                        const extracted = JSON.parse(jsonMatch[0]);
-                        return Array.isArray(extracted) ? extracted : [];
-                    }
-                    return [];
-                } catch (retryError) {
-                    console.error(`   ❌ Retry failed for chunk ${chunkIndex + 1}`);
-                    throw error; // Throw original error to stop processing
-                }
-            }
-            
-            console.error(`Error processing chunk ${chunkIndex + 1}:`, error.message);
-            return [];
-        }
-    }
-
-    /**
-     * Process entire PDF and extract all knowledge
-     * Supports resuming from a specific chunk
-     */
-    async processPDF(pdfPath, options = {}) {
+    async processPDFByTOC(pdfPath, options = {}) {
         const {
-            useAI = true,
             saveToDatabase = false,
             outputFile = null,
-            startFromChunk = 0, // Resume from this chunk
-            maxChunks = null // Limit chunks to process (for testing)
+            startFromSection = 0, // Resume from this section index
+            maxSections = null // Limit sections to process (for testing)
         } = options;
 
-        console.log(`\n🔄 Processing PDF: ${path.basename(pdfPath)}`);
+        console.log(`\n🔄 Processing PDF by TOC Structure: ${path.basename(pdfPath)}`);
         
-        // Load or extract TOC first
+        // Load or extract TOC
         const toc = await this.getTOC(pdfPath);
+        
+        if (!toc || toc.length === 0) {
+            console.error('❌ No TOC found! Please run TOC extraction first.');
+            return { knowledge: [], totalEntries: 0 };
+        }
         
         // Read PDF
         const pdfData = await this.readPDF(pdfPath);
         
-        // Clean text - remove boilerplate that adds noise to extraction
-        // This textbook has copyright notices on every page and page markers
-        const cleanedText = pdfData.text
-            // Remove copyright notices (appears on every page)
-            .replace(/Copyright \d{4} Cengage Learning.*?restrictions require it\./gs, '')
-            // Remove page markers like "-- 16 of 528 --"
-            .replace(/--\s*\d+\s*of\s*\d+\s*--/g, '')
-            // Remove excessive newlines
-            .replace(/\n\s*\n\s*\n+/g, '\n\n')
-            // Remove standalone page numbers
-            .replace(/^\d+\s*$/gm, '')
-            // Normalize spaces
-            .replace(/\s+/g, ' ')
-            .replace(/\n /g, '\n')
-            .trim();
+        // Keep the raw text for page range extraction (with page markers)
+        const rawText = pdfData.text;
 
-        // Split into chunks
-        const chunks = this.splitIntoChunks(cleanedText);
-        console.log(`📚 Split into ${chunks.length} chunks`);
+        // Get all chapters and sections
+        const chapters = toc.filter(e => e.type === 'chapter');
+        const sections = toc.filter(e => e.type === 'section');
         
-        // Apply chunk limits if specified
-        const chunksToProcess = maxChunks 
-            ? chunks.slice(startFromChunk, startFromChunk + maxChunks)
-            : chunks.slice(startFromChunk);
+        console.log(`📚 Found ${chapters.length} chapters and ${sections.length} sections`);
         
-        if (startFromChunk > 0) {
-            console.log(`📍 Resuming from chunk ${startFromChunk + 1}/${chunks.length}`);
+        // Build section list with page ranges
+        const sectionsToProcess = [];
+        
+        for (let i = 0; i < chapters.length; i++) {
+            const chapter = chapters[i];
+            const chapterSections = toc.filter(e => e.parent === chapter.number && e.type === 'section');
+            
+            for (let j = 0; j < chapterSections.length; j++) {
+                const section = chapterSections[j];
+                const nextSection = chapterSections[j + 1];
+                const nextChapter = chapters[i + 1];
+                
+                // Determine end page for this section
+                let endPage;
+                if (nextSection) {
+                    endPage = nextSection.page - 1;
+                } else if (nextChapter) {
+                    endPage = nextChapter.page - 1;
+                } else {
+                    endPage = section.page + 10; // Default to 10 pages if no next section
+                }
+                
+                sectionsToProcess.push({
+                    chapterNumber: chapter.number,
+                    chapterTitle: chapter.title,
+                    sectionTitle: section.title,
+                    startPage: section.page + this.pageOffset, // Apply page offset
+                    endPage: endPage + this.pageOffset, // Apply page offset
+                    pageRange: `Pages ${section.page}-${endPage} (PDF: ${section.page + this.pageOffset}-${endPage + this.pageOffset})`
+                });
+            }
         }
-        if (maxChunks) {
-            console.log(`⚡ Processing ${maxChunks} chunks (chunks ${startFromChunk + 1}-${startFromChunk + chunksToProcess.length})`);
+        
+        console.log(`📄 Total sections to process: ${sectionsToProcess.length}`);
+        
+        // Apply limits if specified
+        const limitedSections = maxSections 
+            ? sectionsToProcess.slice(startFromSection, startFromSection + maxSections)
+            : sectionsToProcess.slice(startFromSection);
+        
+        if (startFromSection > 0) {
+            console.log(`📍 Resuming from section ${startFromSection + 1}/${sectionsToProcess.length}`);
+        }
+        if (maxSections) {
+            console.log(`⚡ Processing ${maxSections} sections (${startFromSection + 1}-${startFromSection + limitedSections.length})`);
         }
 
-        if (!useAI) {
-            console.log('\n⚠️  AI extraction disabled. Returning raw chunks.');
-            return { chunks, rawText: cleanedText };
-        }
-
-        // Process each chunk with AI
-        console.log('\n🤖 Extracting knowledge with Gemini AI...');
+        // Process each section with AI
+        console.log('\n🤖 Extracting knowledge section by section...\n');
         const allKnowledge = [];
         
-        // Track chapter and page context across chunks
-        let chapterContext = {
-            lastChapterNumber: null,
-            lastChapterTitle: null,
-            lastPageReference: null
-        };
-        
-        for (let i = 0; i < chunksToProcess.length; i++) {
-            const actualChunkIndex = startFromChunk + i;
-            console.log(`   Processing chunk ${actualChunkIndex + 1}/${chunks.length}...`);
+        for (let i = 0; i < limitedSections.length; i++) {
+            const actualIndex = startFromSection + i;
+            const sectionInfo = limitedSections[i];
             
-            // Try to find context from TOC
-            const tocContext = this.findContextFromTOC(chunksToProcess[i], toc);
-            if (tocContext) {
-                // Update context from TOC
-                chapterContext = {
-                    ...chapterContext,
-                    ...tocContext
-                };
+            console.log(`   [${actualIndex + 1}/${sectionsToProcess.length}] Ch ${sectionInfo.chapterNumber}: ${sectionInfo.sectionTitle} (${sectionInfo.pageRange})`);
+            
+            // Extract text for this section based on page range
+            // Use rawText (with page markers) for accurate extraction
+            const sectionText = this.getTextForPageRange(
+                rawText, 
+                sectionInfo.startPage, 
+                sectionInfo.endPage
+            );
+            
+            if (!sectionText || sectionText.length < 100) {
+                console.log(`      ⚠️  Section text too short (${sectionText?.length || 0} chars), skipping`);
+                continue;
+            }
+            
+            console.log(`      📝 Extracted ${sectionText.length} characters`);
+            
+            // If section text is too long, split it into smaller chunks
+            const maxChunkSize = 5000;
+            let sectionChunks = [];
+            
+            if (sectionText.length > maxChunkSize) {
+                // Split into smaller chunks but keep them manageable
+                for (let start = 0; start < sectionText.length; start += maxChunkSize) {
+                    sectionChunks.push(sectionText.substring(start, start + maxChunkSize));
+                }
+                console.log(`      (Split into ${sectionChunks.length} chunks due to length)`);
+            } else {
+                sectionChunks = [sectionText];
             }
             
             try {
-                const extracted = await this.extractKnowledgeWithAI(
-                    chunksToProcess[i], 
-                    actualChunkIndex, 
-                    chunks.length,
-                    chapterContext
-                );
-                
-                if (extracted.length > 0) {
-                    // Update chapter and page context from extracted entries
-                    for (const item of extracted) {
-                        if (item.chapterNumber) chapterContext.lastChapterNumber = item.chapterNumber;
-                        if (item.chapterTitle) chapterContext.lastChapterTitle = item.chapterTitle;
-                        if (item.pageReference) chapterContext.lastPageReference = item.pageReference;
+                // Process each chunk of this section
+                for (let chunkIdx = 0; chunkIdx < sectionChunks.length; chunkIdx++) {
+                    const extracted = await this.extractKnowledgeFromSection(
+                        sectionChunks[chunkIdx],
+                        sectionInfo,
+                        chunkIdx,
+                        sectionChunks.length
+                    );
+                    
+                    if (extracted.length > 0) {
+                        // Enrich with full context
+                        const enriched = extracted.map(item => ({
+                            ...item,
+                            chapterNumber: sectionInfo.chapterNumber,
+                            chapterTitle: sectionInfo.chapterTitle,
+                            sectionTitle: sectionInfo.sectionTitle,
+                            pageReference: sectionInfo.pageRange,
+                            sourceReference: `Skin Care: Beyond the Basics (4th Edition) - Chapter ${sectionInfo.chapterNumber}: ${sectionInfo.chapterTitle} - ${sectionInfo.sectionTitle} (${sectionInfo.pageRange})`,
+                            verified: true
+                        }));
+                        
+                        allKnowledge.push(...enriched);
+                        console.log(`      ✓ Extracted ${extracted.length} entries`);
+                    } else {
+                        console.log(`      ⊘ No valuable content`);
                     }
                     
-                    // Fill in missing page references using context
-                    const enriched = extracted.map(item => {
-                        // If pageReference is null, use the last known page reference
-                        if (!item.pageReference && chapterContext.lastPageReference) {
-                            item.pageReference = chapterContext.lastPageReference;
-                        }
-                        
-                        // Build detailed source reference
-                        let sourceRef = 'Skin Care: Beyond the Basics (4th Edition)';
-                        
-                        if (item.chapterNumber && item.chapterTitle) {
-                            sourceRef += ` - Chapter ${item.chapterNumber}: ${item.chapterTitle}`;
-                        } else if (item.chapterTitle) {
-                            sourceRef += ` - ${item.chapterTitle}`;
-                        } else if (item.chapterNumber) {
-                            sourceRef += ` - Chapter ${item.chapterNumber}`;
-                        }
-                        
-                        if (item.pageReference) {
-                            sourceRef += ` (${item.pageReference})`;
-                        }
-                        
-                        return {
-                            ...item,
-                            sourceReference: sourceRef,
-                            verified: true // Book content is verified
-                        };
-                    });
-                    
-                    allKnowledge.push(...enriched);
-                    console.log(`   ✓ Extracted ${extracted.length} knowledge entries`);
+                    // Small delay between chunks of same section
+                    if (chunkIdx < sectionChunks.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+                    }
                 }
                 
-                // Increased delay to respect rate limits
-                // 10 req/min = 6 seconds between requests minimum
-                if (i < chunksToProcess.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 7000)); // 7 second delay for safety
+                // Delay between sections to respect rate limits
+                if (i < limitedSections.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 7000));
                 }
+                
             } catch (error) {
-                console.error(`\n❌ Fatal error on chunk ${actualChunkIndex + 1}: ${error.message}`);
+                console.error(`\n❌ Fatal error on section ${actualIndex + 1}: ${error.message}`);
                 console.log(`\n💾 Saving ${allKnowledge.length} entries extracted so far...`);
                 
                 // Save progress before exiting
                 if (outputFile && allKnowledge.length > 0) {
                     await fs.writeFile(
-                        outputFile.replace('.json', `-progress-chunk${actualChunkIndex}.json`),
+                        outputFile.replace('.json', `-progress-section${actualIndex}.json`),
                         JSON.stringify(allKnowledge, null, 2),
                         'utf-8'
                     );
-                    console.log(`💾 Progress saved! Resume with: startFromChunk: ${actualChunkIndex + 1}`);
+                    console.log(`💾 Progress saved! Resume with: startFromSection: ${actualIndex + 1}`);
                 }
                 
-                throw error; // Re-throw to stop execution
+                throw error;
             }
         }
 
@@ -642,9 +532,107 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
         return {
             knowledge: allKnowledge,
             totalEntries: allKnowledge.length,
+            sectionsProcessed: limitedSections.length,
             pdfInfo: pdfData.info
         };
     }
+
+    /**
+     * Extract knowledge from a specific section using AI
+     */
+    async extractKnowledgeFromSection(sectionText, sectionInfo, chunkIndex, totalChunks) {
+        const { GoogleGenerativeAI } = require('@google/generative-ai');
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+        const chunkInfo = totalChunks > 1 ? ` (chunk ${chunkIndex + 1}/${totalChunks})` : '';
+
+        const prompt = `You are extracting knowledge from "Skin Care: Beyond the Basics (4th Edition)" - Chapter ${sectionInfo.chapterNumber}: ${sectionInfo.chapterTitle}.
+
+CURRENT SECTION: "${sectionInfo.sectionTitle}" (${sectionInfo.pageRange})${chunkInfo}
+
+CONTEXT:
+- This is a professional esthetics textbook
+- Extract ONLY clinically relevant, professional-level knowledge
+- This specific section focuses on: ${sectionInfo.sectionTitle}
+
+EXTRACTION RULES:
+1. Extract knowledge entries that are substantial and clinically useful
+2. COMBINE sidebar definitions WITH main text explanations
+3. Include mechanisms, clinical applications, contraindications
+4. Skip: pure navigation text, figure labels, "In Conclusion" summaries, page numbers
+5. Each entry should be comprehensive (not fragmented)
+6. Focus on professional/clinical information, not basic definitions
+
+Extract as JSON array:
+[
+  {
+    "category": "MUST be one of these EXACT values: skin-conditions, ingredients, treatments, routines, cosmetics, procedures, general-advice",
+    "subcategory": "specific subcategory (e.g., cell-biology, sterilization, immune-function, anatomy, physiology)",
+    "title": "Clear, professional title",
+    "content": "Detailed, well-structured content with clinical relevance. Combine definitions with explanations. Include mechanisms, applications, and evidence.",
+    "keywords": ["keyword1", "keyword2", "keyword3"]
+  }
+]
+
+IMPORTANT: For anatomy/biology topics (cells, tissues, etc.), use category="general-advice" with appropriate subcategory.
+
+SECTION TEXT:
+${sectionText}
+
+Respond ONLY with valid JSON array. Return [] if no valuable content.`;
+
+        try {
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+            
+            // Extract JSON from response
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            if (jsonMatch) {
+                const extracted = JSON.parse(jsonMatch[0]);
+                return Array.isArray(extracted) ? extracted : [];
+            }
+            
+            return [];
+        } catch (error) {
+            // Handle rate limiting with exponential backoff
+            if (error.message.includes('429') || error.message.includes('quota')) {
+                console.error(`      ⚠️  Rate limit hit`);
+                
+                const retryMatch = error.message.match(/retry in ([\d.]+)s/);
+                const retryDelay = retryMatch ? Math.ceil(parseFloat(retryMatch[1]) * 1000) : 60000;
+                
+                console.log(`      ⏱️  Waiting ${Math.ceil(retryDelay/1000)}s before retry...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay + 2000));
+                
+                // Retry once
+                try {
+                    const retryResult = await model.generateContent(prompt);
+                    const retryResponse = await retryResult.response;
+                    const retryText = retryResponse.text();
+                    const jsonMatch = retryText.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) {
+                        const extracted = JSON.parse(jsonMatch[0]);
+                        return Array.isArray(extracted) ? extracted : [];
+                    }
+                    return [];
+                } catch (retryError) {
+                    console.error(`      ❌ Retry failed`);
+                    throw error;
+                }
+            }
+            
+            console.error(`      Error processing section: ${error.message}`);
+            return [];
+        }
+    }
+
+
+
+
+
+
 
     /**
      * Save extracted knowledge to MongoDB
@@ -701,7 +689,7 @@ Respond ONLY with valid JSON array. Return [] if chunk has no valuable content.`
  * 
  * MODES:
  * 1. 'toc' - Extract table of contents only
- * 2. 'extract' - Extract knowledge using TOC guidance
+ * 2. 'extract' - Extract knowledge section-by-section using TOC (RECOMMENDED)
  * 3. 'full' - Extract TOC then extract knowledge
  */
 async function main() {
@@ -725,7 +713,7 @@ async function main() {
             console.log(`📄 Saved to: ${tocPath}`);
             console.log('\n📋 Next Steps:');
             console.log('   1. Review the table-of-contents.json file');
-            console.log('   2. Run with "extract" mode to extract content using TOC:');
+            console.log('   2. Run with "extract" mode to extract content by sections:');
             console.log('      node pdfProcessor.js extract');
             console.log('');
             
@@ -735,21 +723,23 @@ async function main() {
         }
 
         if (mode === 'extract' || mode === 'full') {
-            console.log('\n🎯 MODE: Extracting Knowledge with TOC Guidance');
+            console.log('\n🎯 MODE: Extracting Knowledge by TOC Sections');
             console.log('─'.repeat(80));
             
-            const result = await processor.processPDF(pdfPath, {
-                useAI: true,
+            const result = await processor.processPDFByTOC(pdfPath, {
                 saveToDatabase: false, // Set to true to save directly to DB
                 outputFile: outputPath,
-                startFromChunk: 0,
-                maxChunks: null // Process all chunks
+                startFromSection: 0,
+                maxSections: 10 // Start with first 10 sections for testing
             });
 
             console.log('\n📊 Processing Summary:');
+            console.log(`   Sections processed: ${result.sectionsProcessed}`);
             console.log(`   Total entries: ${result.totalEntries}`);
+            console.log(`   Avg entries per section: ${(result.totalEntries / result.sectionsProcessed).toFixed(1)}`);
             console.log(`   Output file: ${outputPath}`);
             console.log('\n✅ Processing complete!');
+            console.log('\n📋 To process more sections, update maxSections or remove the limit.');
         }
 
         // Close database connection
