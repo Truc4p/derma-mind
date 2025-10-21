@@ -1,4 +1,4 @@
-const DermatologyKnowledge = require('./models/DermatologyKnowledge');
+const DermatologyKnowledge = require('../../models/DermatologyKnowledge');
 const mongoose = require('mongoose');
 
 // Comprehensive dermatology knowledge base

@@ -549,19 +549,80 @@ CMD ["npm", "start"]
 
 ## 🔄 Data Migration & Seeding
 
-### Sample Data Seeding
-```bash
-# Seed database with sample data
-node scripts/seedDatabase.js
+### Scripts Organization
 
-# Clear database
-node scripts/clearDatabase.js
+All database and utility scripts are organized in the `scripts/` directory:
+
 ```
+scripts/
+├── seed/                    # Database seeding scripts
+│   ├── seedIngredients.js
+│   ├── seedEducation.js
+│   ├── seedExtractedKnowledge.js
+│   └── seedKnowledgeBase.js
+├── utils/                   # Helper utilities
+│   ├── addKnowledge.js
+│   ├── debugInsert.js
+│   └── validateEntries.js
+├── README.md               # Comprehensive guide
+├── QUICK_REFERENCE.md      # Quick command reference
+└── */README.md             # Detailed docs per directory
+```
+
+### Quick Start - Seed Database
+
+```bash
+# Seed all collections (run from backend directory)
+node scripts/seed/seedIngredients.js
+node scripts/seed/seedEducation.js
+node scripts/seed/seedKnowledgeBase.js
+
+# OR import from extracted JSON
+node scripts/seed/seedExtractedKnowledge.js
+```
+
+### Script Categories
+
+#### Seed Scripts (`scripts/seed/`)
+- **seedIngredients.js** - Seeds 25+ skincare ingredients with benefits, safety info
+- **seedEducation.js** - Seeds educational articles and guides
+- **seedExtractedKnowledge.js** - Imports knowledge from JSON files (batch processing)
+- **seedKnowledgeBase.js** - Seeds curated dermatology knowledge base
+
+#### Utility Scripts (`scripts/utils/`)
+- **addKnowledge.js** - Helper for adding new knowledge entries
+- **debugInsert.js** - Debug script for troubleshooting insertions
+- **validateEntries.js** - Validates data format before import
+
+### Usage Examples
+
+```bash
+# Validate data before importing
+node scripts/utils/validateEntries.js
+
+# Add new knowledge entries
+node scripts/utils/addKnowledge.js
+
+# Debug database insertion issues
+node scripts/utils/debugInsert.js
+
+# Seed specific collection
+node scripts/seed/seedIngredients.js
+```
+
+### Detailed Documentation
+
+For comprehensive documentation on all scripts:
+- **Overview**: See `scripts/README.md`
+- **Quick Reference**: See `scripts/QUICK_REFERENCE.md`
+- **Seed Scripts**: See `scripts/seed/README.md`
+- **Utils Scripts**: See `scripts/utils/README.md`
 
 ### Data Migration Scripts
 - User data migration utilities
-- Ingredient database import
-- Educational content seeding
+- Ingredient database import with validation
+- Educational content seeding with media
+- Knowledge base batch processing with error handling
 
 ## 🤝 Contributing
 

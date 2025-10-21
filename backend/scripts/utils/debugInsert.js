@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const fs = require('fs');
-const DermatologyKnowledge = require('./models/DermatologyKnowledge');
+const DermatologyKnowledge = require('../../models/DermatologyKnowledge');
 
 async function debugInsert() {
     try {
@@ -9,7 +9,7 @@ async function debugInsert() {
         console.log('✅ Connected to MongoDB\n');
 
         // Read data
-        const data = JSON.parse(fs.readFileSync('./knowledge-sources/pdfs/extracted-knowledge.json', 'utf8'));
+        const data = JSON.parse(fs.readFileSync('../../knowledge-sources/pdfs/extracted-knowledge.json', 'utf8'));
         console.log(`📊 JSON file has ${data.length} entries\n`);
 
         // Clear existing

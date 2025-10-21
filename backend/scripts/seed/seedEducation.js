@@ -1,6 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const EducationContent = require('./models/EducationContent')
+const EducationContent = require('../../models/EducationContent')
 
 const educationData = [
   {

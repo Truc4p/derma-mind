@@ -4,7 +4,7 @@
  * This script helps you add more dermatology knowledge from various sources
  */
 
-const DermatologyKnowledge = require('./models/DermatologyKnowledge');
+const DermatologyKnowledge = require('../../models/DermatologyKnowledge');
 const mongoose = require('mongoose');
 require('dotenv').config();
 

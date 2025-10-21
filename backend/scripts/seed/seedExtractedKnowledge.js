@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
-const DermatologyKnowledge = require('./models/DermatologyKnowledge');
+const DermatologyKnowledge = require('../../models/DermatologyKnowledge');
 
 /**
  * Script to import extracted knowledge from JSON file to MongoDB
@@ -19,7 +19,7 @@ async function seedExtractedKnowledge() {
         console.log('✅ Connected to MongoDB Atlas');
 
         // Read the extracted knowledge JSON file
-        const jsonFilePath = path.join(__dirname, 'knowledge-sources', 'pdfs', 'extracted-knowledge.json');
+        const jsonFilePath = path.join(__dirname, '../../knowledge-sources', 'pdfs', 'extracted-knowledge.json');
         console.log('📂 Reading extracted knowledge from:', jsonFilePath);
 
         if (!fs.existsSync(jsonFilePath)) {

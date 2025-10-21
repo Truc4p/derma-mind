@@ -1,6 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const Ingredient = require('./models/Ingredient')
+const Ingredient = require('../../models/Ingredient')
 
 // Sample ingredients data
 const ingredientsData = [

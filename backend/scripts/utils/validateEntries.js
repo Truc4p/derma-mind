@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const data = JSON.parse(fs.readFileSync('./knowledge-sources/pdfs/extracted-knowledge.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync('../../knowledge-sources/pdfs/extracted-knowledge.json', 'utf8'));
 
 console.log('Checking all 55 entries for validation issues...\n');
 
