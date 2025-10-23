@@ -1,4 +1,5 @@
 const geminiService = require('../services/geminiService');
+const vectorService = require('../services/vectorService');
 
 /**
  * @desc    Send a message to the AI Dermatologist
@@ -13,15 +14,19 @@ exports.chat = async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        // Generate response using Gemini with knowledge base
-        const result = await geminiService.generateResponse(
+        // Use RAG to retrieve relevant context
+        const ragResult = await vectorService.ragQuery(message, conversationHistory || []);
+
+        // Generate response using Gemini with retrieved context
+        const result = await geminiService.generateResponseWithContext(
             message,
+            ragResult.context,
             conversationHistory || []
         );
 
         res.json({
             response: result.response,
-            sources: result.knowledgeSources,
+            sources: ragResult.sources,
             timestamp: new Date()
         });
     } catch (error) {

@@ -10,6 +10,8 @@
     "seed:education": "node seedEducation.js",
     "seed:knowledge": "node seedKnowledgeBase.js",
     "seed:extracted": "node seedExtractedKnowledge.js",
+    "setup:rag": "node scripts/setupVectorDB.js",
+    "test:rag": "node scripts/testRAG.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -24,12 +26,16 @@
   "type": "commonjs",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
+    "@langchain/core": "^1.0.1",
+    "@langchain/google-genai": "^0.1.12",
+    "@qdrant/js-client-rest": "^1.15.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.19.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "langchain": "^0.3.36",
     "mongoose": "^8.18.3",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",

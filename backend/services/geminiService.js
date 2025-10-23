@@ -223,6 +223,48 @@ Respond in JSON format.`;
     }
 
     /**
+     * Generate response using RAG-retrieved context from vector database
+     */
+    async generateResponseWithContext(userMessage, ragContext, conversationHistory = []) {
+        try {
+            console.log(`📚 Using RAG context for query: "${userMessage}"`);
+            
+            // Build prompt with RAG context
+            let fullPrompt = this.systemContext;
+            
+            // Add RAG context
+            fullPrompt += '\n\n=== RELEVANT KNOWLEDGE FROM DERMATOLOGY TEXTBOOK ===\n';
+            fullPrompt += ragContext;
+            fullPrompt += '\n=== END OF KNOWLEDGE BASE ===\n\n';
+            
+            fullPrompt += 'IMPORTANT: Use the information from the knowledge base above to provide accurate, evidence-based answers.\n\n';
+            
+            // Add conversation history
+            if (conversationHistory.length > 0) {
+                fullPrompt += 'Previous conversation:\n';
+                conversationHistory.slice(-5).forEach(msg => {
+                    fullPrompt += `${msg.role === 'user' ? 'Patient' : 'Dermatologist'}: ${msg.content}\n`;
+                });
+            }
+
+            fullPrompt += `\nPatient: ${userMessage}\nDermatologist:`;
+
+            // Generate response
+            const result = await this.model.generateContent(fullPrompt);
+            const response = await result.response;
+            const text = response.text();
+
+            return {
+                response: text,
+                method: 'rag-vector-search'
+            };
+        } catch (error) {
+            console.error('Error generating RAG response:', error);
+            throw new Error('Failed to generate response with RAG context');
+        }
+    }
+
+    /**
      * Generate a personalized skincare routine
      */
     async generateSkincareRoutine(skinProfile) {

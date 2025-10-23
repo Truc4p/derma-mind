@@ -173,3 +173,22 @@ coverage/
 *.pid
 *.seed
 *.pid.lock
+
+# PDF Source Files (large files)
+backend/knowledge-sources/pdfs/*.pdf
+# Note: Keep .gitkeep or README in pdfs/ to maintain folder structure
+
+# Jupyter Notebook outputs and checkpoints
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Extracted content images (optional - uncomment if too large for repo)
+# backend/knowledge-sources/extracted-content/images/*.png
+# Note: Keep smaller preview images or add specific exclusions as needed
