@@ -4,6 +4,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const path = require('path')
 
 // Import routes
 const authRoutes = require('./routes/auth')
@@ -17,9 +18,19 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // Middleware
-app.use(helmet())
+// Configure helmet with relaxed CSP for images
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "http://localhost:3004", "http://localhost:5175"],
+    },
+  },
+}))
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3004',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5175',
   credentials: true
 }))
 
@@ -38,6 +49,9 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
+
+// Serve static images from knowledge base
+app.use('/api/knowledge-images', express.static(path.join(__dirname, 'knowledge-sources/extracted-content/images')))
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')

@@ -27,6 +27,7 @@ exports.chat = async (req, res) => {
         res.json({
             response: result.response,
             sources: ragResult.sources,
+            images: result.images || [],
             timestamp: new Date()
         });
     } catch (error) {

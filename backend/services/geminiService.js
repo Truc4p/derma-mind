@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
+const { convertImagesToHtml, extractImageReferences } = require('../utils/imageProcessor');
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -32,8 +33,9 @@ IMPORTANT RESPONSE RULES:
 2. Synthesize information from multiple sources when available to provide comprehensive answers
 3. If multiple knowledge entries are provided, integrate insights from each one
 4. Provide detailed, thorough responses that cover all aspects found in the knowledge base
-5. At the end of your response, add: "SOURCES_USED: [list ALL titles from the knowledge base that you referenced]"
-6. Format: SOURCES_USED: Title 1, Title 2, Title 3, Title 4, Title 5
+5. When you encounter figure references in the knowledge base (e.g., ![Figure 15-1](images/figure_15_1.png)), INCLUDE THEM in your response at the appropriate location
+6. At the end of your response, add: "SOURCES_USED: [list ALL titles from the knowledge base that you referenced]"
+7. Format: SOURCES_USED: Title 1, Title 2, Title 3, Title 4, Title 5
 
 Always strive to be comprehensive by utilizing all available knowledge base information.
 If unsure about something not in the knowledge base, recommend consulting an in-person dermatologist for proper diagnosis.`;
@@ -278,6 +280,9 @@ Respond in JSON format.`;
    - Include all details, measurements, times, and specific instructions from each step
 3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
 4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
+5. **IMPORTANT FOR IMAGES**: When you see image references in the knowledge base like "![Figure 1-1](images/figure_1_1.png)", 
+   YOU MUST include them EXACTLY as written in your response at the appropriate location. 
+   DO NOT just mention "Figure 1-1" as text - include the full markdown syntax: ![Figure 1-1](images/figure_1_1.png)
 
 `;
             
@@ -294,11 +299,24 @@ Respond in JSON format.`;
             // Generate response with retry logic
             const result = await this.generateWithRetry(fullPrompt);
             const response = await result.response;
-            const text = response.text();
+            let text = response.text();
+
+            console.log('🔍 Raw AI response (first 500 chars):', text.substring(0, 500));
+
+            // Convert markdown image references to HTML img tags
+            const baseUrl = process.env.BACKEND_URL || 'http://localhost:3004';
+            console.log('🔧 Converting images with base URL:', baseUrl);
+            text = convertImagesToHtml(text, baseUrl);
+
+            console.log('✅ Converted response (first 500 chars):', text.substring(0, 500));
+
+            // Extract image references for metadata
+            const imageReferences = extractImageReferences(text);
 
             return {
                 response: text,
-                method: 'rag-vector-search'
+                method: 'rag-vector-search',
+                images: imageReferences
             };
         } catch (error) {
             console.error('Error generating RAG response:', error);

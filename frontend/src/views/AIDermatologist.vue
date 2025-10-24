@@ -418,6 +418,14 @@ What would you like to know more about?`
         formatMessage(content) {
             // Use marked to parse markdown properly
             try {
+                // Configure marked to support HTML (for our img tags)
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    headerIds: false,
+                    mangle: false,
+                    sanitize: false // Allow HTML img tags
+                })
                 return marked.parse(content)
             } catch (error) {
                 console.error('Error parsing markdown:', error)
@@ -657,6 +665,24 @@ What would you like to know more about?`
     margin: 1rem 0 0.5rem 0;
     font-weight: 600;
     color: var(--primary-800);
+}
+
+/* Image styling for knowledge base figures */
+.message-text :deep(img.knowledge-figure) {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--primary-200);
+    display: block;
+}
+
+.message-text :deep(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1rem 0;
 }
 
 .message.user .message-text :deep(h1),
