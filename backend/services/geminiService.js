@@ -40,6 +40,38 @@ If unsure about something not in the knowledge base, recommend consulting an in-
     }
 
     /**
+     * Generate content with retry logic for handling API overload
+     */
+    async generateWithRetry(prompt, maxRetries = 3, initialDelay = 1000) {
+        let lastError;
+        
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                return await this.model.generateContent(prompt);
+            } catch (error) {
+                lastError = error;
+                
+                // Check if it's a retryable error (503 Service Unavailable or 429 Rate Limit)
+                if (error.status === 503 || error.status === 429) {
+                    if (attempt < maxRetries - 1) {
+                        // Exponential backoff: wait longer with each retry
+                        const delay = initialDelay * Math.pow(2, attempt);
+                        console.log(`🔄 Gemini API overloaded (attempt ${attempt + 1}/${maxRetries}). Retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                }
+                
+                // If it's not retryable or we've exhausted retries, throw the error
+                throw error;
+            }
+        }
+        
+        // If we get here, all retries failed
+        throw lastError;
+    }
+
+    /**
      * Get relevant knowledge from database based on query
      */
     async getRelevantKnowledge(userQuery, limit = 5) {
@@ -237,7 +269,17 @@ Respond in JSON format.`;
             fullPrompt += ragContext;
             fullPrompt += '\n=== END OF KNOWLEDGE BASE ===\n\n';
             
-            fullPrompt += 'IMPORTANT: Use the information from the knowledge base above to provide accurate, evidence-based answers.\n\n';
+            fullPrompt += `CRITICAL INSTRUCTIONS:
+1. Use the information from the knowledge base above to provide accurate, evidence-based answers
+2. When the knowledge base contains step-by-step procedures, numbered lists, or treatment protocols:
+   - Include ALL steps in their COMPLETE form
+   - Do NOT summarize, condense, or skip steps
+   - Maintain the original numbering and sequence
+   - Include all details, measurements, times, and specific instructions from each step
+3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
+4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
+
+`;
             
             // Add conversation history
             if (conversationHistory.length > 0) {
@@ -249,8 +291,8 @@ Respond in JSON format.`;
 
             fullPrompt += `\nPatient: ${userMessage}\nDermatologist:`;
 
-            // Generate response
-            const result = await this.model.generateContent(fullPrompt);
+            // Generate response with retry logic
+            const result = await this.generateWithRetry(fullPrompt);
             const response = await result.response;
             const text = response.text();
 
@@ -260,6 +302,12 @@ Respond in JSON format.`;
             };
         } catch (error) {
             console.error('Error generating RAG response:', error);
+            
+            // Check if it's a rate limit or overload error
+            if (error.status === 503 || error.status === 429) {
+                throw new Error('The AI service is currently overloaded. Please try again in a few moments.');
+            }
+            
             throw new Error('Failed to generate response with RAG context');
         }
     }

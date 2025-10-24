@@ -181,6 +181,7 @@ export default {
                 timestamp: new Date()
             }
 
+            console.log('📤 Sending user message:', userMessage.content)
             this.messages.push(userMessage)
             this.userInput = ''
 
@@ -190,7 +191,7 @@ export default {
                 // Simulate AI response (replace with actual API call)
                 await this.getAIResponse(userMessage.content)
             } catch (error) {
-                console.error('Error getting AI response:', error)
+                console.error('❌ Error getting AI response:', error)
                 this.messages.push({
                     role: 'assistant',
                     content: "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
@@ -203,11 +204,27 @@ export default {
 
         async getAIResponse(userMessage) {
             try {
+                console.log('🔍 Preparing API request...')
+                console.log('📚 User query:', userMessage)
+                console.log('📝 Conversation history (last 10 messages):', this.messages.slice(-10))
+                
                 // Call the real Gemini AI API
-                const response = await api.post('/ai-dermatologist/chat', {
+                const requestData = {
                     message: userMessage,
                     conversationHistory: this.messages.slice(-10) // Send last 10 messages for context
-                })
+                }
+                
+                console.log('📤 Sending request to /ai-dermatologist/chat:', requestData)
+                
+                const response = await api.post('/ai-dermatologist/chat', requestData)
+                
+                console.log('✅ Received API response:', response.data)
+                console.log('📚 Using RAG context for query:', userMessage)
+                console.log('💡 AI Response:', response.data.response)
+                
+                if (response.data.sources) {
+                    console.log('📖 Sources used:', response.data.sources)
+                }
 
                 this.messages.push({
                     role: 'assistant',
@@ -216,9 +233,11 @@ export default {
                     timestamp: new Date()
                 })
             } catch (error) {
-                console.error('Error calling AI API:', error)
+                console.error('❌ Error calling AI API:', error)
+                console.error('❌ Error details:', error.response?.data || error.message)
                 
                 // Fallback to local response if API fails
+                console.log('⚠️ Falling back to local response')
                 let response = this.generateContextualResponse(userMessage)
                 this.messages.push({
                     role: 'assistant',
@@ -229,10 +248,12 @@ export default {
         },
 
         generateContextualResponse(message) {
+            console.log('🔄 Generating contextual fallback response for:', message)
             const lowerMessage = message.toLowerCase()
 
             // Skincare routine responses
             if (lowerMessage.includes('routine') && lowerMessage.includes('oily')) {
+                console.log('✅ Matched pattern: oily skin routine')
                 return `For oily skin, I recommend a balanced routine:
 
 **Morning:**
@@ -256,6 +277,7 @@ Would you like product recommendations or have questions about specific products
             }
 
             if (lowerMessage.includes('wrinkle') || lowerMessage.includes('anti-aging')) {
+                console.log('✅ Matched pattern: wrinkles/anti-aging')
                 return `To reduce wrinkles naturally and effectively:
 
 **Top Recommendations:**
@@ -277,6 +299,7 @@ Start slowly with active ingredients and build tolerance. Would you like specifi
             }
 
             if (lowerMessage.includes('sensitive skin') || lowerMessage.includes('avoid')) {
+                console.log('✅ Matched pattern: sensitive skin')
                 return `For sensitive skin, **avoid these common irritants:**
 
 **❌ Ingredients to avoid:**
@@ -305,6 +328,7 @@ What specific concerns do you have with your sensitive skin?`
             }
 
             if (lowerMessage.includes('acne') || lowerMessage.includes('breakout')) {
+                console.log('✅ Matched pattern: acne/breakouts')
                 return `For acne-prone skin, here's my recommendation:
 
 **Key Ingredients:**
@@ -331,6 +355,7 @@ Would you like specific product recommendations or have questions about acne sca
             }
 
             if (lowerMessage.includes('exfoliate') || lowerMessage.includes('exfoliation')) {
+                console.log('✅ Matched pattern: exfoliation')
                 return `**Exfoliation Guidelines:**
 
 **How often:**
@@ -365,6 +390,7 @@ What's your skin type? I can give you more specific recommendations!`
             }
 
             // Generic response for other questions
+            console.log('ℹ️ No specific pattern matched, using generic response')
             return `Thank you for your question! As a virtual dermatologist, I'm here to help with skincare, cosmetic, and facial improvement advice.
 
 To provide you with the most accurate and personalized recommendation, could you tell me more about:

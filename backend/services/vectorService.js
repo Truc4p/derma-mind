@@ -159,12 +159,18 @@ class VectorService {
      */
     async ragQuery(userQuery, conversationHistory = []) {
         try {
-            // 1. Retrieve relevant context (increased from 5 to 8 for better coverage)
-            const relevantDocs = await this.searchRelevantDocs(userQuery, 8);
+            // 1. Retrieve relevant context (increased from 5 to 10 for better coverage of split content)
+            const relevantDocs = await this.searchRelevantDocs(userQuery, 10);
+            
+            console.log(`📚 Retrieved ${relevantDocs.length} chunks for RAG:`);
+            relevantDocs.forEach((doc, idx) => {
+                const preview = doc.content.substring(0, 100).replace(/\n/g, ' ');
+                console.log(`   ${idx + 1}. [Chunk ${doc.metadata.chunkIndex}] Score: ${doc.score.toFixed(4)} - "${preview}..."`);
+            });
             
             // 2. Build context from retrieved documents
             const context = relevantDocs
-                .map((doc, idx) => `[Source ${idx + 1}]: ${doc.content}`)
+                .map((doc, idx) => `[Source ${idx + 1} - Chunk ${doc.metadata.chunkIndex}]: ${doc.content}`)
                 .join('\n\n');
             
             // 3. Return context and sources for use with Gemini

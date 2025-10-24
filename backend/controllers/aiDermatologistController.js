@@ -31,9 +31,22 @@ exports.chat = async (req, res) => {
         });
     } catch (error) {
         console.error('AI Chat error:', error);
-        res.status(500).json({ 
-            error: 'Failed to generate response',
-            message: error.message 
+        
+        // Determine appropriate user-facing error message
+        let userMessage = 'Failed to generate response';
+        let statusCode = 500;
+        
+        if (error.message.includes('overloaded')) {
+            userMessage = 'The AI service is currently experiencing high traffic. Please try again in a moment.';
+            statusCode = 503;
+        } else if (error.message.includes('rate limit')) {
+            userMessage = 'Too many requests. Please wait a moment and try again.';
+            statusCode = 429;
+        }
+        
+        res.status(statusCode).json({ 
+            error: userMessage,
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
 };
