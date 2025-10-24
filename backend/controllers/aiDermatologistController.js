@@ -26,7 +26,8 @@ exports.chat = async (req, res) => {
 
         res.json({
             response: result.response,
-            sources: ragResult.sources,
+            sources: ragResult.sources, // Now includes chapter/section info
+            chunks: ragResult.chunks,   // Detailed chunk info for debugging
             images: result.images || [],
             timestamp: new Date()
         });

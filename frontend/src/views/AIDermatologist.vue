@@ -55,6 +55,19 @@
                      class="message" :class="message.role">
                     <div class="message-content">
                         <div class="message-text" v-html="formatMessage(message.content)"></div>
+                        
+                        <!-- Source references for assistant messages -->
+                        <div v-if="message.role === 'assistant' && message.sources && message.sources.length > 0" 
+                             class="message-sources">
+                            <div class="sources-header">📚 References:</div>
+                            <ul class="sources-list">
+                                <li v-for="(source, idx) in message.sources" :key="idx" class="source-item">
+                                    <strong>{{ source.reference }}</strong>
+                                    <span v-if="source.hasImages" class="has-images-badge">📊 Contains figures</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
                         <div class="message-time">{{ formatTime(message.timestamp) }}</div>
                     </div>
                 </div>
@@ -229,7 +242,8 @@ export default {
                 this.messages.push({
                     role: 'assistant',
                     content: response.data.response,
-                    sources: response.data.sources,
+                    sources: response.data.sources || [],
+                    images: response.data.images || [],
                     timestamp: new Date()
                 })
             } catch (error) {
@@ -683,6 +697,71 @@ What would you like to know more about?`
     height: auto;
     border-radius: 8px;
     margin: 1rem 0;
+}
+
+/* Source references styling */
+.message-sources {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--primary-50);
+    border-left: 3px solid var(--primary-400);
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.message.user .message-sources {
+    background: rgba(255, 255, 255, 0.1);
+    border-left-color: rgba(255, 255, 255, 0.5);
+}
+
+.sources-header {
+    font-weight: 600;
+    color: var(--primary-700);
+    margin-bottom: 0.5rem;
+}
+
+.message.user .sources-header {
+    color: white;
+}
+
+.sources-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.source-item {
+    padding: 0.25rem 0;
+    color: var(--primary-600);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.message.user .source-item {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.source-item strong {
+    color: var(--primary-800);
+}
+
+.message.user .source-item strong {
+    color: white;
+}
+
+.has-images-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--primary-200);
+    border-radius: 12px;
+    color: var(--primary-700);
+}
+
+.message.user .has-images-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
 .message.user .message-text :deep(h1),

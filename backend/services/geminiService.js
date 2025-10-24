@@ -29,13 +29,11 @@ class GeminiService {
 You provide professional, evidence-based advice while being empathetic and easy to understand.
 
 IMPORTANT RESPONSE RULES:
-1. Use ALL the information provided in the "Relevant Knowledge Base Information" section below
+1. Use ALL the information provided in the knowledge base sections
 2. Synthesize information from multiple sources when available to provide comprehensive answers
-3. If multiple knowledge entries are provided, integrate insights from each one
-4. Provide detailed, thorough responses that cover all aspects found in the knowledge base
-5. When you encounter figure references in the knowledge base (e.g., ![Figure 15-1](images/figure_15_1.png)), INCLUDE THEM in your response at the appropriate location
-6. At the end of your response, add: "SOURCES_USED: [list ALL titles from the knowledge base that you referenced]"
-7. Format: SOURCES_USED: Title 1, Title 2, Title 3, Title 4, Title 5
+3. Provide detailed, thorough responses that cover all relevant aspects found in the knowledge base
+4. When you encounter figure references (e.g., ![Figure 15-1](images/figure_15_1.png)), include the EXACT markdown syntax in your response
+5. Format your responses in clear, easy-to-read markdown with headers, lists, and proper formatting
 
 Always strive to be comprehensive by utilizing all available knowledge base information.
 If unsure about something not in the knowledge base, recommend consulting an in-person dermatologist for proper diagnosis.`;
@@ -280,9 +278,14 @@ Respond in JSON format.`;
    - Include all details, measurements, times, and specific instructions from each step
 3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
 4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
-5. **IMPORTANT FOR IMAGES**: When you see image references in the knowledge base like "![Figure 1-1](images/figure_1_1.png)", 
-   YOU MUST include them EXACTLY as written in your response at the appropriate location. 
-   DO NOT just mention "Figure 1-1" as text - include the full markdown syntax: ![Figure 1-1](images/figure_1_1.png)
+5. **CRITICAL FOR IMAGES**: When you see figure references like "![Figure 1-1](images/figure_1_1.png)" in the knowledge base:
+   - Copy the EXACT markdown syntax into your response: ![Figure 1-1](images/figure_1_1.png)
+   - Place it at the appropriate location in your explanation
+   - DO NOT just write "Figure 1-1" as plain text
+   - DO NOT describe the figure - just include the markdown image syntax
+   - Example: "Here is the cell structure: ![Figure 1-1](images/figure_1_1.png)"
+
+DO NOT add "SOURCES_USED" at the end of your response. The source information is tracked separately.
 
 `;
             
