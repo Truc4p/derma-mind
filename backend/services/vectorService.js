@@ -52,51 +52,6 @@ class VectorService {
     }
 
     /**
-     * Extract metadata from chunk content (chapter, section, etc.)
-     */
-    extractMetadataFromChunk(chunk, chunkIndex) {
-        const metadata = {
-            source: 'Skin Care: Beyond the Basics, 4th Edition by Mark Lees, Ph.D.',
-            chunkIndex: chunkIndex,
-            chapter: null,
-            section: null,
-            hasImages: false,
-            imageReferences: []
-        };
-
-        // Extract chapter (looks for "CHAPTER X" pattern)
-        const chapterMatch = chunk.match(/CHAPTER\s+(\d+)\s+([^\n]+)/i);
-        if (chapterMatch) {
-            metadata.chapter = `Chapter ${chapterMatch[1]}: ${chapterMatch[2].trim()}`;
-        }
-
-        // Extract section headers (looks for ## or ### patterns)
-        const sectionMatch = chunk.match(/^#+\s+([^\n]+)/m);
-        if (sectionMatch && !chapterMatch) {
-            metadata.section = sectionMatch[1].trim();
-        }
-
-        // Detect figure references
-        const imageRegex = /!\[([^\]]*)\]\(images\/([^)]+)\)/g;
-        let imageMatch;
-        const images = [];
-        
-        while ((imageMatch = imageRegex.exec(chunk)) !== null) {
-            images.push({
-                altText: imageMatch[1],
-                filename: imageMatch[2]
-            });
-        }
-
-        if (images.length > 0) {
-            metadata.hasImages = true;
-            metadata.imageReferences = images;
-        }
-
-        return metadata;
-    }
-
-    /**
      * Load and process the markdown knowledge base
      */
     async loadKnowledgeBase() {
@@ -119,13 +74,13 @@ class VectorService {
             
             console.log(`Split knowledge base into ${chunks.length} chunks`);
             
-            return chunks.map((chunk, index) => {
-                const metadata = this.extractMetadataFromChunk(chunk, index);
-                return {
-                    pageContent: chunk,
-                    metadata: metadata
-                };
-            });
+            return chunks.map((chunk, index) => ({
+                pageContent: chunk,
+                metadata: {
+                    source: 'skin-care-beyond-the-basics-4th',
+                    chunkIndex: index
+                }
+            }));
         } catch (error) {
             console.error('Error loading knowledge base:', error);
             throw error;
@@ -210,49 +165,21 @@ class VectorService {
             console.log(`📚 Retrieved ${relevantDocs.length} chunks for RAG:`);
             relevantDocs.forEach((doc, idx) => {
                 const preview = doc.content.substring(0, 100).replace(/\n/g, ' ');
-                const source = doc.metadata.chapter || doc.metadata.section || 'General content';
-                console.log(`   ${idx + 1}. [${source}] Score: ${doc.score.toFixed(4)} - "${preview}..."`);
+                console.log(`   ${idx + 1}. [Chunk ${doc.metadata.chunkIndex}] Score: ${doc.score.toFixed(4)} - "${preview}..."`);
             });
             
-            // 2. Build context from retrieved documents with source attribution
+            // 2. Build context from retrieved documents
             const context = relevantDocs
-                .map((doc, idx) => {
-                    let sourceAttribution = `[Source ${idx + 1}`;
-                    if (doc.metadata.chapter) {
-                        sourceAttribution += ` - ${doc.metadata.chapter}`;
-                    } else if (doc.metadata.section) {
-                        sourceAttribution += ` - ${doc.metadata.section}`;
-                    }
-                    sourceAttribution += `]`;
-                    
-                    return `${sourceAttribution}: ${doc.content}`;
-                })
+                .map((doc, idx) => `[Source ${idx + 1} - Chunk ${doc.metadata.chunkIndex}]: ${doc.content}`)
                 .join('\n\n');
             
-            // 3. Prepare unique source references for citation
-            const uniqueSources = new Map();
-            relevantDocs.forEach(doc => {
-                const sourceKey = doc.metadata.chapter || doc.metadata.section || 'General Content';
-                if (!uniqueSources.has(sourceKey)) {
-                    uniqueSources.set(sourceKey, {
-                        reference: sourceKey,
-                        hasImages: doc.metadata.hasImages || false,
-                        images: doc.metadata.imageReferences || [],
-                        bookTitle: doc.metadata.source
-                    });
-                }
-            });
-            
-            // 4. Return context and sources for use with Gemini
+            // 3. Return context and sources for use with Gemini
             return {
                 context: context,
-                sources: Array.from(uniqueSources.values()),
-                chunks: relevantDocs.map(doc => ({
+                sources: relevantDocs.map(doc => ({
                     text: doc.content.substring(0, 200) + '...',
                     score: doc.score,
-                    chapter: doc.metadata.chapter,
-                    section: doc.metadata.section,
-                    hasImages: doc.metadata.hasImages
+                    metadata: doc.metadata
                 }))
             };
         } catch (error) {
