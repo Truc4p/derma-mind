@@ -131,10 +131,18 @@ class VectorService {
     /**
      * Search for relevant documents based on query
      */
-    async searchRelevantDocs(query, limit = 5) {
+    async searchRelevantDocs(query, limit = 5, debugMode = false) {
         try {
             // Generate embedding for the query
             const queryEmbedding = await this.embeddings.embedQuery(query);
+            
+            if (debugMode) {
+                console.log('\n🔍 VECTOR SEARCH DEBUG INFO:');
+                console.log(`   Query: "${query}"`);
+                console.log(`   Query Vector Length: ${queryEmbedding.length}`);
+                console.log(`   Query Vector Sample: [${queryEmbedding.slice(0, 5).map(v => v.toFixed(4)).join(', ')}...]`);
+                console.log(`   Search Limit: ${limit}`);
+            }
             
             // Search in Qdrant
             const searchResults = await this.qdrantClient.search(this.collectionName, {
@@ -142,6 +150,15 @@ class VectorService {
                 limit: limit,
                 with_payload: true
             });
+            
+            if (debugMode) {
+                console.log(`   Found ${searchResults.length} results from Qdrant`);
+                searchResults.forEach((result, idx) => {
+                    console.log(`   ${idx + 1}. Score: ${result.score.toFixed(8)} (${(result.score * 100).toFixed(2)}%)`);
+                    console.log(`      Chunk: ${result.payload.metadata.chunkIndex}`);
+                    console.log(`      Text: "${result.payload.text.substring(0, 60)}..."`);
+                });
+            }
             
             return searchResults.map(result => ({
                 content: result.payload.text,
@@ -155,18 +172,109 @@ class VectorService {
     }
 
     /**
-     * Complete RAG pipeline: search + generate response
+     * Helper: Analyze and categorize score
      */
-    async ragQuery(userQuery, conversationHistory = []) {
+    scoreCategory(score) {
+        if (score >= 0.90) return '🟢 PERFECT (90-100%)';
+        if (score >= 0.75) return '🟢 EXCELLENT (75-89%)';
+        if (score >= 0.60) return '🟡 GOOD (60-74%)';
+        if (score >= 0.45) return '🟡 FAIR (45-59%)';
+        if (score >= 0.30) return '🔴 WEAK (30-44%)';
+        return '⚫ POOR (<30%)';
+    }
+
+    /**
+     * Helper: Detect if chunk contains figures
+     */
+    hasFigures(text) {
+        return /!\[Figure|\(images\/figure_/i.test(text);
+    }
+
+    /**
+     * Complete RAG pipeline: search + generate response with detailed scoring
+     */
+    async ragQuery(userQuery, conversationHistory = [], debugMode = false) {
         try {
-            // 1. Retrieve relevant context (increased from 5 to 10 for better coverage of split content)
-            const relevantDocs = await this.searchRelevantDocs(userQuery, 10);
+            console.log('\n' + '='.repeat(80));
+            console.log('🔍 RAG QUERY ANALYSIS');
+            console.log('='.repeat(80));
+            console.log(`📝 User Query: "${userQuery}"`);
+            console.log(`📊 Query Length: ${userQuery.length} chars, ${userQuery.split(' ').length} words`);
             
-            console.log(`📚 Retrieved ${relevantDocs.length} chunks for RAG:`);
+            // 1. Retrieve relevant context (increased from 5 to 10 for better coverage of split content)
+            const relevantDocs = await this.searchRelevantDocs(userQuery, 10, debugMode);
+            
+            console.log(`\n📚 Retrieved ${relevantDocs.length} chunks from Qdrant:\n`);
+            
+            // Calculate statistics
+            const scores = relevantDocs.map(d => d.score);
+            const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+            const maxScore = Math.max(...scores);
+            const minScore = Math.min(...scores);
+            
+            console.log(`📈 Score Statistics:`);
+            console.log(`   Highest: ${maxScore.toFixed(4)} (100% match)`);
+            console.log(`   Average: ${avgScore.toFixed(4)} (${(avgScore * 100).toFixed(1)}% avg similarity)`);
+            console.log(`   Lowest:  ${minScore.toFixed(4)} (${(minScore * 100).toFixed(1)}% similarity)`);
+            console.log(`   Range:   ${(maxScore - minScore).toFixed(4)} (score spread)\n`);
+            
+            // Detailed breakdown
+            console.log('💡 Chunk Details (sorted by relevance):\n');
             relevantDocs.forEach((doc, idx) => {
-                const preview = doc.content.substring(0, 100).replace(/\n/g, ' ');
-                console.log(`   ${idx + 1}. [Chunk ${doc.metadata.chunkIndex}] Score: ${doc.score.toFixed(4)} - "${preview}..."`);
+                const chunkId = doc.metadata.chunkIndex;
+                const score = doc.score;
+                const category = this.scoreCategory(score);
+                const hasFigs = this.hasFigures(doc.content);
+                const figLabel = hasFigs ? '📸 HAS FIGURES' : '   ';
+                const preview = doc.content
+                    .substring(0, 120)
+                    .replace(/\n/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                
+                console.log(`   ${idx + 1}. Chunk #${chunkId}`);
+                console.log(`      Score: ${score.toFixed(4)} (${(score * 100).toFixed(1)}%) ${category} ${figLabel}`);
+                console.log(`      Text: "${preview}..."`);
+                console.log(`      Length: ${doc.content.length} chars`);
+                console.log('');
             });
+            
+            // Scoring explanation
+            console.log('📖 SCORING EXPLAINED:');
+            console.log('   Score = Cosine Similarity between query vector and chunk vector');
+            console.log('   Range: 0.0 (completely different) to 1.0 (identical meaning)');
+            console.log('   Distance metric: Cosine');
+            console.log('   Vector dimensions: 768 (Gemini embeddings)');
+            console.log('   Model: text-embedding-004\n');
+            
+            // Analyze why scores are what they are
+            console.log('🧠 WHY THESE SCORES?:');
+            relevantDocs.slice(0, 3).forEach((doc, idx) => {
+                const score = doc.score;
+                const content = doc.content;
+                
+                // Detect matching keywords
+                const queryWords = userQuery.toLowerCase().split(/\W+/);
+                const matchedWords = queryWords.filter(w => 
+                    content.toLowerCase().includes(w) && w.length > 3
+                );
+                
+                const figureMatch = /Figure \d+/i.test(userQuery) && /Figure \d+/.test(content);
+                
+                console.log(`   Chunk ${idx + 1} (${score.toFixed(4)}):`);
+                if (matchedWords.length > 0) {
+                    console.log(`      ✓ Matching keywords: ${matchedWords.slice(0, 3).join(', ')}`);
+                }
+                if (figureMatch) {
+                    console.log(`      ✓ Figure reference match detected`);
+                }
+                if (score < 0.50) {
+                    console.log(`      ⚠ Lower score: may be tangentially related or semantic drift`);
+                }
+                console.log('');
+            });
+            
+            console.log('='.repeat(80) + '\n');
             
             // 2. Build context from retrieved documents
             const context = relevantDocs
@@ -183,7 +291,7 @@ class VectorService {
                 }))
             };
         } catch (error) {
-            console.error('Error in RAG query:', error);
+            console.error('❌ Error in RAG query:', error);
             throw error;
         }
     }
