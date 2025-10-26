@@ -418,15 +418,27 @@ What would you like to know more about?`
         formatMessage(content) {
             // Use marked to parse markdown properly
             try {
-                // Configure marked to support HTML (for our img tags)
+                // Configure marked to support HTML
                 marked.setOptions({
                     breaks: true,
                     gfm: true,
                     headerIds: false,
                     mangle: false,
-                    sanitize: false // Allow HTML img tags
+                    sanitize: false
                 })
-                return marked.parse(content)
+                
+                // First, convert markdown image references to full URLs
+                // The vite proxy already handles /api routes, so we can use relative paths
+                const convertedContent = content.replace(
+                    /!\[([^\]]*)\]\(images\/([^)]+)\)/g,
+                    (match, altText, imagePath) => {
+                        // Use relative path since vite proxy handles /api routes
+                        return `![${altText}](/api/knowledge-images/${imagePath})`
+                    }
+                )
+                
+                // Then let marked parse the markdown to HTML
+                return marked.parse(convertedContent)
             } catch (error) {
                 console.error('Error parsing markdown:', error)
                 // Fallback to simple formatting

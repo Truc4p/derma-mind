@@ -278,14 +278,15 @@ Respond in JSON format.`;
    - Include all details, measurements, times, and specific instructions from each step
 3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
 4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
-5. **CRITICAL FOR IMAGES**: When you see figure references like "![Figure 1-1](images/figure_1_1.png)" in the knowledge base:
-   - Copy the EXACT markdown syntax into your response: ![Figure 1-1](images/figure_1_1.png)
-   - Place it at the appropriate location in your explanation
-   - DO NOT just write "Figure 1-1" as plain text
-   - DO NOT describe the figure - just include the markdown image syntax
+5. **CRITICAL FOR IMAGES**: When you see figure references in the knowledge base:
+   - Return ONLY markdown syntax, NEVER HTML tags
+   - Example: Use ![Figure 1-1](images/figure_1_1.png) NOT <img> tags
+   - DO NOT include URLs or HTML attributes in your response
+   - Keep it simple: just the markdown image reference
    - Example: "Here is the cell structure: ![Figure 1-1](images/figure_1_1.png)"
 
 DO NOT add "SOURCES_USED" at the end of your response. The source information is tracked separately.
+DO NOT include HTML tags or URLs in your response - only use markdown syntax.
 
 `;
             
@@ -306,18 +307,11 @@ DO NOT add "SOURCES_USED" at the end of your response. The source information is
 
             console.log('🔍 Raw AI response (first 500 chars):', text.substring(0, 500));
 
-            // Convert markdown image references to HTML img tags
-            const baseUrl = process.env.BACKEND_URL || 'http://localhost:3004';
-            console.log('🔧 Converting images with base URL:', baseUrl);
-            text = convertImagesToHtml(text, baseUrl);
-
-            console.log('✅ Converted response (first 500 chars):', text.substring(0, 500));
-
-            // Extract image references for metadata
+            // Extract image references for metadata (from markdown, not HTML)
             const imageReferences = extractImageReferences(text);
 
             return {
-                response: text,
+                response: text, // Return markdown, let frontend handle HTML conversion
                 method: 'rag-vector-search',
                 images: imageReferences
             };

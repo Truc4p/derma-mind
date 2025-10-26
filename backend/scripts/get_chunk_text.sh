@@ -20,7 +20,7 @@ echo ""
 curl -X POST "${QDRANT_URL}/collections/${COLLECTION_NAME}/points/scroll" \
   -H "Content-Type: application/json" \
   -d "{
-        \"limit\": 1000,
+        \"limit\": 5000,
         \"with_payload\": true,
         \"with_vector\": false
       }" | jq ".result.points[] | select(.payload.metadata.chunkIndex == ${CHUNK_INDEX}) | {

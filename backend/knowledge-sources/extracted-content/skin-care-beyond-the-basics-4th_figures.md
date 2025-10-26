@@ -2851,7 +2851,7 @@ Courtesy Elaine R. Cook, M.D.
 
 
 
-![Figure 5-10A](images/figure_5_10A.png)
+![Figure 5-10](images/figure_5_10.png)
 
 
 
@@ -3383,7 +3383,7 @@ Most conditions indicating photo-damaged skin are determined by a mix of all of 
 
 
 
-![Figure 6-18A](images/figure_6_18A.png)
+![Figure 6-18](images/figure_6_18.png)
 
 
 
@@ -3409,7 +3409,7 @@ Image Copyright absolut, 2012. Used under license from Shutterstock.com
 
 
 
-![Figure 6-18B](images/figure_6_18B.png)
+![Figure 6-18](images/figure_6_18.png)
 
 
 
@@ -3822,7 +3822,7 @@ Courtesy Rube J. Pardo, M.D., Ph.D.
 
 
 
-![Figure 7-13A](images/figure_7_13A.png)
+![Figure 7-13](images/figure_7_13.png)
 
 
 
@@ -3903,7 +3903,7 @@ Courtesy www.dermnet.com
 
 
 
-![Figure 7-16A](images/figure_7_16A.png)
+![Figure 7-16](images/figure_7_16.png)
 
 
 
@@ -3997,7 +3997,7 @@ Courtesy DermNetNZ.org, New Zealand Dermatological Society
 
 
 
-![Figure 7-19A](images/figure_7_19A.png)
+![Figure 7-19](images/figure_7_19.png)
 
 
 
@@ -5800,9 +5800,6 @@ FIGURE 11-2 A well-organized retail area is important to the esthetics practice.
 
 
 
-![Figure 11-3A](images/figure_11_3A.png)
-
-
 
 198 CHAPTER 11
 
@@ -5837,7 +5834,7 @@ FIGURE 11-3 Sample ingredient labels for cleansers.
 
 
 
-![Figure 11-3B](images/figure_11_3B.png)
+![Figure 11-3](images/figure_11_3.png)
 
 
 
@@ -6675,7 +6672,7 @@ Courtesy Rube J. Pardo, M.D., Ph.D.
 
 
 
-![Figure 13-1A](images/figure_13_1A.png)
+![Figure 13-1](images/figure_13_1.png)
 
 
 
@@ -8177,7 +8174,7 @@ Courtesy Mark Lees Skin Care Inc.
 
 
 
-![Figure 15-14A](images/figure_15_14A.png)
+![Figure 15-14](images/figure_15_14.png)
 
 
 
@@ -8367,7 +8364,7 @@ Courtesy Mark Lees Skin Care Inc.
 
 
 
-![Figure 15-17A](images/figure_15_17A.png)
+![Figure 15-17](images/figure_15_17.png)
 
 
 
@@ -8405,7 +8402,7 @@ Courtesy Mark Lees Skin Care Inc.
 
 
 
-![Figure 15-18A](images/figure_15_18A.png)
+![Figure 15-18](images/figure_15_18.png)
 
 
 
@@ -9388,7 +9385,7 @@ Courtesy Mark Lees Skin Care, Inc. Courtesy Mark Lees Skin Care, Inc.
 
 
 
-![Figure 17-9A](images/figure_17_9A.png)
+![Figure 17-9](images/figure_17_9.png)
 
 
 
@@ -9535,7 +9532,7 @@ A B C D E
 
 
 
-![Figure 18-1A](images/figure_18_1A.png)
+![Figure 18-1](images/figure_18_1.png)
 
 
 
@@ -9897,7 +9894,7 @@ Courtesy Mark Lees Skin Care, Inc.
 
 
 
-![Figure 19-3A](images/figure_19_3A.png)
+![Figure 19-3](images/figure_19_3.png)
 
 
 
@@ -9988,7 +9985,7 @@ Courtesy www.dermnet.com.
 
 
 
-![Figure 19-6A](images/figure_19_6A.png)
+![Figure 19-6](images/figure_19_6.png)
 
 
 
@@ -10014,7 +10011,7 @@ Courtesy www.dermnet.com.
 
 
 
-![Figure 19-7A](images/figure_19_7A.png)
+![Figure 19-7](images/figure_19_7.png)
 
 
 
@@ -10036,7 +10033,7 @@ Images Courtesy The Skin Cancer Foundation, www.skincancer.org
 
 
 
-![Figure 19-8A](images/figure_19_8A.png)
+![Figure 19-8](images/figure_19_8.png)
 
 
 
@@ -10061,7 +10058,7 @@ Images Courtesy The Skin Cancer Foundation, www.skincancer.org.
 
 
 
-![Figure 19-8D](images/figure_19_8D.png)
+![Figure 19-8](images/figure_19_8.png)
 
 
 
@@ -10091,7 +10088,7 @@ Courtesy Micheal J. Bond, M.D.
 
 
 
-![Figure 19-9A](images/figure_19_9A.png)
+![Figure 19-9](images/figure_19_9.png)
 
 
 
@@ -10469,8 +10466,6 @@ Rules for the Retinoid Client
 
 
 
-![Figure 20-2A](images/figure_20_2A.png)
-
 
 
 The New Science of Aging Skin Treatment 397
@@ -10517,7 +10512,7 @@ Courtesy Mark Lees Skin Care, Inc.
 
 
 
-![Figure 20-3A](images/figure_20_3A.png)
+![Figure 20-3](images/figure_20_3.png)
 
 
 
@@ -10630,7 +10625,7 @@ Courtesy Mark Lees Skin Care, Inc.
 
 
 
-![Figure 20-5A](images/figure_20_5A.png)
+![Figure 20-5](images/figure_20_5.png)
 
 
 
@@ -10654,7 +10649,7 @@ Courtesy Mark Lees Skin Care, Inc.
 
 
 
-![Figure 20-6A](images/figure_20_6A.png)
+![Figure 20-6](images/figure_20_6.png)
 
 
 
@@ -10678,10 +10673,6 @@ Clients with photoaging skin should have the entire skin care program explained 
 The Basics of Treating Sun-Damaged Skin
 
 • Sun exposure must be carefully avoided, especially during the hours between 10 a.m. and 3 p.m. • An SPF 15 (or higher) broad-spectrum sunscreen should be worn on a daily basis, incorporated into a day cream or fluid. • An 8 to 10 percent alpha hydroxy acid product, with a pH of no less than 3.5, should be used daily. • A daily stabilized broad-spectrum antioxidant serum applied to the skin will help prevent cell damage, and in the long term will help prevent skin breakdown resulting in wrinkles and elastosis. • A serum or cream containing peptides, such as palmitoyl pentapeptide-4 (formerly called palmitoyl pentapeptide-3), or the newer complex of palmitoyl oligopeptide and palmitoyl tetrapeptide-7, should be used daily. Collagen stimulants such as hydrocotyl (Centella asiatica) and coneflower (Echinacea purpurea) may also be used, or combined into this type of product. Serums
-
-
-
-![Figure 20-7A](images/figure_20_7A.png)
 
 
 
@@ -10973,7 +10964,7 @@ For clients with acne, the AHA treatment procedure is essentially the same as we
 
 
 
-![Figure 21-3A](images/figure_21_3A.png)
+![Figure 21-3](images/figure_21_3.png)
 
 
 
@@ -10993,7 +10984,7 @@ Courtesy Murad Medical Group. Courtesy Murad Skin Research Laboratories.
 
 
 
-![Figure 21-4A](images/figure_21_4A.png)
+![Figure 21-4](images/figure_21_4.png)
 
 
 
@@ -11041,7 +11032,7 @@ Courtesy Murad Skin Research Laboratories. Courtesy Murad Skin Research Laborato
 
 
 
-![Figure 21-6A](images/figure_21_6A.png)
+![Figure 21-7](images/figure_21_7.png)
 
 
 
@@ -11070,7 +11061,8 @@ Courtesy Kirk Smith, M.D. Courtesy Melvin L. Elson, M.D.
 
 
 
-![Figure 21](images/figure_21.png)
+![Figure 21-8](images/figure_21-8.png)
+![Figure 21-9](images/figure_21-9.png)
 
 
 
@@ -11344,7 +11336,7 @@ Courtesy Derek A. Jones, M.D., F.A.C.S.
 
 
 
-![Figure 22-1A](images/figure_22_1A.png)
+![Figure 22-1](images/figure_22_1.png)
 
 
 
@@ -11361,10 +11353,6 @@ FIGURE 22-2 A–F, This patient had both a face lift and a mid-face lift, upper 
 A B
 
 Courtesy Derek A. Jones, M.D., F.A.C.S.
-
-
-
-![Figure 22-2A](images/figure_22_2A.png)
 
 
 
@@ -11449,7 +11437,7 @@ Endoscopic forehead lifting is a newer procedure in which small incisions are ma
 
 
 
-![Figure 22-3A](images/figure_22_3A.png)
+![Figure 22-3](images/figure_22_3.png)
 
 
 
@@ -11498,7 +11486,7 @@ Surgical Procedure An incision is made inside the nostrils. The bones of the nos
 
 
 
-![Figure 22-5A](images/figure_22_5A.png)
+![Figure 22-5](images/figure_22_5.png)
 
 
 
@@ -11545,7 +11533,7 @@ Presurgical Facial Characteristics These characteristics are acne scarring, “i
 
 
 
-![Figure 22-6A](images/figure_22_6A.png)
+![Figure 22-6](images/figure_22_6.png)
 
 
 
@@ -11696,8 +11684,6 @@ Hyperpigmentation Hyperpigmentation is a problem for some patients following las
 
 
 
-![Figure 22-8A](images/figure_22_8A.png)
-
 
 
 456 CHAPTER 22
@@ -11825,7 +11811,7 @@ Courtesy Kirk Smith, M.D.
 
 
 
-![Figure 22-9A](images/figure_22_9A.png)
+![Figure 22-9](images/figure_22_9.png)
 
 
 
@@ -11854,7 +11840,7 @@ Sunscreen is typically not used until day 18 or until erythema is reduced. Sunsc
 
 
 
-![Figure 22-10A](images/figure_22_10A.png)
+![Figure 22-10](images/figure_22_10.png)
 
 
 
@@ -12026,7 +12012,7 @@ Photos provided by Judith Crowell, M.D.
 
 
 
-![Figure 23-2A](images/figure_23_2A.png)
+![Figure 23-2](images/figure_23_2.png)
 
 
 
@@ -12110,7 +12096,7 @@ Courtesy Solta Medical, Inc.
 
 
 
-![Figure 23-5A](images/figure_23_5A.png)
+![Figure 23-5](images/figure_23_5.png)
 
 
 
@@ -12138,7 +12124,7 @@ Courtesy James R. Patrinely, M.D., F.A.C.S.
 
 
 
-![Figure 23-6A](images/figure_23_6A.png)
+![Figure 23-6](images/figure_23_6.png)
 
 
 
