@@ -12810,393 +12810,198 @@ Ziana, 305 Zinc oxide, 191, 241, 377 Zinc supplements, 290 Zonite, 31 Zyderm, 46
 
 | Figure | Caption | Page |
 |--------|---------|------|
-| FIGURE 1-1 | Much like the skin that covers our bodies, the cell is prote... | 16 |
-| FIGURE 1-1 | FIGURE 1-1 Structure of the cell. | 16 |
-| FIGURE 1-2 | We have discussed some of the respiratory, digestive, and sy... | 18 |
-| FIGURE 1-2 | FIGURE 1-2 The DNA double helix. | 18 |
-| FIGURE 1-3 | splits into two separate cells, both containing exactly the ... | 19 |
-| FIGURE 1-3 | FIGURE 1-3 Indirect division of the human cell. First phase—... | 19 |
-| FIGURE 1-4 | The skin is comprised of three major layers (Figure 1-4). Th... | 20 |
-| FIGURE 1-4 | FIGURE 1-4 Histology of the skin, hair, and glands. | 21 |
-| FIGURE 1-5 | The outermost major layer of the skin is known as the epider... | 22 |
-| FIGURE 1-5 | FIGURE 1-5 The epidermal and dermal layers of the skin. | 23 |
-| FIGURE 1-6 | Dr. Peter Elias, a dermatologist at the University of Califo... | 25 |
-| FIGURE 1-6 | FIGURE 1-6 Melanocytes in the epidermis produce melanin. epi... | 26 |
-| FIGURE 1-7 | Two types of specialized cells in the epidermis should be di... | 27 |
-| FIGURE 1-7 | FIGURE 1-7 The brick-and-mortar concept of the outermost lay... | 27 |
-| FIGURE 1-8 | The investigation of skin penetration is still largely theor... | 28 |
-| FIGURE 1-8 | FIGURE 1-8 Various routes of skin penetration: through the f... | 29 |
-| FIGURE 1-9 | Occlusion is the process of covering the skin with a heavy s... | 33 |
-| FIGURE 1-9 | FIGURE 1-9 Occlusive mask. | 33 |
-| FIGURE 1-10 | Iontophoresis or ionization uses electrical current to polar... | 34 |
-| FIGURE 1-10 | FIGURE 1-10 The electrode on the client’s face is the positi... | 34 |
-| FIGURE 2-1 | Sterilization, aseptic techniques, good hygiene, and disinfe... | 37 |
-| FIGURE 2-1 | FIGURE 2-1 Bacterial shapes. | 38 |
-| FIGURE 2-2 | MRSA (pronounced MUR-sah) is an aggressive form of staphyloc... | 39 |
-| FIGURE 2-3 | Sterilization is the process of killing all microorganisms, ... | 40 |
-| FIGURE 2-2 | FIGURE 2-2 MRSA lesion. | 40 |
-| FIGURE 2-3 | FIGURE 2-3 Example of an autoclave. | 41 |
-| FIGURE 2-4 | for 20 to 25 minutes. Rinse thoroughly. Never use an extract... | 45 |
-| FIGURE 2-4 | FIGURE 2-4 Commonly used disinfectants and antiseptics. | 45 |
-| FIGURE 2-5 | You absolutely must use disposable gloves when performing wa... | 49 |
-| FIGURE 2-5 | FIGURE 2-5 It is important for estheticians to wear gloves d... | 49 |
-| FIGURE 3-1 | Let’s put all this information in perspective. Think of the ... | 59 |
-| FIGURE 3-1 | FIGURE 3-1 The immune fi re department. | 59 |
-| FIGURE 3-2 | In Chapter 1, we discussed how DNA replicates itself in cell... | 62 |
-| FIGURE 3-2 | FIGURE 3-2 Lock and key of the membrane. | 62 |
-| FIGURE 3-3 | Lupus is a disease that affects more than a half a million A... | 67 |
-| FIGURE 3-3 | FIGURE 3-3 Systemic lupus erythematosus (SLE) butterfl y rash... | 67 |
-| FIGURE 3-4 | Discoid lupus erythematosus (DLE) is a form of lupus that pr... | 68 |
-| FIGURE 3-4 | FIGURE 3-4 Discoid lesion in discoid lupus. | 68 |
-| FIGURE 3-5 | Subacute cutaneous lupus erythematosus (SCLE) is a sub-form ... | 69 |
-| FIGURE 3-5 | FIGURE 3-5 Subacute cutaneous lupus erythematosus (SCLE). | 69 |
-| FIGURE 4-1 | Conjunctivitis is a bacterial infection of the conjunctiva o... | 72 |
-| FIGURE 4-1 | FIGURE 4-1 Conjunctivitis (“pinkeye”). | 72 |
-| FIGURE 4-2 | Herpes simplex is a virus that causes outbreaks of blisters ... | 73 |
+| FIGURE 1-1 | Structure of the cell. | 16 |
+| FIGURE 1-2 | The DNA double helix. | 18 |
+| FIGURE 1-3 | Indirect division of the human cell. First phase—Chromosomes begin to line up in the center of cell. Second phase—Chromosomes duplicate themselves. Third phase—New structures begin migrating to opposite ends of the cell. Fourth phase—Nucleus of the cell begins dividing. Fifth phase—Nucleus breaks into two identical nuclei. Sixth phase—Cell forms two identical cells. | 19 |
+| FIGURE 1-4 | Histology of the skin, hair, and glands. | 20 |
+| FIGURE 1-5 | The epidermal and dermal layers of the skin. | 22 |
+| FIGURE 1-6 | Melanocytes in the epidermis produce melanin. | 25 |
+| FIGURE 1-7 | The brick-and-mortar concept of the outermost layer of skin. | 27 |
+| FIGURE 1-8 | Various routes of skin penetration: through the follicle wall, the sebaceous glands, and intercellular and transcellular routes. | 28 |
+| FIGURE 1-9 | Occlusive mask. | 33 |
+| FIGURE 1-10 | The electrode on the client’s face is the positive pole. The current flows to the negative pole in the client’s hand. Positively charged, waterbased materials are repelled by the positive pole and attracted to the negative pole, increasing absorption of material into the skin surface. Desincrustation, using negatively charged alkaline liquids, is performed by switching the electrodes—using negative on the face while the client holds the positive electrode. | 34 |
+| FIGURE 2-1 | Bacterial shapes. | 37 |
+| FIGURE 2-2 | MRSA lesion. | 39 |
+| FIGURE 2-3 | Example of an autoclave. | 40 |
+| FIGURE 2-4 | Commonly used disinfectants and antiseptics. | 45 |
+| FIGURE 2-5 | It is important for estheticians to wear gloves during many procedures, including facial treatments, extraction, waxing, and electrolysis. | 49 |
+| FIGURE 3-1 | The immune fi re department. | 59 |
+| FIGURE 3-2 | Lock and key of the membrane. | 62 |
+| FIGURE 3-3 | Systemic lupus erythematosus (SLE) butterfl y rash. | 67 |
+| FIGURE 3-4 | Discoid lesion in discoid lupus. | 68 |
+| FIGURE 3-5 | Subacute cutaneous lupus erythematosus (SCLE). | 69 |
+| FIGURE 4-1 | Conjunctivitis (“pinkeye”). | 72 |
+| FIGURE 4-2 | Herpes simplex. | 73 |
+| FIGURE 4-3 | MRSA lesion. | 74 |
+| FIGURE 4-4 | Herpes type 2 in patient with HIV. | 82 |
+| FIGURE 4-5 | Shingles on the neck and face of a patient with HIV. | 83 |
+| FIGURE 4-6 | Seborrheic dermatitis in a patient with HIV. | 84 |
+| FIGURE 4-7 | Kaposi’s sarcoma in an AIDS (HIV-positive) patient. | 84 |
+| FIGURE 5-1 | The endocrine system. | 92 |
+| FIGURE 5-2 | Female reproductive organs. | 95 |
+| FIGURE 5-3 | Male reproductive organs. | 96 |
+| FIGURE 5-4 | Combination skin can be recognized by an oilier T-zone, down the middle of the face, and smaller pores, indicating drier skin in the perimeter of the face. | 97 |
+| FIGURE 5-5 | The menstrual cycle. | 100 |
+| FIGURE 5-6 | Mask of pregnancy (melasma). | 102 |
+| FIGURE 5-7 | Melasma in a male patient is very unusual. | 102 |
+| FIGURE 5-8 | Striae (stretch marks). | 103 |
+| FIGURE 5-9 | Chin acne. | 105 |
+| FIGURE 5-10 | Melasma after Triluma treatment. | 107 |
+| FIGURE 6-1 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; and F, Fitzpatrick VI. | 114 |
+| FIGURE 6-2 | Confi dential skin health survey. | 115 |
+| FIGURE 6-3 | A lighted magnifying lamp. | 118 |
+| FIGURE 6-4 | Large pores indicate oily skin areas. | 119 |
+| FIGURE 6-5 | Alipidic skin is characterized by a lack of visible pore openings. | 120 |
+| FIGURE 6-6 | Combination skin. | 121 |
+| FIGURE 6-7 | Dehydration is characterized by many fine lines and wrinkles. | 121 |
+| FIGURE 6-8 | Open and closed comedones. | 123 |
+| FIGURE 6-9 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 124 |
+| FIGURE 6-10 | Sebaceous hyperplasia can vary in size and shape, as seen in this photo. | 125 |
+| FIGURE 6-11 | Milia. | 125 |
+| FIGURE 6-12 | Pseudopores. | 126 |
+| FIGURE 6-13 | Telangiectasias. | 127 |
+| FIGURE 6-14 | Solar lentigenes. | 128 |
+| FIGURE 6-15 | Mottling. | 128 |
+| FIGURE 6-16 | Vitiligo. | 129 |
+| FIGURE 6-17 | Melasma. | 129 |
+| FIGURE 6-18 | Glogau Type IV—only wrinkles. | 130 |
 | FIGURE 7-1 | Impetigo is a contagious bacterial infection of the skin. Th... | 73 |
-| FIGURE 4-2 | FIGURE 4-2 Herpes simplex. | 73 |
-| FIGURE 4-3 | Methicillin-resistant Staphylococcus aureus (MRSA; pronounce... | 74 |
-| FIGURE 4-3 | FIGURE 4-3 MRSA lesion. | 74 |
-| FIGURE 4-4 | herpes . But, as explained later in this chapter, there are ... | 82 |
-| FIGURE 4-4 | FIGURE 4-4 Herpes type 2 in patient with HIV. | 82 |
-| FIGURE 4-5 | FIGURE 4-5 Shingles on the neck and face of a patient with H... | 83 |
-| FIGURE 4-6 | often needed to control the disorder (Figure 4-6). Psoriasis... | 84 |
-| FIGURE 4-7 | Kaposi’s sarcoma (KS) was, at one time, a frequent skin symp... | 84 |
-| FIGURE 4-6 | FIGURE 4-6 Seborrheic dermatitis in a patient with HIV. | 84 |
-| FIGURE 4-7 | FIGURE 4-7 Kaposi’s sarcoma in an AIDS (HIV-positive) patien... | 85 |
-| FIGURE 5-1 | There are eight major endocrine glands in the human body (Fi... | 92 |
-| FIGURE 5-1 | FIGURE 5-1 The endocrine system. | 92 |
-| FIGURE 5-2 | Keeping the skin in healthy condition through good, consiste... | 95 |
-| FIGURE 5-2 | FIGURE 5-2 Female reproductive organs. | 95 |
-| FIGURE 5-3 | are released into the fallopian tubes for possible fertiliza... | 96 |
-| FIGURE 5-3 | FIGURE 5-3 Male reproductive organs. | 96 |
-| FIGURE 5-4 | Puberty is the stage of life when physical changes occur in ... | 97 |
-| FIGURE 5-4 | FIGURE 5-4 Combination skin can be recognized by an oilier T... | 98 |
-| FIGURE 5-5 | With puberty and adolescence comes menarche , the beginning ... | 100 |
-| FIGURE 5-5 | FIGURE 5-5 The menstrual cycle. | 100 |
-| FIGURE 5-6 | FIGURE 5-6 Mask of pregnancy (melasma). | 102 |
-| FIGURE 5-7 | FIGURE 5-7 Melasma in a male patient is very unusual. | 102 |
-| FIGURE 5-8 | It is best to wait until the pregnancy is over. Observe whet... | 103 |
-| FIGURE 5-8 | FIGURE 5-8 Striae (stretch marks). It is best to wait until ... | 103 |
-| FIGURE 5-9 | Women frequently experience acne fl are-ups 7 to 10 days befo... | 105 |
-| FIGURE 5-9 | FIGURE 5-9 Chin acne. | 105 |
-| FIGURE 5-10A | If she must go in the sun, recommend the use of a high-SPF, ... | 107 |
-| FIGURE 5-10A | FIGURE 5-10A Melasma before Triluma treatment. | 107 |
-| FIGURE 5-10B | FIGURE 5-10B Melasma after Triluma treatment. | 107 |
-| FIGURE 6-1 | Fitzpatrick Skin Typing is a system of classifying the clien... | 114 |
-| FIGURE 6-1 | FIGURE 6-1 A , Fitzpatrick I; B , Fitzpatrick II; C , Fitzpa... | 114 |
-| FIGURE 6-2 | The first treatment for every client should begin by taking ... | 115 |
-| FIGURE 6-2 | FIGURE 6-2 Confi dential skin health survey. | 116 |
-| FIGURE 6-3 | 1. Begin by cleansing the skin with a gentle cleansing milk ... | 118 |
-| FIGURE 6-4 | sudden fl ashes of light that might disturb the client, do no... | 119 |
-| FIGURE 6-3 | FIGURE 6-3 A lighted magnifying lamp. | 119 |
-| FIGURE 6-4 | FIGURE 6-4 Large pores indicate oily skin areas. | 120 |
-| FIGURE 6-5 | FIGURE 6-5 Alipidic skin is characterized by a lack of visib... | 120 |
-| FIGURE 6-6 | bordered by the ears, lower chin and neck, and top edge of t... | 121 |
-| FIGURE 6-7 | Dehydration is a condition in which the skin lacks moisture ... | 121 |
-| FIGURE 6-6 | FIGURE 6-6 Combination skin. | 121 |
-| FIGURE 6-7 | FIGURE 6-7 Dehydration is characterized by many fine lines a... | 122 |
-| FIGURE 6-8 | • Open comedones —enlarged clogged follicles, commonly known... | 123 |
-| FIGURE 6-8 | FIGURE 6-8 Open and closed comedones. | 123 |
-| FIGURE 6-9 | FIGURE 6-9 Sebaceous fi laments, often called clogged pores, ... | 124 |
-| FIGURE 6-10A | FIGURE 6-10A Multiple sebaceous hyperplasia in an adult male... | 124 |
-| FIGURE 6-11 | • Pustule —a red bump with a white head, usually an acne les... | 125 |
-| FIGURE 6-10B | FIGURE 6-10B Sebaceous hyperplasia can vary in size and shap... | 125 |
-| FIGURE 6-11 | FIGURE 6-11 Milia. | 126 |
-| FIGURE 6-12 | FIGURE 6-12 Pseudopores. | 126 |
-| FIGURE 6-13 | • Telangiectasias —dilated red capillaries (Figure 6-13) • C... | 127 |
-| FIGURE 6-13 | FIGURE 6-13 Telangiectasias. | 127 |
-| FIGURE 6-14 | • Solar lentigenes —freckles caused by sun exposure (Figure ... | 128 |
-| FIGURE 6-14 | FIGURE 6-14 Solar lentigenes. | 128 |
-| FIGURE 6-15 | FIGURE 6-15 Mottling. | 128 |
-| FIGURE 6-17 | • Post-inflammatory hyperpigmentation —dark splotches or spo... | 129 |
-| FIGURE 6-16 | FIGURE 6-16 Vitiligo. • Post-inflammatory hyperpigmentation ... | 129 |
-| FIGURE 6-17 | FIGURE 6-17 Melasma. | 129 |
-| FIGURE 6-18A | Most conditions indicating photo-damaged skin are determined... | 130 |
-| FIGURE 6-18B | FIGURE 6-18B Glogau Type II—wrinkles in motion. | 131 |
-| FIGURE 6-18A | FIGURE 6-18A Glogau Type I—No wrinkles. | 131 |
-| FIGURE 6-18C | FIGURE 6-18C Glogau Type III— wrinkles at rest. | 131 |
-| FIGURE 6-18D | FIGURE 6-18D Glogau Type IV—only wrinkles. | 131 |
-| FIGURE 7-1 | Impetigo is a skin infection that is commonly seen on the fa... | 137 |
-| FIGURE 7-2 | Folliculitis is a bacterial infection of the hair follicle. ... | 137 |
-| FIGURE 7-2 | FIGURE 7-2 Folliculitis on the back. Furuncle is a severe in... | 138 |
-| FIGURE 7-3 | characterized by a red erythemic line running from the sourc... | 139 |
-| FIGURE 7-5 | Tinea versicolor is sometimes called sun fungus (Figure 7-5)... | 139 |
-| FIGURE 7-3 | FIGURE 7-3 Facial cellulitis. Note the severe swelling and i... | 139 |
-| FIGURE 7-4 | FIGURE 7-4 MRSA lesion. | 140 |
-| FIGURE 7-5 | FIGURE 7-5 Tinea versicolor, sometimes called sun fungus. It... | 140 |
-| FIGURE 7-6 | Tinea corporis is better known by the public as ringworm. It... | 141 |
-| FIGURE 7-7 | Candidas are yeast infections. They can cause a variety of s... | 141 |
-| FIGURE 7-6 | FIGURE 7-6 Tinea corporis infection on the leg. | 141 |
-| FIGURE 7-7 | FIGURE 7-7 Perleche. | 141 |
-| FIGURE 7-8 | Herpes refers to a group of viruses. Herpes simplex is the c... | 142 |
-| FIGURE 7-9 | Herpes zoster , better known as shingles , is caused by the ... | 142 |
-| FIGURE 7-10 | Molloscum contagiosum is a viral infection frequently seen o... | 142 |
-| FIGURE 7-8 | FIGURE 7-8 Herpes simplex causes common cold sores. | 142 |
-| FIGURE 7-9 | FIGURE 7-9 Typical case of herpes zoster (shingles). Note th... | 143 |
-| FIGURE 7-10 | FIGURE 7-10 Molloscum contagiosum. | 143 |
-| FIGURE 7-11 | nitrogen or cautery with an electric needle. Warts are conta... | 144 |
-| FIGURE 7-12 | Pityriasis rosea is a patchy, red, rash-like disorder. It ca... | 144 |
-| FIGURE 7-11 | FIGURE 7-11 Warts. | 144 |
-| FIGURE 7-12 | FIGURE 7-12 Pityriasis rosea. | 144 |
-| FIGURE 7-13A | Contact dermatitis is probably the most common form of derma... | 145 |
-| FIGURE 7-13A | FIGURE 7-13A Contact dermatitis in a hairstylist due to para... | 145 |
-| FIGURE 7-13B | FIGURE 7-13B Contact dermatitis due to nickel allergy. | 145 |
-| FIGURE 7-14 | Atopic eczema or dermatitis is a more complicated form of de... | 146 |
-| FIGURE 7-14 | FIGURE 7-14 Atopic dermatitis. | 146 |
-| FIGURE 7-15 | Psoriasis is an autoimmune inflammatory disease of the skin ... | 147 |
-| FIGURE 7-15 | FIGURE 7-15 Psoriasis. | 147 |
-| FIGURE 7-16A | Keratosis pilaris is a chronic condition in which the skin e... | 148 |
-| FIGURE 7-16A | FIGURE 7-16A Keratosis pilaris often affects the upper arm. | 148 |
-| FIGURE 7-16B | FIGURE 7-16B Keratosis pilaris is often seen on the lower ch... | 148 |
-| FIGURE 7-17 | Vascular lesions are visible conditions that involve the blo... | 149 |
-| FIGURE 7-17 | FIGURE 7-17 Telangiectasias, also sometimes known as coupero... | 149 |
-| FIGURE 7-18 | Skin tags are very small, threadlike growths. They are frequ... | 150 |
-| FIGURE 7-18 | FIGURE 7-18 Skin tags are often seen on the neck and in the ... | 150 |
-| FIGURE 7-19A | Xanthomas or xanthalasmas are fatty pockets found on the eye... | 151 |
-| FIGURE 7-19A | FIGURE 7-19A AND B Xanthalasmas can appear on any area of th... | 151 |
-| FIGURE 8-1 | Matter is anything that takes up space and has substance. Yo... | 156 |
-| FIGURE 8-1 | FIGURE 8-1 Periodic table of the elements. | 156 |
-| FIGURE 8-2 | which are extremely light (it takes about 1,800 electrons to... | 157 |
-| FIGURE 8-2 | FIGURE 8-2 Sodium and chlorine atoms. which are extremely li... | 157 |
-| FIGURE 8-3 | protons in its nucleus as negative electrons orbiting the at... | 158 |
-| FIGURE 8-3 | FIGURE 8-3 Sodium and chlorine ions. protons in its nucleus ... | 158 |
-| FIGURE 8-5 | Let’s go back and look at the periodic table of the elements... | 159 |
-| FIGURE 8-4 | FIGURE 8-4 Carbon atoms “sharing” electrons with other carbo... | 159 |
-| FIGURE 8-5 | FIGURE 8-5 H 2 O molecule “sharing” electrons between hydrog... | 159 |
-| FIGURE 8-6 | When a molecule joins two different elements together, the r... | 160 |
-| FIGURE 8-6 | FIGURE 8-6 NaCl solution. | 160 |
-| FIGURE 8-7 | Protein is made of carbon, oxygen, nitrogen, hydrogen, and s... | 162 |
-| FIGURE 8-8 | ions is known as the pH of the substance. The term pH is an ... | 163 |
-| FIGURE 8-7 | FIGURE 8-7 Examples of (A) monosaccharide, (B) disaccharide,... | 163 |
-| FIGURE 8-8 | FIGURE 8-8 Average pH values. Cosmetics should also have a s... | 164 |
-| FIGURE 9-1 | Emollients also can be both functional and performance ingre... | 169 |
-| FIGURE 9-1 | FIGURE 9-1 Emollients spread across the skin, helping to pre... | 169 |
-| FIGURE 9-2 | Emulsifi ers are chemicals that keep water and oil solutions ... | 173 |
-| FIGURE 9-2 | FIGURE 9-2 Types of emulsions. | 174 |
-| FIGURE 9-3 | If you over-emulsify an ingredient, the result is called a m... | 181 |
-| FIGURE 9-3 | FIGURE 9-3 Detergent micelle. | 181 |
-| FIGURE 9-4 | are compatible with the lipids making up the intercellular c... | 182 |
-| FIGURE 9-4 | FIGURE 9-4 Liposomes help protect and transport performance ... | 182 |
-| FIGURE 9-5 | FIGURE 9-5 Encapsulation methods in the liposome and the nan... | 182 |
-| FIGURE 10-1 | OTC drugs are required by law to use special chart labels ca... | 203 |
-| FIGURE 10-1 | FIGURE 10-1 Drug facts label. | 204 |
-| FIGURE 11-1 | After graduating from school, the esthetician will be amazed... | 209 |
-| FIGURE 11-2 | Let’s take a trip to the stockroom of a successful skin care... | 210 |
-| FIGURE 11-1 | FIGURE 11-1 The success of any skin care program depends on ... | 210 |
-| FIGURE 11-3A | Chemical Action and Design Chemically, this product uses dis... | 211 |
-| FIGURE 11-2 | FIGURE 11-2 A well-organized retail area is important to the... | 211 |
-| FIGURE 11-3B | Chemical Action and Design If you look at the ingredient lab... | 212 |
-| FIGURE 11-3 | FIGURE 11-3 Sample ingredient labels for cleansers. | 212 |
-| FIGURE 11-4 | Chemical Action and Design This cream is a mixture of humect... | 221 |
-| FIGURE 11-4 | FIGURE 11-4 Bottle A has more oil and emollient for dry skin... | 222 |
-| FIGURE 11-5 | Many steps are involved in developing new skin care and cosm... | 229 |
-| FIGURE 11-5 | FIGURE 11-5 Formulating all types of skin care products is b... | 229 |
-| FIGURE 12-1 | On OTC products, the manufacturer must print an OTC drug fac... | 237 |
-| FIGURE 12-1 | FIGURE 12-1 Drug facts label. | 237 |
-| FIGURE 13-1 | Sensitive skin is often obvious on examination. It is most o... | 244 |
-| FIGURE 13-1A | FIGURE 13-1A In sensitive skin, the area appears whiter than... | 245 |
-| FIGURE 13-1B | FIGURE 13-1B The skin quickly regains its pink tone, sometim... | 245 |
-| FIGURE 13-2 | FIGURE 13-2 Urticaria (hives). | 245 |
-| FIGURE 13-3 | 1. Begin by cleansing the skin with a very mild, nonfoaming,... | 248 |
-| FIGURE 13-3 | FIGURE 13-3 Telangiectasias. | 248 |
-| FIGURE 13-4 | Dermatitis is a term dermatologists use to describe general ... | 249 |
-| FIGURE 13-4 | FIGURE 13-4 Severe contact dermatitis as a reaction to cosme... | 249 |
-| FIGURE 13-5 | A frequent problem seen by the esthetician is eyelid dermati... | 259 |
-| FIGURE 13-6 | All or any of these factors can cause eyelid irritation and ... | 259 |
-| FIGURE 13-5 | FIGURE 13-5 Eyelid contact dermatitis from cosmetics. | 259 |
-| FIGURE 13-6 | FIGURE 13-6 Irritant eye reaction after using a new eye prod... | 260 |
-| FIGURE 13-7 | Products developed for sensitive skin should be tested by an... | 261 |
-| FIGURE 13-7 | FIGURE 13-7 A , Dermatologist-administered patch tests for v... | 261 |
-| FIGURE 13-8 | Choosing the right products for sensitive skin can be tricky... | 265 |
-| FIGURE 13-8 | FIGURE 13-8 A–F , Using a home skin care regimen that is spe... | 265 |
-| FIGURE 13-8 | FIGURE 13-8 ( continued ) | 266 |
-| FIGURE 14-1 | Rosacea , formerly known as acne rosacea and sometimes refer... | 273 |
-| FIGURE 14-2 | rushing of the blood to the facial skin can stimulate sebace... | 274 |
-| FIGURE 14-1 | FIGURE 14-1 Nose telangiectasias. Dilated capillaries, calle... | 274 |
-| FIGURE 14-2 | FIGURE 14-2 An example of a severe fl are of rosacea, which c... | 274 |
-| FIGURE 14-3 | The sudden flushing of blood to the face triggers the releas... | 275 |
-| FIGURE 14-3 | FIGURE 14-3 A–C , The beginning stages of rosacea. The first... | 275 |
-| FIGURE 14-3 | FIGURE 14-3 ( Continued ) | 276 |
-| FIGURE 14-4 | Erythematotelangiectatic (er-uh-THEM-uh-toe-tel-an-jee-EK-tu... | 278 |
-| FIGURE 14-6 | comedones are present. These larger-than-normal pimples prim... | 279 |
-| FIGURE 14-4 | FIGURE 14-4 Subtype 1: facial redness (erythematotelangiec... | 279 |
-| FIGURE 14-5 | FIGURE 14-5 Subtype 2: bumps and pimples (papulopustular ros... | 279 |
-| FIGURE 14-6 | FIGURE 14-6 Subtype 3: skin thickening (phymatous rosacea). ... | 279 |
-| FIGURE 14-7 | An enlarged nose resulting from rosacea is known as rhinophy... | 280 |
-| FIGURE 14-8A | FIGURE 14-8A AND B Rhinophyma. | 280 |
-| FIGURE 14-7 | FIGURE 14-7 Red, swollen noses can be the beginning of rhino... | 280 |
-| FIGURE 14-10 | Phymatous rosacea can affect either women or men, but it is ... | 281 |
-| FIGURE 14-9 | FIGURE 14-9 Dark and red distended capillaries, enlarged p... | 281 |
-| FIGURE 14-10 | FIGURE 14-10 Subtype 4: eye irritation (ocular rosacea). Wat... | 281 |
-| FIGURE 14-11 | That being said, estheticians see rosacea frequently in the ... | 282 |
-| FIGURE 14-11A | FIGURE 14-11A AND B Before and after rosacea treatment. Rosa... | 282 |
-| FIGURE 14-12 | Products are available to help soothe sensitive skin, and so... | 285 |
-| FIGURE 14-12A | FIGURE 14-12A AND B Esthetic management of redness-prone ski... | 285 |
-| FIGURE 15-1 | From our parents, we inherit certain genes that determine ho... | 290 |
-| FIGURE 15-2 | that is not red or inflamed. Examples of noninflammatory acn... | 291 |
-| FIGURE 15-1 | FIGURE 15-1 The progression of acne. | 291 |
-| FIGURE 15-2 | FIGURE 15-2 Open and closed comedones. | 291 |
-| FIGURE 15-4 | means they cannot survive in the presence of oxygen. These b... | 292 |
-| FIGURE 15-3 | FIGURE 15-3 The development of acne in a young girl. | 292 |
-| FIGURE 15-4 | FIGURE 15-4 The papule. | 293 |
-| FIGURE 15-5 | FIGURE 15-5 The pustule. | 293 |
-| FIGURE 15-6 | for this “clump” of dead white blood cells. For practical pu... | 294 |
-| FIGURE 15-7A | Acne is “graded” by dermatologists on a four-point scale (Fi... | 294 |
-| FIGURE 15-6 | FIGURE 15-6 The cyst. | 294 |
-| FIGURE 15-8 | Scars form when the skin, in a desperate attempt to heal its... | 295 |
-| FIGURE 15-7A | FIGURE 15-7A Grade I acne. | 295 |
-| FIGURE 15-7B | FIGURE 15-7B Grade II acne. | 295 |
-| FIGURE 15-7C | FIGURE 15-7C Grade III acne. | 295 |
-| FIGURE 15-7D | FIGURE 15-7D Grade IV acne | 295 |
-| FIGURE 15-8 | FIGURE 15-8 Acne scarring. | 296 |
-| FIGURE 15-9 | Many women suffer from premenstrual acne flares, predominant... | 297 |
-| FIGURE 15-9 | FIGURE 15-9 Acne in the chin and jawline can be related to h... | 298 |
-| FIGURE 15-10 | sometimes the forehead. This is the beginning of adolescent ... | 300 |
-| FIGURE 15-10A | FIGURE 15-10A AND B Improvement in bumpy arms after using a ... | 300 |
-| FIGURE 15-11 | Acne excoriée is a condition in which the client constantly ... | 302 |
-| FIGURE 15-11 | FIGURE 15-11 Acne excoriée. | 303 |
-| FIGURE 15-12 | Seborrheic dermatitis is a sometimes chronic inflammation of... | 304 |
-| FIGURE 15-12 | FIGURE 15-12 Seborrheic dermatitis presents with red, fl aky ... | 305 |
-| FIGURE 15-13 | Perioral dermatitis , which is dermatitis around the mouth, ... | 306 |
-| FIGURE 15-13 | FIGURE 15-13 Typical pattern of perioral dermatitis on the c... | 306 |
-| FIGURE 15-14A | Benzoyl peroxide is an excellent acne treatment medication t... | 308 |
-| FIGURE 15-14A | FIGURE 15-14A AND B This client had Grade II acne complicate... | 308 |
-| FIGURE 15-15 | almost immediately. Apply additional dabs to pimples and rai... | 314 |
-| FIGURE 15-15A | FIGURE 15-15A AND B This case of Grade I acne was improved s... | 314 |
-| FIGURE 15-16 | FIGURE 15-16 This male college student had excellent results... | 314 |
-| FIGURE 15-17A | The home-care routine is the same as for Grade I acne; howev... | 315 |
-| FIGURE 15-17A | FIGURE 15-17A–D This client had problem skin for 15 years an... | 315 |
-| FIGURE 15-17A | FIGURE 15-17A–D ( continued ) | 316 |
-| FIGURE 15-18A | FIGURE 15-18A–D Grade II acne. This client improved signifi c... | 317 |
-| FIGURE 15-18A | FIGURE 15-18A–D ( continued ) | 318 |
-| FIGURE 16-1 | Researchers have developed a test for comedogenicity using t... | 330 |
-| FIGURE 16-1 | FIGURE 16-1 The microscopic view of retention hyperkeratosis... | 331 |
-| FIGURE 17-1 | Clogged pores are rarely found on a truly dry or alipidic (d... | 345 |
-| FIGURE 17-1 | FIGURE 17-1 Combination skin. | 345 |
-| FIGURE 17-2 | FIGURE 17-2 Examination procedures. | 346 |
-| FIGURE 17-4 | a few days. The debris extracted from a sebaceous fi lament w... | 347 |
-| FIGURE 17-3A | FIGURE 17-3A AND B Treatment for clogged, dehydrated skin in... | 347 |
-| FIGURE 17-4 | FIGURE 17-4 Sebaceous fi laments, often called clogged pores,... | 347 |
-| FIGURE 17-5 | The use of a brushing machine may help loosen dead cells, pa... | 349 |
-| FIGURE 17-5 | FIGURE 17-5 An ultrasonic “blade” is used here to exfoliate ... | 349 |
-| FIGURE 17-6 | After pre-softening the accumulations, remove all products f... | 350 |
-| FIGURE 17-6 | FIGURE 17-6 Cotton swabs are used to gently extract comedone... | 351 |
-| FIGURE 17-7 | Closed comedones are the most diffi cult of any lesion to ext... | 352 |
-| FIGURE 17-7 | FIGURE 17-7 Dilation using a lancet. | 353 |
-| FIGURE 17-8 | Milia are small deposits of sebum and keratin between the fo... | 355 |
-| FIGURE 17-8 | FIGURE 17-8 Milia. | 356 |
-| FIGURE 17-9A | FIGURE 17-9A Milia are often seen around the eye area, foreh... | 357 |
-| FIGURE 17-9B | FIGURE 17-9B Chart of general extraction rules. | 357 |
-| FIGURE 17-10 | Many clients complain of small, milia-like lesions around th... | 358 |
-| FIGURE 17-10 | FIGURE 17-10 Xanthelasmas. | 358 |
-| FIGURE 17-11 | In older clients, often men, you will find a concentration o... | 359 |
-| FIGURE 17-11 | FIGURE 17-11 Favre-Racouchot syndrome (senile solar comedone... | 360 |
+| FIGURE 7-2 | Folliculitis on the back. Furuncle is a severe infection of the hair follicle. It is also known as a boil. | 137 |
+| FIGURE 7-3 | Facial cellulitis. Note the severe swelling and inflammation. | 139 |
+| FIGURE 7-4 | MRSA lesion. | 140 |
+| FIGURE 7-5 | Tinea versicolor, sometimes called sun fungus. | 139 |
+| FIGURE 7-6 | Tinea corporis infection on the leg. | 141 |
+| FIGURE 7-7 | Perleche. | 141 |
+| FIGURE 7-8 | Herpes simplex causes common cold sores. | 142 |
+| FIGURE 7-9 | Typical case of herpes zoster (shingles). Note that the lesions follow a typical nerve-route pattern. | 142 |
+| FIGURE 7-10 | Molloscum contagiosum. | 142 |
+| FIGURE 7-11 | Warts. | 144 |
+| FIGURE 7-12 | Pityriasis rosea. | 144 |
+| FIGURE 7-13 | Contact dermatitis due to nickel allergy. | 145 |
+| FIGURE 7-14 | Atopic dermatitis. | 146 |
+| FIGURE 7-15 | Psoriasis. | 147 |
+| FIGURE 7-16 | Keratosis pilaris is often seen on the lower cheeks. | 148 |
+| FIGURE 7-17 | Telangiectasias, also sometimes known as couperose. | 149 |
+| FIGURE 7-18 | Skin tags are often seen on the neck and in the chest area. | 150 |
+| FIGURE 7-19 | AND B Xanthalasmas can appear on any area of the eyes and sometimes on the cheeks or forehead. | 151 |
+| FIGURE 8-1 | Periodic table of the elements. | 156 |
+| FIGURE 8-2 | Sodium and chlorine atoms. | 157 |
+| FIGURE 8-3 | Sodium and chlorine ions. | 158 |
+| FIGURE 8-4 | Carbon atoms “sharing” electrons with other carbon and hydrogen atoms. | 159 |
+| FIGURE 8-5 | H2O molecule “sharing” electrons between hydrogen and oxygen atoms. | 159 |
+| FIGURE 8-6 | NaCl solution. | 160 |
+| FIGURE 8-7 | Examples of (A) monosaccharide, (B) disaccharide, (C) polysaccharide. | 162 |
+| FIGURE 8-8 | Average pH values. | 163 |
+| FIGURE 9-1 | Emollients spread across the skin, helping to prevent dehydration and smooth the skin surface. | 169 |
+| FIGURE 9-2 | Types of emulsions. | 173 |
+| FIGURE 9-3 | Detergent micelle. | 181 |
+| FIGURE 9-4 | Liposomes help protect and transport performance ingredients into the epidermis. | 182 |
+| FIGURE 9-5 | Encapsulation methods in the liposome and the nanosphere or microsponge. | 182 |
+| FIGURE 10-1 | Drug facts label. | 203 |
+| FIGURE 11-1 | The success of any skin care program depends on having the client participate at home. | 209 |
+| FIGURE 11-2 | A well-organized retail area is important to the esthetics practice. | 210 |
+| FIGURE 11-3 | Sample ingredient labels for cleansers. | 211 |
+| FIGURE 11-4 | Bottle A has more oil and emollient for dry skin. Bottle B has less oil and more hydration for dehydrated, oilier skin. | 221 |
+| FIGURE 11-5 | Formulating all types of skin care products is both interesting and challenging. | 229 |
+| FIGURE 12-1 | Drug facts label. | 237 |
+| FIGURE 13-1 | The skin quickly regains its pink tone, sometimes becoming darker after pressure. | 244 |
+| FIGURE 13-2 | Urticaria (hives). | 245 |
+| FIGURE 13-3 | Telangiectasias. | 248 |
+| FIGURE 13-4 | Severe contact dermatitis as a reaction to cosmetics. | 249 |
+| FIGURE 13-5 | Eyelid contact dermatitis from cosmetics. | 259 |
+| FIGURE 13-6 | Irritant eye reaction after using a new eye product. | 259 |
+| FIGURE 13-7 | A, Dermatologist-administered patch tests for various contact allergies. B, Positive patch test indicating allergy to nickel. | 261 |
+| FIGURE 13-8 | (continued) | 265 |
+| FIGURE 14-1 | Nose telangiectasias. Dilated capillaries, called telangiectasias, and a coarse-textured appearance of nose ostia are typical of the rosacea client. | 273 |
+| FIGURE 14-2 | An example of a severe fl are of rosacea, which can affect the whole face. | 274 |
+| FIGURE 14-3 | (Continued) | 275 |
+| FIGURE 14-4 | Subtype 1: facial redness (erythematotelangiectatic rosacea). Flushing and persistent redness. Visible blood vessels may also appear. | 278 |
+| FIGURE 14-5 | Subtype 2: bumps and pimples (papulopustular rosacea). Persistent facial redness with bumps or pimples. Often seen following or with subtype 1. | 279 |
+| FIGURE 14-6 | Subtype 3: skin thickening (phymatous rosacea). Skin thickening and enlargement, usually around the nose. | 279 |
+| FIGURE 14-7 | Red, swollen noses can be the beginning of rhinophyma. | 280 |
+| FIGURE 14-8 | AND B Rhinophyma. | 280 |
+| FIGURE 14-9 | Dark and red distended capillaries, enlarged pores, and enlargement of the nose are shown in this photo of rhinophyma. This nose also has large amounts of sebaceous fi laments and secretions. | 281 |
+| FIGURE 14-10 | Subtype 4: eye irritation (ocular rosacea). Watery and bloodshot appearance, irritation, burning, or stinging. | 281 |
+| FIGURE 14-11 | AND B Before and after rosacea treatment. Rosacea can be kept under control by using prescribed topical and/or oral medication, controlling flushing; avoiding heat, spicy foods, and other triggers; and using nonirritating skin care products. | 282 |
+| FIGURE 14-12 | AND B Esthetic management of redness-prone skin using a specific concept-designed system of home care can make a big difference in redness and help avoid flushing and flares of rosacea. | 285 |
+| FIGURE 15-1 | The progression of acne. | 290 |
+| FIGURE 15-2 | Open and closed comedones. | 291 |
+| FIGURE 15-3 | The development of acne in a young girl. | 292 |
+| FIGURE 15-4 | The papule. | 292 |
+| FIGURE 15-5 | The pustule. | 293 |
+| FIGURE 15-6 | The cyst. | 294 |
+| FIGURE 15-7 | Grade IV acne | 294 |
+| FIGURE 15-8 | Acne scarring. | 295 |
+| FIGURE 15-9 | Acne in the chin and jawline can be related to hormone imbalances. | 297 |
+| FIGURE 15-10 | AND B Improvement in bumpy arms after using a glycolic hydrator. | 300 |
+| FIGURE 15-11 | Acne excoriée. | 302 |
+| FIGURE 15-12 | Seborrheic dermatitis presents with red, fl aky skin in oily areas of the face and most often affects the T-zone of the face, eyebrows, ears, scalp, and hairline. | 305 |
+| FIGURE 15-13 | Typical pattern of perioral dermatitis on the chin. Perioral dermatitis can also appear on the cheeks or anywhere around the mouth area. | 306 |
+| FIGURE 15-14 | AND B This client had Grade II acne complicated by hormonal therapy. After eight weeks using a mix of benzoyl peroxide gel and an AHA/salicylic mixed gel, the client had good clearing results. | 308 |
+| FIGURE 15-15 | AND B This case of Grade I acne was improved signifi cantly in only six weeks of home care by eliminating comedogenic products, using daily follicular exfoliants to loosen and prevent hyperkeratosis, and using an effective foaming cleanser to control sebum. | 314 |
+| FIGURE 15-16 | This male college student had excellent results using a combination of mild 2.5 percent benzoyl peroxide gel and AHA/salicylic acid mixed gel, along with proper cleanser, noncomedogenic moisturizer, and sunscreen. | 314 |
+| FIGURE 15-17 | The home-care routine is the same as for Grade I acne; howev... | 315 |
+| FIGURE 15-18 | FIGURE 15-18A–D Grade II acne. This client improved signifi c... | 317 |
+| FIGURE 16-1 | The microscopic view of retention hyperkeratosis shows excessive cell buildup and swelling. This slide represents a positive test for comedogenicity. | 330 |
+| FIGURE 17-1 | Combination skin. | 345 |
+| FIGURE 17-2 | Examination procedures. | 346 |
+| FIGURE 17-3 | AND B Treatment for clogged, dehydrated skin includes noncomedogenic hydration fluid and sunscreen with low levels of emollient, along with an alpha hydroxy acid gel. This home care was used for six weeks in this case study. Note the differences in texture, tone, clarity, and even coloration. | 347 |
+| FIGURE 17-4 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 347 |
+| FIGURE 17-5 | An ultrasonic “blade” is used here to exfoliate the corneum before extraction. | 349 |
+| FIGURE 17-6 | Cotton swabs are used to gently extract comedones and sebaceous fi laments by gently lifting and slightly twisting the skin. Careful preparation of the skin with desincrustation is essential for ease in extraction. | 350 |
+| FIGURE 17-7 | Dilation using a lancet. | 352 |
+| FIGURE 17-8 | Milia. | 355 |
+| FIGURE 17-9 | Chart of general extraction rules. | 357 |
+| FIGURE 17-10 | Xanthelasmas. | 358 |
+| FIGURE 17-11 | Favre-Racouchot syndrome (senile solar comedones) in a typical pattern on an individual with sun damage. | 359 |
 | FIGURE 18-1 | we can determine the symptoms caused by intrinsic factors an... | 364 |
-| FIGURE 18-1A | FIGURE 18-1A–E Each decade of life may add more signs of agi... | 365 |
-| FIGURE 18-2 | Here we discuss several factors that influence aging. Gravit... | 366 |
-| FIGURE 18-2 | FIGURE 18-2 Elastosis. | 367 |
-| FIGURE 18-3 | The use of microcurrent , a gentle treatment using an ultra-... | 374 |
-| FIGURE 18-3 | FIGURE 18-3 Although it is not the same as a face lift, micr... | 375 |
-| FIGURE 19-1 | about the best ways to prevent sun damage and skin cancer an... | 378 |
-| FIGURE 19-1 | FIGURE 19-1 The spectrum of light—wavelengths. about the bes... | 378 |
-| FIGURE 19-2 | Chloasma , also known as “liver spots,” are almost completel... | 380 |
-| FIGURE 19-2 | FIGURE 19-2 Chloasma, or liver spots, are spots of concentra... | 380 |
-| FIGURE 19-3A | many clients do not exhibit hyperpigmentation on the body as... | 381 |
-| FIGURE 19-3 | FIGURE 19-3 Hyperpigmentation, often caused by cumulative su... | 381 |
-| FIGURE 19-4 | Tinea versicolor is what many refer to as “sun spots” or “su... | 382 |
-| FIGURE 19-4 | FIGURE 19-4 Tinea versicolor. | 382 |
-| FIGURE 19-5 | Collagen and elastin fibrils in the dermis begin a process c... | 384 |
-| FIGURE 19-5 | FIGURE 19-5 Long-term sun damage. | 384 |
-| FIGURE 19-6A | Skin cancer is caused by the damage to the DNA that we have ... | 385 |
-| FIGURE 19-6A | FIGURE 19-6A Basal cell carcinoma. | 385 |
-| FIGURE 19-6B | FIGURE 19-6B Basal cell carcinoma. | 385 |
-| FIGURE 19-7A | Squamous cell carcinomas are the second most frequently diag... | 386 |
-| FIGURE 19-7A | FIGURE 19-7A Squamous cell carcinoma. | 386 |
-| FIGURE 19-7B | FIGURE 19-7B Squamous cell carcinoma. | 386 |
-| FIGURE 19-8A | FIGURE 19-8A1 Benign mole—symmetrical. Common moles are usua... | 387 |
-| FIGURE 19-8A | FIGURE 19-8A2 Melanoma—asymmetrical. Most early melanomas ar... | 387 |
-| FIGURE 19-8B | FIGURE 19-8B1 Benign mole—even edges. Common moles usually h... | 387 |
-| FIGURE 19-8B | FIGURE 19-8B2 Melanoma—uneven edges. The borders of early me... | 387 |
-| FIGURE 19-8C | FIGURE 19-8C1 Benign mole—one shade. Common moles usually ar... | 387 |
-| FIGURE 19-8C | FIGURE 19-8C2 Melanoma—two or more shades. Varied shades of ... | 387 |
-| FIGURE 19-8D | FIGURE 19-8D1 Benign mole—6 mm or smaller. Common moles are ... | 388 |
-| FIGURE 19-8D | FIGURE 19-8D2 Melanomas usually have larger diameters than b... | 388 |
-| FIGURE 19-8E | FIGURE 19-8E1 AND E2 Common, benign moles look the same over... | 388 |
-| FIGURE 19-9A | cells, they can become cancerous and are often referred to a... | 389 |
-| FIGURE 19-10 | Sebaceous hyperplasias are small, doughnut-shaped lesions th... | 389 |
-| FIGURE 19-9 | FIGURE 19-9 Actinic keratosis is frequently seen in sun-dama... | 389 |
-| FIGURE 19-10 | FIGURE 19-10 Multiple sebaceous hyperplasia in an adult ma... | 390 |
-| FIGURE 19-11 | Fitzpatrick Skin Typing (Figure 19-11). The following is an ... | 393 |
-| FIGURE 19-11 | FIGURE 19-11 A , Fitzpatrick I; B , Fitzpatrick II; C , Fitz... | 393 |
-| FIGURE 19-12 | Self-tanning lotions are becoming more and more popular. The... | 401 |
-| FIGURE 19-12 | FIGURE 19-12 Proper application of a well-formulated DHA sel... | 402 |
-| FIGURE 20-1 | You will notice many symptoms of photoaging skin. Some of th... | 407 |
-| FIGURE 20-1 | FIGURE 20-1 Poikiloderma of civatte is a condition of the ne... | 407 |
-| FIGURE 20-2A | Alpha hydroxy acid treatment is probably the most effective ... | 410 |
-| FIGURE 20-2 | FIGURE 20-2 A–D , Dramatic improvement is seen in the appear... | 411 |
-| FIGURE 20-3A | 7. Do not wax clients using retinoids! Electrolysis is usual... | 412 |
-| FIGURE 20-3 | FIGURE 20-3 A–D , Many clients are concerned about loss of e... | 412 |
-| FIGURE 20-4 | Microdermabrasion is a technique using small crystals, usual... | 414 |
-| FIGURE 20-4 | FIGURE 20-4 Microdermabrasion. | 415 |
-| FIGURE 20-5A | As we have already discussed in Chapter 10 (Performance Ingr... | 416 |
-| FIGURE 20-5 | FIGURE 20-5 A–D , This client was treated with a combination... | 416 |
-| FIGURE 20-6A | peptides that together stimulate collagen, fi bronectin, and ... | 417 |
-| FIGURE 20-6 | FIGURE 20-6 A–D , Use of specialty eye products (creams or s... | 417 |
-| FIGURE 20-7A | Clients with photoaging skin should have the entire skin car... | 418 |
-| FIGURE 20-7 | FIGURE 20-7 Clients must take a program approach to achieve ... | 419 |
-| FIGURE 20-8 | We briefl y mentioned the use of light-emitting diode (LED) t... | 421 |
-| FIGURE 20-8 | FIGURE 20-8 LED treatment has been shown to reduce redness a... | 422 |
-| FIGURE 21-1 | The alpha hydroxy treatment is allowed to stay on the skin f... | 433 |
-| FIGURE 21-1 | FIGURE 21-1 Glycolic acid is applied to the skin of a client... | 434 |
-| FIGURE 21-2A | FIGURE 21-2A AND B Glycolic treatment is popular for lesseni... | 434 |
-| FIGURE 21-3A | You should not combine professional alpha hydroxy acid appli... | 435 |
-| FIGURE 21-4A | closed comedones and loosens open comedones while exfoliatin... | 436 |
-| FIGURE 21-3A | FIGURE 21-3A AND B Routine use of home alpha hydroxy acid pr... | 436 |
-| FIGURE 21-4A | FIGURE 21-4A AND B Glycolic treatment can signifi cantly impr... | 436 |
-| FIGURE 21-6A | Again, the treatment method for hyperpigmented skin is essen... | 437 |
-| FIGURE 21-5A | FIGURE 21-5A AND B Treatment at home with alpha hydroxy and ... | 437 |
-| FIGURE 21-6A | FIGURE 21-6A AND B Glycolic treatment can help the appearanc... | 438 |
-| FIGURE 21-7A | FIGURE 21-7A AND B Hyperpigmentation can be improved by the ... | 438 |
-| FIGURE 21 | The treatments we have been discussing, using 20 to 30 perce... | 439 |
-| FIGURE 21-9A | FIGURE 21-9A AND B In-depth phenol peel (before and after). | 439 |
-| FIGURE 21-8 | FIGURE 21-8 A , Phenol solution is used on the wrinkled lip ... | 439 |
-| FIGURE 21-10 | The client will feel a strong burning sensation when applica... | 443 |
-| FIGURE 21-10 | FIGURE 21-10 Application of salicylic acid using a large swa... | 444 |
-| FIGURE 21-11 | FIGURE 21-11 A , B This series of photos illustrates exfolia... | 444 |
-| FIGURE 21-11 | FIGURE 21-11 C , D Note improvement after two treatments, ... | 445 |
-| FIGURE 21-11 | FIGURE 21-11 E , F Temporary hyperpigmentation and discolora... | 445 |
-| FIGURE 22-1A | Surgical Procedure Incisions are made in front of, or inside... | 452 |
-| FIGURE 22-1 | FIGURE 22-1 A–D , Rhytidectomy, or face lifting, can dramati... | 452 |
-| FIGURE 22-2A | is instructed to keep the head elevated for several days, ev... | 453 |
-| FIGURE 22-2 | FIGURE 22-2 A–F, This patient had both a face lift and a mid... | 453 |
-| FIGURE 22-2 | FIGURE 22-2 ( continued ) | 454 |
-| FIGURE 22-3A | Surgical Procedure The patient is anesthetized or sedated. I... | 458 |
-| FIGURE 22-4 | suture “cords.” The suture material is secured. The advantag... | 459 |
-| FIGURE 22-3 | FIGURE 22-3 Blepharoplasty, or eyelid surgery, can help sign... | 459 |
-| FIGURE 22-4 | FIGURE 22-4 This patient had an endoscopic forehead lift, wi... | 459 |
-| FIGURE 22-5A | Presurgical Facial Characteristics People undergoing the rhi... | 460 |
-| FIGURE 22-5 | FIGURE 22-5 A–D, These views feature the patient before and ... | 461 |
-| FIGURE 22-6A | Dermabrasion is the technique of reducing acne scarring; sca... | 462 |
-| FIGURE 22-6 | FIGURE 22-6 A , Acne scarring in the cheek of this former ac... | 463 |
-| FIGURE 22-7 | The following information is condensed from an article writt... | 466 |
-| FIGURE 22-7 | FIGURE 22-7 Post-laser treatment. | 467 |
-| FIGURE 22-8A | Laser Patient Referral The plastic or dermatological surgeon... | 469 |
-| FIGURE 22-8 | FIGURE 22-8 ( continued ) | 470 |
-| FIGURE 22-8 | FIGURE 22-8 A , The patient arrived 11 days post-CO 2 laser ... | 471 |
-| FIGURE 22-9A | Collagen injections are the oldest form of wrinkle fi ller. C... | 476 |
-| FIGURE 22-9 | FIGURE 22-9 A , Note the deep nasolabial folds on this patie... | 476 |
-| FIGURE 22-10A | Sunscreen is typically not used until day 18 or until erythe... | 477 |
-| FIGURE 22-10 | FIGURE 22-10 Unretouched clinical photos taken before Botox ... | 478 |
-| FIGURE 23-1 | Medical spas are medical offi ces that may offer traditional ... | 484 |
-| FIGURE 23-1 | FIGURE 23-1 Medical spas try to combine the relaxed atmosphe... | 484 |
-| FIGURE 23-2A | Many different types of lasers are used in cosmetic dermatol... | 485 |
-| FIGURE 23-2 | FIGURE 23-2 A , Aging face. B , Aging face resurfacing with ... | 485 |
-| FIGURE 23-3 | FIGURE 23-3 A , Rhinophyma. B , Rhinophyma after laser treat... | 486 |
-| FIGURE 23-4 | Intense pulsed light (IPL) is a type of very strong light th... | 487 |
-| FIGURE 23-4 | FIGURE 23-4 Ellipse intense pulsed light system. | 487 |
-| FIGURE 23-5A | Radio frequency heat energy is used to stimulate collagen pr... | 488 |
-| FIGURE 23-5 | FIGURE 23-5 A , Before radio frequency treatment. B , 6 mont... | 488 |
-| FIGURE 23-6A | Fillers and Wrinkle Injections Cosmetic fi llers, such as hya... | 489 |
-| FIGURE 23-6 | FIGURE 23-6 A , Prominent oral commissures. B , Same patient... | 489 |
-| FIGURE 23-7 | FIGURE 23-7 A , Nasolabial lines. B , Same patient after inj... | 490 |
+| FIGURE 18-2 | Elastosis. | 366 |
+| FIGURE 18-3 | Although it is not the same as a face lift, microcurrent, when applied correctly, has been shown in university studies to improve elasticity, collagen content, and elastin content. | 374 |
+| FIGURE 19-1 | The spectrum of light—wavelengths. | 378 |
+| FIGURE 19-2 | Chloasma, or liver spots, are spots of concentrated melanin caused by sun damage. | 380 |
+| FIGURE 19-3 | Hyperpigmentation, often caused by cumulative sun exposure, can be improved with the use of alpha hydroxy and beta hydroxy acids, and lightening or brightening agents such as hydroquinone or magnesium ascorbyl phosphate. In this case study, a series of 30 percent alpha hydroxy acid exfoliation treatments showed this improvement in three weeks. | 381 |
+| FIGURE 19-4 | Tinea versicolor. | 382 |
+| FIGURE 19-5 | Long-term sun damage. | 384 |
+| FIGURE 19-6 | Basal cell carcinoma. | 385 |
+| FIGURE 19-7 | Squamous cell carcinoma. | 386 |
+| FIGURE 19-8 | FIGURE 19-8A1 Benign mole—symmetrical. Common moles are usua... | 387 |
+| FIGURE 19-9 | Actinic keratosis is frequently seen in sun-damaged clients. | 389 |
+| FIGURE 19-10 | Multiple sebaceous hyperplasia in an adult male with oily skin and sun damage. Sebaceous hyperplasias are typically found on the forehead, temple, and upper cheeks but can appear anywhere on the face. | 389 |
+| FIGURE 19-11 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; F, Fitzpatrick VI. | 393 |
+| FIGURE 19-12 | Proper application of a well-formulated DHA self-tanning product produces beautiful results in a short period of time and is the only safe way to “tan.” | 401 |
+| FIGURE 20-1 | Poikiloderma of civatte is a condition of the neck skin with hyperpigmentation and telangiectasias caused by years of cumulative sun exposure. | 407 |
+| FIGURE 20-2 | A–D, Dramatic improvement is seen in the appearance of this skin treated with alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 410 |
+| FIGURE 20-3 | A–D, Many clients are concerned about loss of elasticity. This client shows great improvement after using alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 412 |
+| FIGURE 20-4 | Microdermabrasion. | 414 |
+| FIGURE 20-5 | A–D, This client was treated with a combination of products containing acetyl hexapeptide-8, lipids, daily sunscreen and alpha hydroxy acids for eight weeks to achieve these positive results in smoothness and the appearance of wrinkle reduction. | 416 |
+| FIGURE 20-6 | A–D, Use of specialty eye products (creams or serums) containing a mixture of peptides for firming and reduction of puffiness, along with fl avonoids to reduce dark circles, can achieve results like these shown over four weeks. | 417 |
+| FIGURE 20-7 | Clients must take a program approach to achieve global improvement as seen here. This client used a home-care product system for six months with peptides, AHAs, lipids, antioxidants, and daily sunscreen. | 418 |
+| FIGURE 20-8 | LED treatment has been shown to reduce redness and increase collagen content in the skin. | 421 |
+| FIGURE 21-1 | Glycolic acid is applied to the skin of a client who has been using a lower-strength glycolic treatment product for at least two weeks at home. This treatment is applied with cotton swabs and carefully monitored according to manufacturer’s directions. | 433 |
+| FIGURE 21-2 | AND B Glycolic treatment is popular for lessening the appearance of facial wrinkles. Shown here are before and after photos of the eye area. | 434 |
+| FIGURE 21-3 | AND B Routine use of home alpha hydroxy acid products along with a series of AHA professional treatments can dramatically affect the appearance of wrinkles in aging skin. | 435 |
+| FIGURE 21-4 | AND B Glycolic treatment can signifi cantly improve the appearance of problem and acne–prone skin (before and after). | 436 |
+| FIGURE 21-5 | AND B Treatment at home with alpha hydroxy and beta hydroxy acid, along with professional AHA and extraction treatments, can help clear blemishes and improve hyperpigmentation in the skin of color. | 437 |
+| FIGURE 21-6 | AND B Glycolic treatment can help the appearance of hyperpigmented skin conditions. | 437 |
+| FIGURE 21-7 | AND B Hyperpigmentation can be improved by the daily use of alpha hydroxy acids and hydroquinone—and of course, daily use of sunscreen at home—as well as professional AHA treatments in the salon or clinic. | 438 |
+| FIGURE 21-8 | A, Phenol solution is used on the wrinkled lip of this patient. Shown here is the “frosting” effect after application of the phenol solution. B, Several months after the peel, the lip is much smoother. | 439 |
+| FIGURE 21-9 | AND B In-depth phenol peel (before and after). | 439 |
+| FIGURE 21-10 | Application of salicylic acid using a large swab. | 443 |
+| FIGURE 21-11 | E, F Temporary hyperpigmentation and discoloration can occur during the first one or two weeks following salicylic treatment. In this more extreme case, dark splotches exfoliate to reveal smoother texture and tone. | 444 |
+| FIGURE 22-1 | A–D, Rhytidectomy, or face lifting, can dramatically improve the appearance of sagging facial skin and elastosis. A forehead lift has also been performed on this patient. | 452 |
+| FIGURE 22-2 | (continued) | 453 |
+| FIGURE 22-3 | Blepharoplasty, or eyelid surgery, can help signifi cantly restructure the eye contours, achieving a more alert, youthful look. | 458 |
+| FIGURE 22-4 | This patient had an endoscopic forehead lift, with a blepharoplasty (eyelift), achieving more youthful contours in both the forehead and eye areas. Notice how much more open her eyes appear. | 459 |
+| FIGURE 22-5 | A–D, These views feature the patient before and after a rhinoplasty. Note the reduction of the nasal bone protrusion, the straightening of the nostrils, and the softer look of the face in general after surgery. | 460 |
+| FIGURE 22-6 | A, Acne scarring in the cheek of this former acne patient. B, After dermabrasion, the cheek area is much smoother. C, This patient needed both dermabrasion and revision of this large surgical scar. D, Notice how much smoother the scar appears. | 462 |
+| FIGURE 22-7 | Post-laser treatment. | 466 |
+| FIGURE 22-8 | A, The patient arrived 11 days post-CO2 laser resurfacing, concerned with extreme redness and dry, tight skin. B, The patient complained of extreme tightness around the mouth, and dryness was evident from crusty fl aking above the upper lip. The patient was instructed in the use of proper camoufl age makeup and how to achieve as natural a look as possible. The patient was instructed to use a fragrance-free moisturizer along with a lipid-based serum to increase hydration. The patient was also instructed in proper cleansing of the skin, using a nonfoaming, gentle cleanser. A facial treatment using a lipid-based hydrator with hyaluronic acid and sodium PCA and a gentle steam treatment to increase hydration were administered. Cool steam was applied, over which high-frequency current was applied to provide a gentle massage. After this, cold cryogenic globes were applied over gauze. These are special glass or Pyrex® balls filled with cold refrigerant chemicals, like those used in chemical ice packs. Another layer of hydrator was applied over the entire face and allowed to sit for 20 minutes. After the treatment, a lipid serum was applied. C, The patient experienced signifi cantly lessened redness in five days. D, Flakiness and dryness were lessened and smoothness was achieved in five days. The patient reported ease of dryness and discomfort almost immediately. E, This patient had an extreme amount of redness after full-face CO2 laser resurfacing and full face lift. She had an important engagement in only a few weeks and was very concerned about having a natural appearance for this event. Again, this patient was given the same hydrating cream, lipid serum, and gentle cleanser and was instructed in the use of camoufl age makeup to cover the redness. F, The patient had tremendous improvement in only five days. Within a short period of time, she was able to discontinue the heavier camoufl age makeup and return to the use of a lighter-weight liquid makeup. | 469 |
+| FIGURE 22-9 | A, Note the deep nasolabial folds on this patient. B, By injecting collagen, the surgeon achieves a remarkable reduction in wrinkles. | 476 |
+| FIGURE 22-10 | Unretouched clinical photos taken before Botox® Cosmetic and after treatment with Botox® Cosmetic at day 14. Results may vary. | 477 |
+| FIGURE 23-1 | Medical spas try to combine the relaxed atmosphere of a spa with medical cosmetic services. | 484 |
+| FIGURE 23-2 | A, Aging face. B, Aging face resurfacing with nonablative laser. | 485 |
+| FIGURE 23-3 | A, Rhinophyma. B, Rhinophyma after laser treatment. | 486 |
+| FIGURE 23-4 | Ellipse intense pulsed light system. | 487 |
+| FIGURE 23-5 | A, Before radio frequency treatment. B, 6 months after treatment. | 488 |
+| FIGURE 23-6 | A, Prominent oral commissures. B, Same patient after injection with hyaluronic acid. | 489 |
+| FIGURE 23-7 | A, Nasolabial lines. B, Same patient after injection with hyaluronic acid. | 490 |
