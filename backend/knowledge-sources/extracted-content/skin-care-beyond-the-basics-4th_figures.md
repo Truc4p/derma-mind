@@ -1631,7 +1631,7 @@ FIGURE 3-1 The immune fire department.
 
 46 CHAPTER 3
 
-Vaccines are an artifi cial way of tricking the immune system into making antibodies, or Igs.
+Vaccines are an artificial way of tricking the immune system into making antibodies, or Igs.
 
 Modifi ed live vaccines are still alive, but radiation treatment renders the organisms unable to reproduce.
 
@@ -1640,7 +1640,7 @@ Antibiotics are drugs made from extracts obtained from living organisms and used
 
 ## HOW MEDICINE HELPS THE IMMUNE SYSTEM Vaccines
 
-Vaccines are an artifi cial way of tricking the immune system into making antibodies, or Igs. Vaccines introduce very small amounts of antigen (foreign organisms) into the body. Not enough of the organism is introduced to cause the body to become ill, but enough that it triggers the B cells to make immunoglobulins (Igs) to protect against whatever organism is being used in the vaccination process. Sometimes the vaccination process produces minor symptoms of the illness. You have probably heard of people getting slightly ill after receiving a flu vaccine. In cases where small amounts of the organisms are enough to trigger disease, doctors sometimes use dead viruses or irradiated organisms in vaccines. Irradiated organisms used in vaccines have been treated with some form of radiation before being used. They are still alive, but the radiation treatment renders the organisms unable to reproduce. These are sometimes called modifi ed live vaccines. Vaccines are available against a large variety of diseases, including polio, smallpox, measles, mumps, certain types of influenza (flu), and many other diseases.
+Vaccines are an artificial way of tricking the immune system into making antibodies, or Igs. Vaccines introduce very small amounts of antigen (foreign organisms) into the body. Not enough of the organism is introduced to cause the body to become ill, but enough that it triggers the B cells to make immunoglobulins (Igs) to protect against whatever organism is being used in the vaccination process. Sometimes the vaccination process produces minor symptoms of the illness. You have probably heard of people getting slightly ill after receiving a flu vaccine. In cases where small amounts of the organisms are enough to trigger disease, doctors sometimes use dead viruses or irradiated organisms in vaccines. Irradiated organisms used in vaccines have been treated with some form of radiation before being used. They are still alive, but the radiation treatment renders the organisms unable to reproduce. These are sometimes called modifi ed live vaccines. Vaccines are available against a large variety of diseases, including polio, smallpox, measles, mumps, certain types of influenza (flu), and many other diseases.
 
 
 ## Antibiotics
@@ -3975,7 +3975,7 @@ Recognize and Refer Medical Conditions 137
 
 Xanthomas are fatty pockets found on the eyelids.
 
-Xanthalasmas are much fl atter than milia, have a yellowish appearance, are below the skin’s surface, and may have irregular shape.
+Xanthalasmas are much flatter than milia, have a yellowish appearance, are below the skin’s surface, and may have irregular shape.
 
 Skin tags are largely hereditary and have been associated with obesity, pregnancy, postmenopause, diabetes, and intestinal disorders. These medical associations are another reason that skin tags should be seen by a physician.
 
@@ -6856,7 +6856,7 @@ Many different fragrances, derived from various sources, are used in skin care a
 
 Sensitive Skin, Allergies, and Irritants 239
 
-Some products are labeled “no artifi cial fragrance,” or “perfume-free.” This is not the same as fragrance-free. Fragrance-free means that no ingredient was added to the product for the purpose of adding a fragrance. Here is the good news: Companies that produce fragrance ingredients are now conducting research to develop fragrance ingredients that reduce the chances of allergic reactions. The companies accomplish this by removing certain biochemical components from the extracts (e.g., proteins) that are known to cause allergic reactions.
+Some products are labeled “no artificial fragrance,” or “perfume-free.” This is not the same as fragrance-free. Fragrance-free means that no ingredient was added to the product for the purpose of adding a fragrance. Here is the good news: Companies that produce fragrance ingredients are now conducting research to develop fragrance ingredients that reduce the chances of allergic reactions. The companies accomplish this by removing certain biochemical components from the extracts (e.g., proteins) that are known to cause allergic reactions.
 
 
 ## Natural Products
@@ -9391,7 +9391,7 @@ Courtesy Mark Lees Skin Care, Inc. Courtesy Mark Lees Skin Care, Inc.
 
 344 CHAPTER 17
 
-Xanthelasmas (zan-thuh-LAZmuhs) are much fl atter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape.
+Xanthelasmas (zan-thuh-LAZmuhs) are much flatter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape.
 
 Syringomas (sear-in-GO-muhs) are small pinpoint lesions that occur under the eyes.
 
@@ -9400,7 +9400,7 @@ side of the milium, moving the extractor very slowly toward the open side of the
 
 ## LESIONS AROUND THE EYES
 
-Many clients complain of small, milia-like lesions around the eye area. Some of these lesions are milia. Some are other types of skin growth or lesions called xanthelasmas (zan-thuh-LAZ-muhs). Xanthelasmas are much larger and fl atter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape (Figure 17-10). They are rarely round like a milium. These lesions should be referred to a dermatologist—they are not in the domain of the esthetician. Xanthelasmas can sometimes be an indicator of other diseases or disorders, such as high cholesterol. Refer the client to a dermatologist for treatment and follow-up.
+Many clients complain of small, milia-like lesions around the eye area. Some of these lesions are milia. Some are other types of skin growth or lesions called xanthelasmas (zan-thuh-LAZ-muhs). Xanthelasmas are much larger and flatter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape (Figure 17-10). They are rarely round like a milium. These lesions should be referred to a dermatologist—they are not in the domain of the esthetician. Xanthelasmas can sometimes be an indicator of other diseases or disorders, such as high cholesterol. Refer the client to a dermatologist for treatment and follow-up.
 
 Syringomas (sear-in-GO-muhs) are small pinpoint lesions that occur under the eyes. These are actually small cysts on the sudoriferous glands. They may look like very small milia and are usually seen in multiple numbers. They are thought to be hereditary or possibly caused by sun damage. They are generally not extractable and should be referred to a dermatologist or an ophthalmologist for treatment. Other small milia in the eye area are often associated with the use of heavy eye creams, concealers, and other eye cosmetics that are thick, heavy, and loaded with fatty emollients. This can cause a buildup of dead cells in the area. Advise the client to switch to a lighter eye cream or a gel-type treatment. These have fewer or lesser concentrations of emollients.
 
@@ -12792,7 +12792,7 @@ Triggers are activities that cause facial flushing, which can lead to a rosacea 
 
 Ulcers are deep erosions in which part of the dermis has been lost, 122 Ultrasonic treatment uses ultrasound vibration to help expand the area between cells and to warm tissue for better absorption of certain products, 20 Ultraviolet A (UVA) rays are longer, deeper-penetrating rays that affect the dermis of the skin. These rays are responsible for most premature aging symptoms, 364–365, 384–385 Ultraviolet B (UVB) rays are sunrays that cause sunburn and most types of skin cancer, 364, 384–385 Ultraviolet C (UVC) rays are short sunrays blocked by the ozone layer, 364 Ultraviolet (UV) rays are light rays produced by the sun, 364 United States Department of Agriculture (USDA), 226 Urticaria, or hives, is due to allergies, 134, 230 USDA. See United States Department of Agriculture UV. See Ultraviolet UVA. See Ultraviolet A UVB. See Ultraviolet B UVC. See Ultraviolet C
 
-Vaccines are an artifi cial way of tricking the immune system into making antibodies, or Igs, 46, 73 Vacuoles are the “storage vats” for waste and excess food supplies, 3
+Vaccines are an artificial way of tricking the immune system into making antibodies, or Igs, 46, 73 Vacuoles are the “storage vats” for waste and excess food supplies, 3
 
 Valence is the number of electrons in the outer energy level of an atom, 144 Varicella zoster virus (VZV), that causes chicken pox. The lesions of herpes zoster look like multiple red blisters, 68 Varicose veins, 89–90 Vascular growth factor (VGF) is a biochemical within the skin that triggers the growth of capillaries, 261 Vascular lasers are designed specifically to treat vascular lesions, 136 Vascular lesions are visible conditions that involve the blood or circulatory system, 135–136 Vascular means “blood vessel related”, 259, 260 Vasodilation is the dilation of the blood vessels resulting in flushing, 262 Vasodilators dilate the blood vessels, making more blood flow through the arterial system, 358 Vehicles are ingredients used as spreading agents, 154, 166–167 with AHAs, 181 Vehicles are the spreading agents in skin care or cosmetic products, 104 Verbal claims, 221 Vesicle is the medical term for blisters, 122 VGF. See Vascular growth factor Viral load is a measurement of how many viral particles are in a person’s blood, 64 Viral skin infections, 128–130 Viruses are another form of microorganism that are often pathogenic, 24 Visceral muscle is responsible for involuntary muscle actions, 5 Viscosity is the thickness and liquidity of a solution, skin care product, or cosmetic, 157 Vitamin A, 16, 96 Vitamin C is a water-soluble vitamin essential in the skin for helping to neutralize free radicals; it is also needed in the production of collagen, 401 Vitamin D, 16, 79, 381–382 Vitamin E, 16, 165 Vitamin E is a fat-soluble vitamin that is a strong antioxidant, 401 Vitamin K, 441–442
 
@@ -12800,7 +12800,7 @@ Vitiligo is a condition in which the skin stops making skin pigment, resulting i
 
 Warts are caused by a variety of viruses known as papillomaviruses or verrucae, 68, 128, 130 Water is the most common vehicle ingredient, 154–155 Water-based, 326 Water-in-oil (W/O) is a solution of oil and water that is mostly oil, 159 Waxes, 319 Waxes are thick, fatty substances that are derived primarily from plants and used as emollients in skin care products, 156 Welts, or wheals, are raised, swollen, red lesions, usually caused by allergies. They are also called hives, 122, 230 White corpuscles are responsible for defending the body against bacterial invasion, 5 White tea is a strong antioxidant extract, 401 Window phase is the period of time between exposure to HIV and the time antibodies are made, 62 Witch hazel, or Hamamelis extract, can be a soothing agent; in higher concentrations, it is an astringent, 174 W/O. See Water-in-oil Wrinkle treatments, 460–463 Wrinkles, sagging vs., 355
 
-Xanthelasmas (zan-thuh-LAZmuhs) are much fl atter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape, 137, 344 Xanthomas are fatty pockets found on the eyelids, 137 Xanthum gum, 165
+Xanthelasmas (zan-thuh-LAZmuhs) are much flatter than milia, have a yellowish appearance, are below the skin’s surface, and may have an irregular shape, 137, 344 Xanthomas are fatty pockets found on the eyelids, 137 Xanthum gum, 165
 
 Ziana, 305 Zinc oxide, 191, 241, 377 Zinc supplements, 290 Zonite, 31 Zyderm, 462 Zyplast, 462
 
@@ -12810,3 +12810,188 @@ Ziana, 305 Zinc oxide, 191, 241, 377 Zinc supplements, 290 Zonite, 31 Zyderm, 46
 
 | Figure | Caption | Page |
 |--------|---------|------|
+| FIGURE 1-1 | Structure of the cell. | 2 |
+| FIGURE 1-2 | The DNA double helix. | 4 |
+| FIGURE 1-3 | Indirect division of the human cell. First phase—Chromosomes begin to line up in the center of cell. Second phase—Chromosomes duplicate themselves. Third phase—New structures begin migrating to opposite ends of the cell. Fourth phase—Nucleus of the cell begins dividing. Fifth phase—Nucleus breaks into two identical nuclei. Sixth phase—Cell forms two identical cells. | 5 |
+| FIGURE 1-4 | Histology of the skin, hair, and glands. | 7 |
+| FIGURE 1-5 | The epidermal and dermal layers of the skin. | 9 |
+| FIGURE 1-6 | Melanocytes in the epidermis produce melanin. | 12 |
+| FIGURE 1-7 | The brick-and-mortar concept of the outermost layer of skin. | 13 |
+| FIGURE 1-8 | Various routes of skin penetration: through the follicle wall, the sebaceous glands, and intercellular and transcellular routes. | 15 |
+| FIGURE 1-9 | Occlusive mask. | 9 |
+| FIGURE 1-10 | The electrode on the client’s face is the positive pole. The current flows to the negative pole in the client’s hand. Positively charged, waterbased materials are repelled by the positive pole and attracted to the negative pole, increasing absorption of material into the skin surface. Desincrustation, using negatively charged alkaline liquids, is performed by switching the electrodes—using negative on the face while the client holds the positive electrode. | 20 |
+| FIGURE 2-1 | Bacterial shapes. | 1 |
+| FIGURE 2-2 | MRSA lesion. | 2 |
+| FIGURE 2-3 | Example of an autoclave. | 3 |
+| FIGURE 2-4 | Commonly used disinfectants and antiseptics. | 30 |
+| FIGURE 2-5 | It is important for estheticians to wear gloves during many procedures, including facial treatments, extraction, waxing, and electrolysis. | 34 |
+| FIGURE 3-1 | The immune fire department. | 1 |
+| FIGURE 3-2 | Lock and key of the membrane. | 2 |
+| FIGURE 3-3 | Systemic lupus erythematosus (SLE) butterfl y rash. | 52 |
+| FIGURE 3-4 | Discoid lesion in discoid lupus. | 4 |
+| FIGURE 3-5 | Subacute cutaneous lupus erythematosus (SCLE). | 4 |
+| FIGURE 4-1 | Conjunctivitis (“pinkeye”). | 1 |
+| FIGURE 4-2 | Herpes simplex. | 2 |
+| FIGURE 4-3 | MRSA lesion. | 3 |
+| FIGURE 4-4 | Herpes type 2 in patient with HIV. | 4 |
+| FIGURE 4-5 | Shingles on the neck and face of a patient with HIV. | 4 |
+| FIGURE 4-6 | Seborrheic dermatitis in a patient with HIV. | 70 |
+| FIGURE 4-7 | Kaposi’s sarcoma in an AIDS (HIV-positive) patient. | 70 |
+| FIGURE 5-1 | The endocrine system. | 1 |
+| FIGURE 5-2 | Female reproductive organs. | 2 |
+| FIGURE 5-3 | Male reproductive organs. | 3 |
+| FIGURE 5-4 | Combination skin can be recognized by an oilier T-zone, down the middle of the face, and smaller pores, indicating drier skin in the perimeter of the face. | 84 |
+| FIGURE 5-5 | The menstrual cycle. | 5 |
+| FIGURE 5-6 | Mask of pregnancy (melasma). | 6 |
+| FIGURE 5-7 | Melasma in a male patient is very unusual. | 6 |
+| FIGURE 5-8 | Striae (stretch marks). | 8 |
+| FIGURE 5-9 | Chin acne. | 9 |
+| FIGURE 5-10 | Melasma after Triluma treatment. | 92 |
+| FIGURE 6-1 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; and F, Fitzpatrick VI. | 100 |
+| FIGURE 6-2 | Confi dential skin health survey. | 2 |
+| FIGURE 6-3 | A lighted magnifying lamp. | 3 |
+| FIGURE 6-4 | Large pores indicate oily skin areas. | 4 |
+| FIGURE 6-5 | Alipidic skin is characterized by a lack of visible pore openings. | 4 |
+| FIGURE 6-6 | Combination skin. | 6 |
+| FIGURE 6-7 | Dehydration is characterized by many fine lines and wrinkles. | 108 |
+| FIGURE 6-8 | Open and closed comedones. | 8 |
+| FIGURE 6-9 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 110 |
+| FIGURE 6-10 | Sebaceous hyperplasia can vary in size and shape, as seen in this photo. | 110 |
+| FIGURE 6-11 | Milia. | 11 |
+| FIGURE 6-12 | Pseudopores. | 12 |
+| FIGURE 6-13 | Telangiectasias. | 13 |
+| FIGURE 6-14 | Solar lentigenes. | 14 |
+| FIGURE 6-15 | Mottling. | 15 |
+| FIGURE 6-16 | Vitiligo. | 16 |
+| FIGURE 6-17 | Melasma. | 17 |
+| FIGURE 6-18 | Glogau Type IV—only wrinkles. | 116 |
+| FIGURE 7-1 | Impetigo is a contagious bacterial infection of the skin. Th... | 73 |
+| FIGURE 7-2 | Folliculitis on the back. Furuncle is a severe infection of the hair follicle. It is also known as a boil. | 124 |
+| FIGURE 7-3 | Facial cellulitis. Note the severe swelling and inflammation. | 124 |
+| FIGURE 7-4 | MRSA lesion. | 4 |
+| FIGURE 7-5 | Tinea versicolor, sometimes called sun fungus. | 4 |
+| FIGURE 7-6 | Tinea corporis infection on the leg. | 6 |
+| FIGURE 7-7 | Perleche. | 7 |
+| FIGURE 7-8 | Herpes simplex causes common cold sores. | 128 |
+| FIGURE 7-9 | Typical case of herpes zoster (shingles). Note that the lesions follow a typical nerve-route pattern. | 128 |
+| FIGURE 7-10 | Molloscum contagiosum. | 10 |
+| FIGURE 7-11 | Warts. | 11 |
+| FIGURE 7-12 | Pityriasis rosea. | 12 |
+| FIGURE 7-13 | Contact dermatitis due to nickel allergy. | 12 |
+| FIGURE 7-14 | Atopic dermatitis. | 14 |
+| FIGURE 7-15 | Psoriasis. | 15 |
+| FIGURE 7-16 | Keratosis pilaris is often seen on the lower cheeks. | 134 |
+| FIGURE 7-17 | Telangiectasias, also sometimes known as couperose. | 134 |
+| FIGURE 7-18 | Skin tags are often seen on the neck and in the chest area. | 136 |
+| FIGURE 7-19 | AND B Xanthalasmas can appear on any area of the eyes and sometimes on the cheeks or forehead. | 136 |
+| FIGURE 8-1 | Periodic table of the elements. | 1 |
+| FIGURE 8-2 | Sodium and chlorine atoms. | 2 |
+| FIGURE 8-3 | Sodium and chlorine ions. | 3 |
+| FIGURE 8-4 | Carbon atoms “sharing” electrons with other carbon and hydrogen atoms. | 3 |
+| FIGURE 8-5 | H2O molecule “sharing” electrons between hydrogen and oxygen atoms. | 3 |
+| FIGURE 8-6 | NaCl solution. | 6 |
+| FIGURE 8-7 | Examples of (A) monosaccharide, (B) disaccharide, (C) polysaccharide. | 148 |
+| FIGURE 8-8 | Average pH values. | 8 |
+| FIGURE 9-1 | Emollients spread across the skin, helping to prevent dehydration and smooth the skin surface. | 154 |
+| FIGURE 9-2 | Types of emulsions. | 2 |
+| FIGURE 9-3 | Detergent micelle. | 3 |
+| FIGURE 9-4 | Liposomes help protect and transport performance ingredients into the epidermis. | 168 |
+| FIGURE 9-5 | Encapsulation methods in the liposome and the nanosphere or microsponge. | 168 |
+| FIGURE 10-1 | Drug facts label. | 1 |
+| FIGURE 11-1 | The success of any skin care program depends on having the client participate at home. | 196 |
+| FIGURE 11-2 | A well-organized retail area is important to the esthetics practice. | 196 |
+| FIGURE 11-3 | Sample ingredient labels for cleansers. | 198 |
+| FIGURE 11-4 | Bottle A has more oil and emollient for dry skin. Bottle B has less oil and more hydration for dehydrated, oilier skin. | 208 |
+| FIGURE 11-5 | Formulating all types of skin care products is both interesting and challenging. | 214 |
+| FIGURE 12-1 | Drug facts label. | 1 |
+| FIGURE 13-1 | The skin quickly regains its pink tone, sometimes becoming darker after pressure. | 230 |
+| FIGURE 13-2 | Urticaria (hives). | 2 |
+| FIGURE 13-3 | Telangiectasias. | 3 |
+| FIGURE 13-4 | Severe contact dermatitis as a reaction to cosmetics. | 3 |
+| FIGURE 13-5 | Eyelid contact dermatitis from cosmetics. | 244 |
+| FIGURE 13-6 | Irritant eye reaction after using a new eye product. | 246 |
+| FIGURE 13-7 | A, Dermatologist-administered patch tests for various contact allergies. B, Positive patch test indicating allergy to nickel. | 246 |
+| FIGURE 13-8 | (continued) | 252 |
+| FIGURE 14-1 | Nose telangiectasias. Dilated capillaries, called telangiectasias, and a coarse-textured appearance of nose ostia are typical of the rosacea client. | 260 |
+| FIGURE 14-2 | An example of a severe fl are of rosacea, which can affect the whole face. | 260 |
+| FIGURE 14-3 | (Continued) | 262 |
+| FIGURE 14-4 | Subtype 1: facial redness (erythematotelangiectatic rosacea). Flushing and persistent redness. Visible blood vessels may also appear. | 264 |
+| FIGURE 14-5 | Subtype 2: bumps and pimples (papulopustular rosacea). Persistent facial redness with bumps or pimples. Often seen following or with subtype 1. | 264 |
+| FIGURE 14-6 | Subtype 3: skin thickening (phymatous rosacea). Skin thickening and enlargement, usually around the nose. | 264 |
+| FIGURE 14-7 | Red, swollen noses can be the beginning of rhinophyma. | 266 |
+| FIGURE 14-8 | AND B Rhinophyma. | 266 |
+| FIGURE 14-9 | Dark and red distended capillaries, enlarged pores, and enlargement of the nose are shown in this photo of rhinophyma. This nose also has large amounts of sebaceous fi laments and secretions. | 266 |
+| FIGURE 14-10 | Subtype 4: eye irritation (ocular rosacea). Watery and bloodshot appearance, irritation, burning, or stinging. | 266 |
+| FIGURE 14-11 | AND B Before and after rosacea treatment. Rosacea can be kept under control by using prescribed topical and/or oral medication, controlling flushing; avoiding heat, spicy foods, and other triggers; and using nonirritating skin care products. | 268 |
+| FIGURE 14-12 | AND B Esthetic management of redness-prone skin using a specific concept-designed system of home care can make a big difference in redness and help avoid flushing and flares of rosacea. | 270 |
+| FIGURE 15-1 | The progression of acne. | 1 |
+| FIGURE 15-2 | Open and closed comedones. | 2 |
+| FIGURE 15-3 | The development of acne in a young girl. | 278 |
+| FIGURE 15-4 | The papule. | 4 |
+| FIGURE 15-5 | The pustule. | 5 |
+| FIGURE 15-6 | The cyst. | 6 |
+| FIGURE 15-7 | Grade IV acne | 6 |
+| FIGURE 15-8 | Acne scarring. | 8 |
+| FIGURE 15-9 | Acne in the chin and jawline can be related to hormone imbalances. | 284 |
+| FIGURE 15-10 | AND B Improvement in bumpy arms after using a glycolic hydrator. | 286 |
+| FIGURE 15-11 | Acne excoriée. | 11 |
+| FIGURE 15-12 | Seborrheic dermatitis presents with red, fl aky skin in oily areas of the face and most often affects the T-zone of the face, eyebrows, ears, scalp, and hairline. | 290 |
+| FIGURE 15-13 | Typical pattern of perioral dermatitis on the chin. Perioral dermatitis can also appear on the cheeks or anywhere around the mouth area. | 292 |
+| FIGURE 15-14 | AND B This client had Grade II acne complicated by hormonal therapy. After eight weeks using a mix of benzoyl peroxide gel and an AHA/salicylic mixed gel, the client had good clearing results. | 294 |
+| FIGURE 15-15 | AND B This case of Grade I acne was improved signifi cantly in only six weeks of home care by eliminating comedogenic products, using daily follicular exfoliants to loosen and prevent hyperkeratosis, and using an effective foaming cleanser to control sebum. | 300 |
+| FIGURE 15-16 | This male college student had excellent results using a combination of mild 2.5 percent benzoyl peroxide gel and AHA/salicylic acid mixed gel, along with proper cleanser, noncomedogenic moisturizer, and sunscreen. | 300 |
+| FIGURE 15-17 | The home-care routine is the same as for Grade I acne; howev... | 315 |
+| FIGURE 15-18 | FIGURE 15-18A–D Grade II acne. This client improved signifi c... | 317 |
+| FIGURE 16-1 | The microscopic view of retention hyperkeratosis shows excessive cell buildup and swelling. This slide represents a positive test for comedogenicity. | 316 |
+| FIGURE 17-1 | Combination skin. | 1 |
+| FIGURE 17-2 | Examination procedures. | 2 |
+| FIGURE 17-3 | AND B Treatment for clogged, dehydrated skin includes noncomedogenic hydration fluid and sunscreen with low levels of emollient, along with an alpha hydroxy acid gel. This home care was used for six weeks in this case study. Note the differences in texture, tone, clarity, and even coloration. | 2 |
+| FIGURE 17-4 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 2 |
+| FIGURE 17-5 | An ultrasonic “blade” is used here to exfoliate the corneum before extraction. | 334 |
+| FIGURE 17-6 | Cotton swabs are used to gently extract comedones and sebaceous fi laments by gently lifting and slightly twisting the skin. Careful preparation of the skin with desincrustation is essential for ease in extraction. | 336 |
+| FIGURE 17-7 | Dilation using a lancet. | 7 |
+| FIGURE 17-8 | Milia. | 8 |
+| FIGURE 17-9 | Chart of general extraction rules. | 8 |
+| FIGURE 17-10 | Xanthelasmas. | 10 |
+| FIGURE 17-11 | Favre-Racouchot syndrome (senile solar comedones) in a typical pattern on an individual with sun damage. | 346 |
+| FIGURE 18-1 | we can determine the symptoms caused by intrinsic factors an... | 364 |
+| FIGURE 18-2 | Elastosis. | 2 |
+| FIGURE 18-3 | Although it is not the same as a face lift, microcurrent, when applied correctly, has been shown in university studies to improve elasticity, collagen content, and elastin content. | 360 |
+| FIGURE 19-1 | The spectrum of light—wavelengths. | 1 |
+| FIGURE 19-2 | Chloasma, or liver spots, are spots of concentrated melanin caused by sun damage. | 366 |
+| FIGURE 19-3 | Hyperpigmentation, often caused by cumulative sun exposure, can be improved with the use of alpha hydroxy and beta hydroxy acids, and lightening or brightening agents such as hydroquinone or magnesium ascorbyl phosphate. In this case study, a series of 30 percent alpha hydroxy acid exfoliation treatments showed this improvement in three weeks. | 366 |
+| FIGURE 19-4 | Tinea versicolor. | 4 |
+| FIGURE 19-5 | Long-term sun damage. | 5 |
+| FIGURE 19-6 | Basal cell carcinoma. | 5 |
+| FIGURE 19-7 | Squamous cell carcinoma. | 372 |
+| FIGURE 19-8 | FIGURE 19-8A1 Benign mole—symmetrical. Common moles are usua... | 387 |
+| FIGURE 19-9 | Actinic keratosis is frequently seen in sun-damaged clients. | 374 |
+| FIGURE 19-10 | Multiple sebaceous hyperplasia in an adult male with oily skin and sun damage. Sebaceous hyperplasias are typically found on the forehead, temple, and upper cheeks but can appear anywhere on the face. | 376 |
+| FIGURE 19-11 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; F, Fitzpatrick VI. | 378 |
+| FIGURE 19-12 | Proper application of a well-formulated DHA self-tanning product produces beautiful results in a short period of time and is the only safe way to “tan.” | 388 |
+| FIGURE 20-1 | Poikiloderma of civatte is a condition of the neck skin with hyperpigmentation and telangiectasias caused by years of cumulative sun exposure. | 392 |
+| FIGURE 20-2 | A–D, Dramatic improvement is seen in the appearance of this skin treated with alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 396 |
+| FIGURE 20-3 | A–D, Many clients are concerned about loss of elasticity. This client shows great improvement after using alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 398 |
+| FIGURE 20-4 | Microdermabrasion. | 4 |
+| FIGURE 20-5 | A–D, This client was treated with a combination of products containing acetyl hexapeptide-8, lipids, daily sunscreen and alpha hydroxy acids for eight weeks to achieve these positive results in smoothness and the appearance of wrinkle reduction. | 402 |
+| FIGURE 20-6 | A–D, Use of specialty eye products (creams or serums) containing a mixture of peptides for firming and reduction of puffiness, along with fl avonoids to reduce dark circles, can achieve results like these shown over four weeks. | 402 |
+| FIGURE 20-7 | Clients must take a program approach to achieve global improvement as seen here. This client used a home-care product system for six months with peptides, AHAs, lipids, antioxidants, and daily sunscreen. | 404 |
+| FIGURE 20-8 | LED treatment has been shown to reduce redness and increase collagen content in the skin. | 408 |
+| FIGURE 21-1 | Glycolic acid is applied to the skin of a client who has been using a lower-strength glycolic treatment product for at least two weeks at home. This treatment is applied with cotton swabs and carefully monitored according to manufacturer’s directions. | 420 |
+| FIGURE 21-2 | AND B Glycolic treatment is popular for lessening the appearance of facial wrinkles. Shown here are before and after photos of the eye area. | 420 |
+| FIGURE 21-3 | AND B Routine use of home alpha hydroxy acid products along with a series of AHA professional treatments can dramatically affect the appearance of wrinkles in aging skin. | 422 |
+| FIGURE 21-4 | AND B Glycolic treatment can signifi cantly improve the appearance of problem and acne–prone skin (before and after). | 422 |
+| FIGURE 21-5 | AND B Treatment at home with alpha hydroxy and beta hydroxy acid, along with professional AHA and extraction treatments, can help clear blemishes and improve hyperpigmentation in the skin of color. | 422 |
+| FIGURE 21-6 | AND B Glycolic treatment can help the appearance of hyperpigmented skin conditions. | 424 |
+| FIGURE 21-7 | AND B Hyperpigmentation can be improved by the daily use of alpha hydroxy acids and hydroquinone—and of course, daily use of sunscreen at home—as well as professional AHA treatments in the salon or clinic. | 424 |
+| FIGURE 21-8 | A, Phenol solution is used on the wrinkled lip of this patient. Shown here is the “frosting” effect after application of the phenol solution. B, Several months after the peel, the lip is much smoother. | 424 |
+| FIGURE 21-9 | AND B In-depth phenol peel (before and after). | 424 |
+| FIGURE 21-10 | Application of salicylic acid using a large swab. | 430 |
+| FIGURE 21-11 | E, F Temporary hyperpigmentation and discoloration can occur during the first one or two weeks following salicylic treatment. In this more extreme case, dark splotches exfoliate to reveal smoother texture and tone. | 430 |
+| FIGURE 22-1 | A–D, Rhytidectomy, or face lifting, can dramatically improve the appearance of sagging facial skin and elastosis. A forehead lift has also been performed on this patient. | 438 |
+| FIGURE 22-2 | (continued) | 440 |
+| FIGURE 22-3 | Blepharoplasty, or eyelid surgery, can help signifi cantly restructure the eye contours, achieving a more alert, youthful look. | 444 |
+| FIGURE 22-4 | This patient had an endoscopic forehead lift, with a blepharoplasty (eyelift), achieving more youthful contours in both the forehead and eye areas. Notice how much more open her eyes appear. | 444 |
+| FIGURE 22-5 | A–D, These views feature the patient before and after a rhinoplasty. Note the reduction of the nasal bone protrusion, the straightening of the nostrils, and the softer look of the face in general after surgery. | 446 |
+| FIGURE 22-6 | A, Acne scarring in the cheek of this former acne patient. B, After dermabrasion, the cheek area is much smoother. C, This patient needed both dermabrasion and revision of this large surgical scar. D, Notice how much smoother the scar appears. | 448 |
+| FIGURE 22-7 | Post-laser treatment. | 7 |
