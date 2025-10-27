@@ -1601,9 +1601,9 @@ Immunoglobulins, or Igs, are antibodies that protect against specific invaders.
 
 The Immune System 45
 
-Igs fl oat through the bloodstream and help protect against invasion by organisms they recognize.
+Igs float through the bloodstream and help protect against invasion by organisms they recognize.
 
-Let’s put all this information in perspective. Think of the body as a community. The immune system is the fi re department (Figure 3-1). The macrophage is the fi re patrol unit, constantly looking for fi res (foreign organisms). If it spots a fi re, it holds it and checks it out, making sure it is not a false alarm. Once the macrophage has established that the organism is real, it signals the T-helper cells, who rush to the fi re station to alert the T-killer cells, who are waiting to “slide down the pole.” The T-killer cells rush to the scene, fi ercely battling the “blaze” of foreign organisms, killing all the organisms. Watching the battle is the T-suppressor cell—who is sort of a lookout. When the fi re is out, the T-suppressor cells blow the whistle to let the T-killer cells know that the fi re is under control. The T-helper cells have also alerted the B cells in the lymph nodes. The B cells start producing fi reproofi ng materials (antibodies, Igs). The Igs serve as safety offi cers to make sure that this type of fi re never starts again.
+Let’s put all this information in perspective. Think of the body as a community. The immune system is the fire department (Figure 3-1). The macrophage is the fire patrol unit, constantly looking for fires (foreign organisms). If it spots a fire, it holds it and checks it out, making sure it is not a false alarm. Once the macrophage has established that the organism is real, it signals the T-helper cells, who rush to the fire station to alert the T-killer cells, who are waiting to “slide down the pole.” The T-killer cells rush to the scene, fi ercely battling the “blaze” of foreign organisms, killing all the organisms. Watching the battle is the T-suppressor cell—who is sort of a lookout. When the fire is out, the T-suppressor cells blow the whistle to let the T-killer cells know that the fire is under control. The T-helper cells have also alerted the B cells in the lymph nodes. The B cells start producing fireproofi ng materials (antibodies, Igs). The Igs serve as safety offi cers to make sure that this type of fire never starts again.
 
 1. The macrophage spots a “fire” and signals the T-helper cells.
 
@@ -1619,7 +1619,7 @@ Let’s put all this information in perspective. Think of the body as a communit
 
 T-killer
 
-FIGURE 3-1 The immune fi re department.
+FIGURE 3-1 The immune fire department.
 
 © Milady, a part of Cengage Learning.
 
@@ -4291,7 +4291,7 @@ Protein is made of carbon, oxygen, nitrogen, hydrogen, and sulfur. The basic uni
 
 ## pH, ACIDS, AND BASES
 
-When water is added to certain compounds like acids, the water (H2O) breaks up and restructures as certain atoms join the acid chemicals. Hydrogen chloride (HCl), for example, becomes hydrochloric acid when mixed with water. The hydrogen ions fl oat separately in the acid. The measurement of these hydrogen
+When water is added to certain compounds like acids, the water (H2O) breaks up and restructures as certain atoms join the acid chemicals. Hydrogen chloride (HCl), for example, becomes hydrochloric acid when mixed with water. The hydrogen ions float separately in the acid. The measurement of these hydrogen
 
 
 
@@ -4589,7 +4589,7 @@ It is very important for estheticians to be well informed about cosmetic ingredi
 
 154 CHAPTER 9
 
-specific areas, help the product stay mixed and uniform in texture, adjust the pH of the product, or help the product stay fresh. Functional ingredients do not usually cause physical appearance changes associated with the use of skin care products and cosmetics. Ingredients that cause the actual physical changes to the appearance of the skin are known as performance ingredients or performance agents. They occasionally are also called active agents. There is a trend toward not calling these chemicals active agents, because the similar-sounding term active ingredients is reserved for drug products. Saying a skin care product has an active ingredient implies that it is a drug. For more information about the technical differences between drugs and cosmetics, see Chapter 12, Claims in Cosmetics. In this chapter, we discuss functional ingredients, which include a large number of cosmetic chemicals. You will learn about how ingredients are used to stabilize, thicken, preserve, and spread other ingredients across the skin that cause the physical changes we see when we use skin care products. The biggest category of functional ingredients is vehicles. Vehicles are spreading agents. They are the substances in which the performance ingredients are “fl oating.” They are the carrier within a skin care product and deliver performance ingredients to specific areas of the skin. They make up the largest actual amount of any skin care product or cosmetic. Without vehicles, we could never apply the performance ingredients and cause the changes we see to the skin’s appearance.
+specific areas, help the product stay mixed and uniform in texture, adjust the pH of the product, or help the product stay fresh. Functional ingredients do not usually cause physical appearance changes associated with the use of skin care products and cosmetics. Ingredients that cause the actual physical changes to the appearance of the skin are known as performance ingredients or performance agents. They occasionally are also called active agents. There is a trend toward not calling these chemicals active agents, because the similar-sounding term active ingredients is reserved for drug products. Saying a skin care product has an active ingredient implies that it is a drug. For more information about the technical differences between drugs and cosmetics, see Chapter 12, Claims in Cosmetics. In this chapter, we discuss functional ingredients, which include a large number of cosmetic chemicals. You will learn about how ingredients are used to stabilize, thicken, preserve, and spread other ingredients across the skin that cause the physical changes we see when we use skin care products. The biggest category of functional ingredients is vehicles. Vehicles are spreading agents. They are the substances in which the performance ingredients are “floating.” They are the carrier within a skin care product and deliver performance ingredients to specific areas of the skin. They make up the largest actual amount of any skin care product or cosmetic. Without vehicles, we could never apply the performance ingredients and cause the changes we see to the skin’s appearance.
 
 
 ## ABOUT WATER
@@ -4757,7 +4757,7 @@ All of these surfactants can help remove oils, dirt, and other debris from the s
 
 ## EMULSIFIERS
 
-Emulsifi ers are chemicals that keep water and oil solutions well mixed. Let’s go back to the kitchen for a moment. Remember that greasy pan? Let’s pretend that the grease is in a mayonnaise jar. If you add water to the jar with grease in it, what happens to the oil? It fl oats to the top. This is because water and oil will not mix under normal circumstances. If you add some dishwashing detergent to the jar, the oil starts to “break up.” If you put a top on the jar and shake it, the oil is dispersed throughout the water evenly. The water becomes cloudy because the oil has saturated the water in small droplets. The detergent is what made the oil break into small droplets and disperse throughout the water. But didn’t you add a detergent to the water? You thought that this section was about emulsifi ers? Well, it is. It just so happens that surfactants, detergents included, are also emulsifi ers. They reduce the tension of the water in a cleanser and also reduce the tension of the water in a solution, or even a cosmetic lotion. Emulsifi ers work by forming a sort of “shell” around the very small oil droplets, allowing them to remain suspended in a solution of water. When a solution of water and oil is mixed, and it is mostly water, the solution is called an oil-inwater (O/W) solution. When the solution is mostly oil, it is called a water-inoil (W/O) solution (Figure 9-2).
+Emulsifi ers are chemicals that keep water and oil solutions well mixed. Let’s go back to the kitchen for a moment. Remember that greasy pan? Let’s pretend that the grease is in a mayonnaise jar. If you add water to the jar with grease in it, what happens to the oil? It floats to the top. This is because water and oil will not mix under normal circumstances. If you add some dishwashing detergent to the jar, the oil starts to “break up.” If you put a top on the jar and shake it, the oil is dispersed throughout the water evenly. The water becomes cloudy because the oil has saturated the water in small droplets. The detergent is what made the oil break into small droplets and disperse throughout the water. But didn’t you add a detergent to the water? You thought that this section was about emulsifi ers? Well, it is. It just so happens that surfactants, detergents included, are also emulsifi ers. They reduce the tension of the water in a cleanser and also reduce the tension of the water in a solution, or even a cosmetic lotion. Emulsifi ers work by forming a sort of “shell” around the very small oil droplets, allowing them to remain suspended in a solution of water. When a solution of water and oil is mixed, and it is mostly water, the solution is called an oil-inwater (O/W) solution. When the solution is mostly oil, it is called a water-inoil (W/O) solution (Figure 9-2).
 
 
 
@@ -4812,7 +4812,7 @@ External phase is the water in an oil-in-water emulsion.
 
 Suspension means the solute is suspended throughout a solvent. Suspension is usually not homogenous. The internal and external phases do not stay mixed for any period of time.
 
-The phrase “water-based” generally means that the emulsion or lotion is an oil-in-water emulsion. It does not necessarily mean that the emulsion is oil-free. The main reason cosmetic companies refer to a product as being water based is to appeal to the consumer. Consumers who have oily or problem skin, and consumers who do not like greasy products, look for products that are watery textured because they are lighter in weight and not greasy. How can you tell the difference among the three basic types of surfactants? Surface active agents (which reduce surface tension of water for spreading of cosmetic products), detergents (cleansing and foaming agents), and emulsifi ers (which keep water and oils in emulsion state) are all surfactants. The difference among the three has to do with their molecular structures. The size of the molecule determines the different properties that a particular surfactant has in a cosmetic solution. Surfactants are polymer molecules. This means that a chain of carbon atoms are connected to one another. Surfactant polymer molecules have two ends. One end is attracted to water; the other end is repelled by water. The end that is repelled by water is instead attracted to fatty substances. Lipophilic means “fat-loving.” Hydrophilic means “waterloving.” The size of the lipophilic end of the polymer determines which kind of surfactant group the molecule will be. Short-chain carbon polymers, chains with 8 or 10 carbon atoms, have a shorter lipophilic end and are surface active agents used in creams to improve slip (how well the product flows across the skin) and spreadability. Medium-length chain molecules with a medium-size lipophilic end are the detergents used in cleansers that help foam and remove surface debris. Longchain polymers, which have a large lipophilic end, are the emulsifi ers. This makes sense, because these molecules must have a strong attraction to fat. Remember, these molecules are the ones that “surround” or form the “shell” around the oil droplets and spread themselves throughout the water solution. The other end of the emulsifi er (the hydrophilic end) is attracted to the water in the solution. So the molecule produces a tug-of-war between the oil and the water. The emulsifi er is attracted to the oil and is more or less wrapped around the oil, but the other end is attracted to the water in which it is fl oating. This constant “pulling” keeps the oil or fat evenly suspended in the water solution, or vice versa in the case of a water-in-oil suspension. The oil droplets in an oil-inwater emulsion are referred to as globules. They are the dispersed part of the emulsion and are referred to as the internal phase. The water in an oil-in-water emulsion is called the external phase. A suspension is a liquid solution in which the internal and external phases do not stay mixed for any period of time. We have talked here about lotions only. Many types of cosmetic emulsions are not lotions and contain other components besides water and oils. Makeup, for example, is a solid such as talc that is emulsifi ed in a liquid. The external phase of a makeup base is usually water, possibly mixed with propylene glycol or another solvent. Aerosol hair spray is an example of a liquid that is emulsifi ed within a gas. Mousse is an example of a gas that is emulsifi ed within an external-phase liquid.
+The phrase “water-based” generally means that the emulsion or lotion is an oil-in-water emulsion. It does not necessarily mean that the emulsion is oil-free. The main reason cosmetic companies refer to a product as being water based is to appeal to the consumer. Consumers who have oily or problem skin, and consumers who do not like greasy products, look for products that are watery textured because they are lighter in weight and not greasy. How can you tell the difference among the three basic types of surfactants? Surface active agents (which reduce surface tension of water for spreading of cosmetic products), detergents (cleansing and foaming agents), and emulsifi ers (which keep water and oils in emulsion state) are all surfactants. The difference among the three has to do with their molecular structures. The size of the molecule determines the different properties that a particular surfactant has in a cosmetic solution. Surfactants are polymer molecules. This means that a chain of carbon atoms are connected to one another. Surfactant polymer molecules have two ends. One end is attracted to water; the other end is repelled by water. The end that is repelled by water is instead attracted to fatty substances. Lipophilic means “fat-loving.” Hydrophilic means “waterloving.” The size of the lipophilic end of the polymer determines which kind of surfactant group the molecule will be. Short-chain carbon polymers, chains with 8 or 10 carbon atoms, have a shorter lipophilic end and are surface active agents used in creams to improve slip (how well the product flows across the skin) and spreadability. Medium-length chain molecules with a medium-size lipophilic end are the detergents used in cleansers that help foam and remove surface debris. Longchain polymers, which have a large lipophilic end, are the emulsifi ers. This makes sense, because these molecules must have a strong attraction to fat. Remember, these molecules are the ones that “surround” or form the “shell” around the oil droplets and spread themselves throughout the water solution. The other end of the emulsifi er (the hydrophilic end) is attracted to the water in the solution. So the molecule produces a tug-of-war between the oil and the water. The emulsifi er is attracted to the oil and is more or less wrapped around the oil, but the other end is attracted to the water in which it is floating. This constant “pulling” keeps the oil or fat evenly suspended in the water solution, or vice versa in the case of a water-in-oil suspension. The oil droplets in an oil-inwater emulsion are referred to as globules. They are the dispersed part of the emulsion and are referred to as the internal phase. The water in an oil-in-water emulsion is called the external phase. A suspension is a liquid solution in which the internal and external phases do not stay mixed for any period of time. We have talked here about lotions only. Many types of cosmetic emulsions are not lotions and contain other components besides water and oils. Makeup, for example, is a solid such as talc that is emulsifi ed in a liquid. The external phase of a makeup base is usually water, possibly mixed with propylene glycol or another solvent. Aerosol hair spray is an example of a liquid that is emulsifi ed within a gas. Mousse is an example of a gas that is emulsifi ed within an external-phase liquid.
 
 
 ## PHYSICAL EMULSIONS
@@ -6742,7 +6742,7 @@ Chronic skin inflammation has a cumulative effect on skin aging and deterioratio
 
 ## ANALYSIS TECHNIQUE
 
-1. Begin by cleansing the skin with a very mild, nonfoaming, fragrance-free cleanser using cool, wet cotton pads. Using sponges or other implements may cause a friction reaction in extremely sensitive skin. Redness during the very beginning of treatment is a surefi re symptom of sensitive skin. Skin that turns red from friction or the slightest touch or scrape is called dermatographic (literally, “skin-writing”). Persons with dermatographic skin experience hivelike swelling from slight scratches from an activity as simple as carrying a cardboard box if the edges of the box lightly scrape the arms. These same people are likely to experience swelling and redness from common skin care practices such as mechanical exfoliation (brushing or scrubs), microdermabrasion, extraction, waxing, hardening masks, and other physical or mechanical skin treatment techniques. All physical treatments previously listed should be avoided as much as possible on these clients. 2. Remove all traces of makeup and cleanser. Do not tone the skin. Toning before analysis may distort the true appearance of the skin and lead to an error in the analysis procedure. 3. Using your magnifying lamp, look carefully at all areas of the skin. Sensitive skin generally has a pink tone and may have red areas or red or pink splotches or blotchiness. It may have telangiectasias, or distended red capillaries, also known as couperose (Figure 13-3) Not all clients with telangiectases are
+1. Begin by cleansing the skin with a very mild, nonfoaming, fragrance-free cleanser using cool, wet cotton pads. Using sponges or other implements may cause a friction reaction in extremely sensitive skin. Redness during the very beginning of treatment is a surefire symptom of sensitive skin. Skin that turns red from friction or the slightest touch or scrape is called dermatographic (literally, “skin-writing”). Persons with dermatographic skin experience hivelike swelling from slight scratches from an activity as simple as carrying a cardboard box if the edges of the box lightly scrape the arms. These same people are likely to experience swelling and redness from common skin care practices such as mechanical exfoliation (brushing or scrubs), microdermabrasion, extraction, waxing, hardening masks, and other physical or mechanical skin treatment techniques. All physical treatments previously listed should be avoided as much as possible on these clients. 2. Remove all traces of makeup and cleanser. Do not tone the skin. Toning before analysis may distort the true appearance of the skin and lead to an error in the analysis procedure. 3. Using your magnifying lamp, look carefully at all areas of the skin. Sensitive skin generally has a pink tone and may have red areas or red or pink splotches or blotchiness. It may have telangiectasias, or distended red capillaries, also known as couperose (Figure 13-3) Not all clients with telangiectases are
 
 FIGURE 13-3 Telangiectasias.
 
@@ -7089,7 +7089,7 @@ Occasionally, a client experiences a reaction in the treatment room. Most of the
 
 ## HOME-CARE CONCEPTS FOR SENSITIVE SKIN
 
-You should spend some time educating your clients about treating their skin at home. Emphasize the importance of avoiding activities and procedures that can increase redness or the chance of reactions and damage to the barrier function. With the client, discuss the following precautions. Many of these concepts are similar to those previously mentioned for use in the treatment room. 1. Avoid heat, including sun exposure, sitting directly in front of fi replaces, and hot water in the shower or when cleansing the skin. Heat may stimulate both neurological and immune responses. 2. Avoid sun exposure, and always wear a sunscreen during daylight hours. 3. Avoid using scrubs and strong exfoliants. 4. Avoid using fragranced products. 5. Stop using any product that feels stimulating or overdrying. 6. Avoid overcleansing or cleansing the skin too often. 7. Avoid using alcohol-based products.
+You should spend some time educating your clients about treating their skin at home. Emphasize the importance of avoiding activities and procedures that can increase redness or the chance of reactions and damage to the barrier function. With the client, discuss the following precautions. Many of these concepts are similar to those previously mentioned for use in the treatment room. 1. Avoid heat, including sun exposure, sitting directly in front of fireplaces, and hot water in the shower or when cleansing the skin. Heat may stimulate both neurological and immune responses. 2. Avoid sun exposure, and always wear a sunscreen during daylight hours. 3. Avoid using scrubs and strong exfoliants. 4. Avoid using fragranced products. 5. Stop using any product that feels stimulating or overdrying. 6. Avoid overcleansing or cleansing the skin too often. 7. Avoid using alcohol-based products.
 
 Some clients with sensitive skin who also have rosacea may experience more redness in the following cases:
 
@@ -7364,7 +7364,7 @@ None of these theories alone have ever been confirmed to be a cause of rosacea b
 
 It is evident that constant flushing of the face makes rosacea worse and is responsible for flares. We know there are certain triggers for flares, and all of these triggers can cause flushing of the facial skin. Remember, flares and flushing cause the release of biochemicals that grow and expand capillaries, which further increase flushing during subsequent flares. Flushing triggers, which should be strictly avoided by people who have rosacea, include the following:
 
-• Sun exposure of any type—the worst culprit in rosacea flares. Sun must be avoided at all times. In fact, past sun exposure may be a factor in rosacea. One study surveyed people who have rosacea and found that 44 percent of them had a history of blistering sunburn at some time in their lives. In the same study, only 5 percent of the people who did not have rosacea (the control group) had a history of sunburn. • Besides ultraviolet rays, sun also radiates heat, a known cause of flushing and flares. People who have rosacea should wear sunscreen every day. • Heat exposure to the face of any type—this includes exposure when opening ovens, sitting in front of fi replaces, or experiencing indoor heating that is too warm. Allow hot cars to air out before getting in. • Hot or cold weather. • Extreme temperatures of any type—including saunas, steam baths, and hot water on the skin. Cold water should also be avoided. • Ingestion of alcohol, especially red wine. • Exercise that raises body temperature—it is best that people with rosacea exercise indoors in air conditioning. If exercise takes place outside, it is best to exercise in the very early morning or after dusk to avoid heat and sun exposure. Exercise in a pool is a good choice, although chlorine might be a trigger, and the skin should be thoroughly rinsed after swimming. • Hot beverages. • Spicy foods.
+• Sun exposure of any type—the worst culprit in rosacea flares. Sun must be avoided at all times. In fact, past sun exposure may be a factor in rosacea. One study surveyed people who have rosacea and found that 44 percent of them had a history of blistering sunburn at some time in their lives. In the same study, only 5 percent of the people who did not have rosacea (the control group) had a history of sunburn. • Besides ultraviolet rays, sun also radiates heat, a known cause of flushing and flares. People who have rosacea should wear sunscreen every day. • Heat exposure to the face of any type—this includes exposure when opening ovens, sitting in front of fireplaces, or experiencing indoor heating that is too warm. Allow hot cars to air out before getting in. • Hot or cold weather. • Extreme temperatures of any type—including saunas, steam baths, and hot water on the skin. Cold water should also be avoided. • Ingestion of alcohol, especially red wine. • Exercise that raises body temperature—it is best that people with rosacea exercise indoors in air conditioning. If exercise takes place outside, it is best to exercise in the very early morning or after dusk to avoid heat and sun exposure. Exercise in a pool is a good choice, although chlorine might be a trigger, and the skin should be thoroughly rinsed after swimming. • Hot beverages. • Spicy foods.
 
 
 
@@ -12810,198 +12810,198 @@ Ziana, 305 Zinc oxide, 191, 241, 377 Zinc supplements, 290 Zonite, 31 Zyderm, 46
 
 | Figure | Caption | Page |
 |--------|---------|------|
-| FIGURE 1-1 | Structure of the cell. | 16 |
-| FIGURE 1-2 | The DNA double helix. | 18 |
-| FIGURE 1-3 | Indirect division of the human cell. First phase—Chromosomes begin to line up in the center of cell. Second phase—Chromosomes duplicate themselves. Third phase—New structures begin migrating to opposite ends of the cell. Fourth phase—Nucleus of the cell begins dividing. Fifth phase—Nucleus breaks into two identical nuclei. Sixth phase—Cell forms two identical cells. | 19 |
-| FIGURE 1-4 | Histology of the skin, hair, and glands. | 20 |
-| FIGURE 1-5 | The epidermal and dermal layers of the skin. | 22 |
-| FIGURE 1-6 | Melanocytes in the epidermis produce melanin. | 25 |
-| FIGURE 1-7 | The brick-and-mortar concept of the outermost layer of skin. | 27 |
-| FIGURE 1-8 | Various routes of skin penetration: through the follicle wall, the sebaceous glands, and intercellular and transcellular routes. | 28 |
-| FIGURE 1-9 | Occlusive mask. | 33 |
-| FIGURE 1-10 | The electrode on the client’s face is the positive pole. The current flows to the negative pole in the client’s hand. Positively charged, waterbased materials are repelled by the positive pole and attracted to the negative pole, increasing absorption of material into the skin surface. Desincrustation, using negatively charged alkaline liquids, is performed by switching the electrodes—using negative on the face while the client holds the positive electrode. | 34 |
-| FIGURE 2-1 | Bacterial shapes. | 37 |
-| FIGURE 2-2 | MRSA lesion. | 39 |
-| FIGURE 2-3 | Example of an autoclave. | 40 |
-| FIGURE 2-4 | Commonly used disinfectants and antiseptics. | 45 |
-| FIGURE 2-5 | It is important for estheticians to wear gloves during many procedures, including facial treatments, extraction, waxing, and electrolysis. | 49 |
-| FIGURE 3-1 | The immune fi re department. | 59 |
-| FIGURE 3-2 | Lock and key of the membrane. | 62 |
-| FIGURE 3-3 | Systemic lupus erythematosus (SLE) butterfl y rash. | 67 |
-| FIGURE 3-4 | Discoid lesion in discoid lupus. | 68 |
-| FIGURE 3-5 | Subacute cutaneous lupus erythematosus (SCLE). | 69 |
-| FIGURE 4-1 | Conjunctivitis (“pinkeye”). | 72 |
-| FIGURE 4-2 | Herpes simplex. | 73 |
-| FIGURE 4-3 | MRSA lesion. | 74 |
-| FIGURE 4-4 | Herpes type 2 in patient with HIV. | 82 |
-| FIGURE 4-5 | Shingles on the neck and face of a patient with HIV. | 83 |
-| FIGURE 4-6 | Seborrheic dermatitis in a patient with HIV. | 84 |
-| FIGURE 4-7 | Kaposi’s sarcoma in an AIDS (HIV-positive) patient. | 84 |
-| FIGURE 5-1 | The endocrine system. | 92 |
-| FIGURE 5-2 | Female reproductive organs. | 95 |
-| FIGURE 5-3 | Male reproductive organs. | 96 |
-| FIGURE 5-4 | Combination skin can be recognized by an oilier T-zone, down the middle of the face, and smaller pores, indicating drier skin in the perimeter of the face. | 97 |
-| FIGURE 5-5 | The menstrual cycle. | 100 |
-| FIGURE 5-6 | Mask of pregnancy (melasma). | 102 |
-| FIGURE 5-7 | Melasma in a male patient is very unusual. | 102 |
-| FIGURE 5-8 | Striae (stretch marks). | 103 |
-| FIGURE 5-9 | Chin acne. | 105 |
-| FIGURE 5-10 | Melasma after Triluma treatment. | 107 |
-| FIGURE 6-1 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; and F, Fitzpatrick VI. | 114 |
-| FIGURE 6-2 | Confi dential skin health survey. | 115 |
-| FIGURE 6-3 | A lighted magnifying lamp. | 118 |
-| FIGURE 6-4 | Large pores indicate oily skin areas. | 119 |
-| FIGURE 6-5 | Alipidic skin is characterized by a lack of visible pore openings. | 120 |
-| FIGURE 6-6 | Combination skin. | 121 |
-| FIGURE 6-7 | Dehydration is characterized by many fine lines and wrinkles. | 121 |
-| FIGURE 6-8 | Open and closed comedones. | 123 |
-| FIGURE 6-9 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 124 |
-| FIGURE 6-10 | Sebaceous hyperplasia can vary in size and shape, as seen in this photo. | 125 |
-| FIGURE 6-11 | Milia. | 125 |
-| FIGURE 6-12 | Pseudopores. | 126 |
-| FIGURE 6-13 | Telangiectasias. | 127 |
-| FIGURE 6-14 | Solar lentigenes. | 128 |
-| FIGURE 6-15 | Mottling. | 128 |
-| FIGURE 6-16 | Vitiligo. | 129 |
-| FIGURE 6-17 | Melasma. | 129 |
-| FIGURE 6-18 | Glogau Type IV—only wrinkles. | 130 |
+| FIGURE 1-1 | Structure of the cell. | 2 |
+| FIGURE 1-2 | The DNA double helix. | 4 |
+| FIGURE 1-3 | Indirect division of the human cell. First phase—Chromosomes begin to line up in the center of cell. Second phase—Chromosomes duplicate themselves. Third phase—New structures begin migrating to opposite ends of the cell. Fourth phase—Nucleus of the cell begins dividing. Fifth phase—Nucleus breaks into two identical nuclei. Sixth phase—Cell forms two identical cells. | 5 |
+| FIGURE 1-4 | Histology of the skin, hair, and glands. | 7 |
+| FIGURE 1-5 | The epidermal and dermal layers of the skin. | 9 |
+| FIGURE 1-6 | Melanocytes in the epidermis produce melanin. | 12 |
+| FIGURE 1-7 | The brick-and-mortar concept of the outermost layer of skin. | 13 |
+| FIGURE 1-8 | Various routes of skin penetration: through the follicle wall, the sebaceous glands, and intercellular and transcellular routes. | 15 |
+| FIGURE 1-9 | Occlusive mask. | 9 |
+| FIGURE 1-10 | The electrode on the client’s face is the positive pole. The current flows to the negative pole in the client’s hand. Positively charged, waterbased materials are repelled by the positive pole and attracted to the negative pole, increasing absorption of material into the skin surface. Desincrustation, using negatively charged alkaline liquids, is performed by switching the electrodes—using negative on the face while the client holds the positive electrode. | 20 |
+| FIGURE 2-1 | Bacterial shapes. | 1 |
+| FIGURE 2-2 | MRSA lesion. | 2 |
+| FIGURE 2-3 | Example of an autoclave. | 3 |
+| FIGURE 2-4 | Commonly used disinfectants and antiseptics. | 30 |
+| FIGURE 2-5 | It is important for estheticians to wear gloves during many procedures, including facial treatments, extraction, waxing, and electrolysis. | 34 |
+| FIGURE 3-1 | The immune fire department. | 1 |
+| FIGURE 3-2 | Lock and key of the membrane. | 2 |
+| FIGURE 3-3 | Systemic lupus erythematosus (SLE) butterfl y rash. | 52 |
+| FIGURE 3-4 | Discoid lesion in discoid lupus. | 4 |
+| FIGURE 3-5 | Subacute cutaneous lupus erythematosus (SCLE). | 4 |
+| FIGURE 4-1 | Conjunctivitis (“pinkeye”). | 1 |
+| FIGURE 4-2 | Herpes simplex. | 2 |
+| FIGURE 4-3 | MRSA lesion. | 3 |
+| FIGURE 4-4 | Herpes type 2 in patient with HIV. | 4 |
+| FIGURE 4-5 | Shingles on the neck and face of a patient with HIV. | 4 |
+| FIGURE 4-6 | Seborrheic dermatitis in a patient with HIV. | 70 |
+| FIGURE 4-7 | Kaposi’s sarcoma in an AIDS (HIV-positive) patient. | 70 |
+| FIGURE 5-1 | The endocrine system. | 1 |
+| FIGURE 5-2 | Female reproductive organs. | 2 |
+| FIGURE 5-3 | Male reproductive organs. | 3 |
+| FIGURE 5-4 | Combination skin can be recognized by an oilier T-zone, down the middle of the face, and smaller pores, indicating drier skin in the perimeter of the face. | 84 |
+| FIGURE 5-5 | The menstrual cycle. | 5 |
+| FIGURE 5-6 | Mask of pregnancy (melasma). | 6 |
+| FIGURE 5-7 | Melasma in a male patient is very unusual. | 6 |
+| FIGURE 5-8 | Striae (stretch marks). | 8 |
+| FIGURE 5-9 | Chin acne. | 9 |
+| FIGURE 5-10 | Melasma after Triluma treatment. | 92 |
+| FIGURE 6-1 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; and F, Fitzpatrick VI. | 100 |
+| FIGURE 6-2 | Confi dential skin health survey. | 2 |
+| FIGURE 6-3 | A lighted magnifying lamp. | 3 |
+| FIGURE 6-4 | Large pores indicate oily skin areas. | 4 |
+| FIGURE 6-5 | Alipidic skin is characterized by a lack of visible pore openings. | 4 |
+| FIGURE 6-6 | Combination skin. | 6 |
+| FIGURE 6-7 | Dehydration is characterized by many fine lines and wrinkles. | 108 |
+| FIGURE 6-8 | Open and closed comedones. | 8 |
+| FIGURE 6-9 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 110 |
+| FIGURE 6-10 | Sebaceous hyperplasia can vary in size and shape, as seen in this photo. | 110 |
+| FIGURE 6-11 | Milia. | 11 |
+| FIGURE 6-12 | Pseudopores. | 12 |
+| FIGURE 6-13 | Telangiectasias. | 13 |
+| FIGURE 6-14 | Solar lentigenes. | 14 |
+| FIGURE 6-15 | Mottling. | 15 |
+| FIGURE 6-16 | Vitiligo. | 16 |
+| FIGURE 6-17 | Melasma. | 17 |
+| FIGURE 6-18 | Glogau Type IV—only wrinkles. | 116 |
 | FIGURE 7-1 | Impetigo is a contagious bacterial infection of the skin. Th... | 73 |
-| FIGURE 7-2 | Folliculitis on the back. Furuncle is a severe infection of the hair follicle. It is also known as a boil. | 137 |
-| FIGURE 7-3 | Facial cellulitis. Note the severe swelling and inflammation. | 139 |
-| FIGURE 7-4 | MRSA lesion. | 140 |
-| FIGURE 7-5 | Tinea versicolor, sometimes called sun fungus. | 139 |
-| FIGURE 7-6 | Tinea corporis infection on the leg. | 141 |
-| FIGURE 7-7 | Perleche. | 141 |
-| FIGURE 7-8 | Herpes simplex causes common cold sores. | 142 |
-| FIGURE 7-9 | Typical case of herpes zoster (shingles). Note that the lesions follow a typical nerve-route pattern. | 142 |
-| FIGURE 7-10 | Molloscum contagiosum. | 142 |
-| FIGURE 7-11 | Warts. | 144 |
-| FIGURE 7-12 | Pityriasis rosea. | 144 |
-| FIGURE 7-13 | Contact dermatitis due to nickel allergy. | 145 |
-| FIGURE 7-14 | Atopic dermatitis. | 146 |
-| FIGURE 7-15 | Psoriasis. | 147 |
-| FIGURE 7-16 | Keratosis pilaris is often seen on the lower cheeks. | 148 |
-| FIGURE 7-17 | Telangiectasias, also sometimes known as couperose. | 149 |
-| FIGURE 7-18 | Skin tags are often seen on the neck and in the chest area. | 150 |
-| FIGURE 7-19 | AND B Xanthalasmas can appear on any area of the eyes and sometimes on the cheeks or forehead. | 151 |
-| FIGURE 8-1 | Periodic table of the elements. | 156 |
-| FIGURE 8-2 | Sodium and chlorine atoms. | 157 |
-| FIGURE 8-3 | Sodium and chlorine ions. | 158 |
-| FIGURE 8-4 | Carbon atoms “sharing” electrons with other carbon and hydrogen atoms. | 159 |
-| FIGURE 8-5 | H2O molecule “sharing” electrons between hydrogen and oxygen atoms. | 159 |
-| FIGURE 8-6 | NaCl solution. | 160 |
-| FIGURE 8-7 | Examples of (A) monosaccharide, (B) disaccharide, (C) polysaccharide. | 162 |
-| FIGURE 8-8 | Average pH values. | 163 |
-| FIGURE 9-1 | Emollients spread across the skin, helping to prevent dehydration and smooth the skin surface. | 169 |
-| FIGURE 9-2 | Types of emulsions. | 173 |
-| FIGURE 9-3 | Detergent micelle. | 181 |
-| FIGURE 9-4 | Liposomes help protect and transport performance ingredients into the epidermis. | 182 |
-| FIGURE 9-5 | Encapsulation methods in the liposome and the nanosphere or microsponge. | 182 |
-| FIGURE 10-1 | Drug facts label. | 203 |
-| FIGURE 11-1 | The success of any skin care program depends on having the client participate at home. | 209 |
-| FIGURE 11-2 | A well-organized retail area is important to the esthetics practice. | 210 |
-| FIGURE 11-3 | Sample ingredient labels for cleansers. | 211 |
-| FIGURE 11-4 | Bottle A has more oil and emollient for dry skin. Bottle B has less oil and more hydration for dehydrated, oilier skin. | 221 |
-| FIGURE 11-5 | Formulating all types of skin care products is both interesting and challenging. | 229 |
-| FIGURE 12-1 | Drug facts label. | 237 |
-| FIGURE 13-1 | The skin quickly regains its pink tone, sometimes becoming darker after pressure. | 244 |
-| FIGURE 13-2 | Urticaria (hives). | 245 |
-| FIGURE 13-3 | Telangiectasias. | 248 |
-| FIGURE 13-4 | Severe contact dermatitis as a reaction to cosmetics. | 249 |
-| FIGURE 13-5 | Eyelid contact dermatitis from cosmetics. | 259 |
-| FIGURE 13-6 | Irritant eye reaction after using a new eye product. | 259 |
-| FIGURE 13-7 | A, Dermatologist-administered patch tests for various contact allergies. B, Positive patch test indicating allergy to nickel. | 261 |
-| FIGURE 13-8 | (continued) | 265 |
-| FIGURE 14-1 | Nose telangiectasias. Dilated capillaries, called telangiectasias, and a coarse-textured appearance of nose ostia are typical of the rosacea client. | 273 |
-| FIGURE 14-2 | An example of a severe fl are of rosacea, which can affect the whole face. | 274 |
-| FIGURE 14-3 | (Continued) | 275 |
-| FIGURE 14-4 | Subtype 1: facial redness (erythematotelangiectatic rosacea). Flushing and persistent redness. Visible blood vessels may also appear. | 278 |
-| FIGURE 14-5 | Subtype 2: bumps and pimples (papulopustular rosacea). Persistent facial redness with bumps or pimples. Often seen following or with subtype 1. | 279 |
-| FIGURE 14-6 | Subtype 3: skin thickening (phymatous rosacea). Skin thickening and enlargement, usually around the nose. | 279 |
-| FIGURE 14-7 | Red, swollen noses can be the beginning of rhinophyma. | 280 |
-| FIGURE 14-8 | AND B Rhinophyma. | 280 |
-| FIGURE 14-9 | Dark and red distended capillaries, enlarged pores, and enlargement of the nose are shown in this photo of rhinophyma. This nose also has large amounts of sebaceous fi laments and secretions. | 281 |
-| FIGURE 14-10 | Subtype 4: eye irritation (ocular rosacea). Watery and bloodshot appearance, irritation, burning, or stinging. | 281 |
-| FIGURE 14-11 | AND B Before and after rosacea treatment. Rosacea can be kept under control by using prescribed topical and/or oral medication, controlling flushing; avoiding heat, spicy foods, and other triggers; and using nonirritating skin care products. | 282 |
-| FIGURE 14-12 | AND B Esthetic management of redness-prone skin using a specific concept-designed system of home care can make a big difference in redness and help avoid flushing and flares of rosacea. | 285 |
-| FIGURE 15-1 | The progression of acne. | 290 |
-| FIGURE 15-2 | Open and closed comedones. | 291 |
-| FIGURE 15-3 | The development of acne in a young girl. | 292 |
-| FIGURE 15-4 | The papule. | 292 |
-| FIGURE 15-5 | The pustule. | 293 |
-| FIGURE 15-6 | The cyst. | 294 |
-| FIGURE 15-7 | Grade IV acne | 294 |
-| FIGURE 15-8 | Acne scarring. | 295 |
-| FIGURE 15-9 | Acne in the chin and jawline can be related to hormone imbalances. | 297 |
-| FIGURE 15-10 | AND B Improvement in bumpy arms after using a glycolic hydrator. | 300 |
-| FIGURE 15-11 | Acne excoriée. | 302 |
-| FIGURE 15-12 | Seborrheic dermatitis presents with red, fl aky skin in oily areas of the face and most often affects the T-zone of the face, eyebrows, ears, scalp, and hairline. | 305 |
-| FIGURE 15-13 | Typical pattern of perioral dermatitis on the chin. Perioral dermatitis can also appear on the cheeks or anywhere around the mouth area. | 306 |
-| FIGURE 15-14 | AND B This client had Grade II acne complicated by hormonal therapy. After eight weeks using a mix of benzoyl peroxide gel and an AHA/salicylic mixed gel, the client had good clearing results. | 308 |
-| FIGURE 15-15 | AND B This case of Grade I acne was improved signifi cantly in only six weeks of home care by eliminating comedogenic products, using daily follicular exfoliants to loosen and prevent hyperkeratosis, and using an effective foaming cleanser to control sebum. | 314 |
-| FIGURE 15-16 | This male college student had excellent results using a combination of mild 2.5 percent benzoyl peroxide gel and AHA/salicylic acid mixed gel, along with proper cleanser, noncomedogenic moisturizer, and sunscreen. | 314 |
+| FIGURE 7-2 | Folliculitis on the back. Furuncle is a severe infection of the hair follicle. It is also known as a boil. | 124 |
+| FIGURE 7-3 | Facial cellulitis. Note the severe swelling and inflammation. | 124 |
+| FIGURE 7-4 | MRSA lesion. | 4 |
+| FIGURE 7-5 | Tinea versicolor, sometimes called sun fungus. | 4 |
+| FIGURE 7-6 | Tinea corporis infection on the leg. | 6 |
+| FIGURE 7-7 | Perleche. | 7 |
+| FIGURE 7-8 | Herpes simplex causes common cold sores. | 128 |
+| FIGURE 7-9 | Typical case of herpes zoster (shingles). Note that the lesions follow a typical nerve-route pattern. | 128 |
+| FIGURE 7-10 | Molloscum contagiosum. | 10 |
+| FIGURE 7-11 | Warts. | 11 |
+| FIGURE 7-12 | Pityriasis rosea. | 12 |
+| FIGURE 7-13 | Contact dermatitis due to nickel allergy. | 12 |
+| FIGURE 7-14 | Atopic dermatitis. | 14 |
+| FIGURE 7-15 | Psoriasis. | 15 |
+| FIGURE 7-16 | Keratosis pilaris is often seen on the lower cheeks. | 134 |
+| FIGURE 7-17 | Telangiectasias, also sometimes known as couperose. | 134 |
+| FIGURE 7-18 | Skin tags are often seen on the neck and in the chest area. | 136 |
+| FIGURE 7-19 | AND B Xanthalasmas can appear on any area of the eyes and sometimes on the cheeks or forehead. | 136 |
+| FIGURE 8-1 | Periodic table of the elements. | 1 |
+| FIGURE 8-2 | Sodium and chlorine atoms. | 2 |
+| FIGURE 8-3 | Sodium and chlorine ions. | 3 |
+| FIGURE 8-4 | Carbon atoms “sharing” electrons with other carbon and hydrogen atoms. | 3 |
+| FIGURE 8-5 | H2O molecule “sharing” electrons between hydrogen and oxygen atoms. | 3 |
+| FIGURE 8-6 | NaCl solution. | 6 |
+| FIGURE 8-7 | Examples of (A) monosaccharide, (B) disaccharide, (C) polysaccharide. | 148 |
+| FIGURE 8-8 | Average pH values. | 8 |
+| FIGURE 9-1 | Emollients spread across the skin, helping to prevent dehydration and smooth the skin surface. | 154 |
+| FIGURE 9-2 | Types of emulsions. | 2 |
+| FIGURE 9-3 | Detergent micelle. | 3 |
+| FIGURE 9-4 | Liposomes help protect and transport performance ingredients into the epidermis. | 168 |
+| FIGURE 9-5 | Encapsulation methods in the liposome and the nanosphere or microsponge. | 168 |
+| FIGURE 10-1 | Drug facts label. | 1 |
+| FIGURE 11-1 | The success of any skin care program depends on having the client participate at home. | 196 |
+| FIGURE 11-2 | A well-organized retail area is important to the esthetics practice. | 196 |
+| FIGURE 11-3 | Sample ingredient labels for cleansers. | 198 |
+| FIGURE 11-4 | Bottle A has more oil and emollient for dry skin. Bottle B has less oil and more hydration for dehydrated, oilier skin. | 208 |
+| FIGURE 11-5 | Formulating all types of skin care products is both interesting and challenging. | 214 |
+| FIGURE 12-1 | Drug facts label. | 1 |
+| FIGURE 13-1 | The skin quickly regains its pink tone, sometimes becoming darker after pressure. | 230 |
+| FIGURE 13-2 | Urticaria (hives). | 2 |
+| FIGURE 13-3 | Telangiectasias. | 3 |
+| FIGURE 13-4 | Severe contact dermatitis as a reaction to cosmetics. | 3 |
+| FIGURE 13-5 | Eyelid contact dermatitis from cosmetics. | 244 |
+| FIGURE 13-6 | Irritant eye reaction after using a new eye product. | 246 |
+| FIGURE 13-7 | A, Dermatologist-administered patch tests for various contact allergies. B, Positive patch test indicating allergy to nickel. | 246 |
+| FIGURE 13-8 | (continued) | 252 |
+| FIGURE 14-1 | Nose telangiectasias. Dilated capillaries, called telangiectasias, and a coarse-textured appearance of nose ostia are typical of the rosacea client. | 260 |
+| FIGURE 14-2 | An example of a severe fl are of rosacea, which can affect the whole face. | 260 |
+| FIGURE 14-3 | (Continued) | 262 |
+| FIGURE 14-4 | Subtype 1: facial redness (erythematotelangiectatic rosacea). Flushing and persistent redness. Visible blood vessels may also appear. | 264 |
+| FIGURE 14-5 | Subtype 2: bumps and pimples (papulopustular rosacea). Persistent facial redness with bumps or pimples. Often seen following or with subtype 1. | 264 |
+| FIGURE 14-6 | Subtype 3: skin thickening (phymatous rosacea). Skin thickening and enlargement, usually around the nose. | 264 |
+| FIGURE 14-7 | Red, swollen noses can be the beginning of rhinophyma. | 266 |
+| FIGURE 14-8 | AND B Rhinophyma. | 266 |
+| FIGURE 14-9 | Dark and red distended capillaries, enlarged pores, and enlargement of the nose are shown in this photo of rhinophyma. This nose also has large amounts of sebaceous fi laments and secretions. | 266 |
+| FIGURE 14-10 | Subtype 4: eye irritation (ocular rosacea). Watery and bloodshot appearance, irritation, burning, or stinging. | 266 |
+| FIGURE 14-11 | AND B Before and after rosacea treatment. Rosacea can be kept under control by using prescribed topical and/or oral medication, controlling flushing; avoiding heat, spicy foods, and other triggers; and using nonirritating skin care products. | 268 |
+| FIGURE 14-12 | AND B Esthetic management of redness-prone skin using a specific concept-designed system of home care can make a big difference in redness and help avoid flushing and flares of rosacea. | 270 |
+| FIGURE 15-1 | The progression of acne. | 1 |
+| FIGURE 15-2 | Open and closed comedones. | 2 |
+| FIGURE 15-3 | The development of acne in a young girl. | 278 |
+| FIGURE 15-4 | The papule. | 4 |
+| FIGURE 15-5 | The pustule. | 5 |
+| FIGURE 15-6 | The cyst. | 6 |
+| FIGURE 15-7 | Grade IV acne | 6 |
+| FIGURE 15-8 | Acne scarring. | 8 |
+| FIGURE 15-9 | Acne in the chin and jawline can be related to hormone imbalances. | 284 |
+| FIGURE 15-10 | AND B Improvement in bumpy arms after using a glycolic hydrator. | 286 |
+| FIGURE 15-11 | Acne excoriée. | 11 |
+| FIGURE 15-12 | Seborrheic dermatitis presents with red, fl aky skin in oily areas of the face and most often affects the T-zone of the face, eyebrows, ears, scalp, and hairline. | 290 |
+| FIGURE 15-13 | Typical pattern of perioral dermatitis on the chin. Perioral dermatitis can also appear on the cheeks or anywhere around the mouth area. | 292 |
+| FIGURE 15-14 | AND B This client had Grade II acne complicated by hormonal therapy. After eight weeks using a mix of benzoyl peroxide gel and an AHA/salicylic mixed gel, the client had good clearing results. | 294 |
+| FIGURE 15-15 | AND B This case of Grade I acne was improved signifi cantly in only six weeks of home care by eliminating comedogenic products, using daily follicular exfoliants to loosen and prevent hyperkeratosis, and using an effective foaming cleanser to control sebum. | 300 |
+| FIGURE 15-16 | This male college student had excellent results using a combination of mild 2.5 percent benzoyl peroxide gel and AHA/salicylic acid mixed gel, along with proper cleanser, noncomedogenic moisturizer, and sunscreen. | 300 |
 | FIGURE 15-17 | The home-care routine is the same as for Grade I acne; howev... | 315 |
 | FIGURE 15-18 | FIGURE 15-18A–D Grade II acne. This client improved signifi c... | 317 |
-| FIGURE 16-1 | The microscopic view of retention hyperkeratosis shows excessive cell buildup and swelling. This slide represents a positive test for comedogenicity. | 330 |
-| FIGURE 17-1 | Combination skin. | 345 |
-| FIGURE 17-2 | Examination procedures. | 346 |
-| FIGURE 17-3 | AND B Treatment for clogged, dehydrated skin includes noncomedogenic hydration fluid and sunscreen with low levels of emollient, along with an alpha hydroxy acid gel. This home care was used for six weeks in this case study. Note the differences in texture, tone, clarity, and even coloration. | 347 |
-| FIGURE 17-4 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 347 |
-| FIGURE 17-5 | An ultrasonic “blade” is used here to exfoliate the corneum before extraction. | 349 |
-| FIGURE 17-6 | Cotton swabs are used to gently extract comedones and sebaceous fi laments by gently lifting and slightly twisting the skin. Careful preparation of the skin with desincrustation is essential for ease in extraction. | 350 |
-| FIGURE 17-7 | Dilation using a lancet. | 352 |
-| FIGURE 17-8 | Milia. | 355 |
-| FIGURE 17-9 | Chart of general extraction rules. | 357 |
-| FIGURE 17-10 | Xanthelasmas. | 358 |
-| FIGURE 17-11 | Favre-Racouchot syndrome (senile solar comedones) in a typical pattern on an individual with sun damage. | 359 |
+| FIGURE 16-1 | The microscopic view of retention hyperkeratosis shows excessive cell buildup and swelling. This slide represents a positive test for comedogenicity. | 316 |
+| FIGURE 17-1 | Combination skin. | 1 |
+| FIGURE 17-2 | Examination procedures. | 2 |
+| FIGURE 17-3 | AND B Treatment for clogged, dehydrated skin includes noncomedogenic hydration fluid and sunscreen with low levels of emollient, along with an alpha hydroxy acid gel. This home care was used for six weeks in this case study. Note the differences in texture, tone, clarity, and even coloration. | 2 |
+| FIGURE 17-4 | Sebaceous fi laments, often called clogged pores, are follicles filled with solidifi ed sebum. The black tip is oxidized sebum in the top of the follicle. | 2 |
+| FIGURE 17-5 | An ultrasonic “blade” is used here to exfoliate the corneum before extraction. | 334 |
+| FIGURE 17-6 | Cotton swabs are used to gently extract comedones and sebaceous fi laments by gently lifting and slightly twisting the skin. Careful preparation of the skin with desincrustation is essential for ease in extraction. | 336 |
+| FIGURE 17-7 | Dilation using a lancet. | 7 |
+| FIGURE 17-8 | Milia. | 8 |
+| FIGURE 17-9 | Chart of general extraction rules. | 8 |
+| FIGURE 17-10 | Xanthelasmas. | 10 |
+| FIGURE 17-11 | Favre-Racouchot syndrome (senile solar comedones) in a typical pattern on an individual with sun damage. | 346 |
 | FIGURE 18-1 | we can determine the symptoms caused by intrinsic factors an... | 364 |
-| FIGURE 18-2 | Elastosis. | 366 |
-| FIGURE 18-3 | Although it is not the same as a face lift, microcurrent, when applied correctly, has been shown in university studies to improve elasticity, collagen content, and elastin content. | 374 |
-| FIGURE 19-1 | The spectrum of light—wavelengths. | 378 |
-| FIGURE 19-2 | Chloasma, or liver spots, are spots of concentrated melanin caused by sun damage. | 380 |
-| FIGURE 19-3 | Hyperpigmentation, often caused by cumulative sun exposure, can be improved with the use of alpha hydroxy and beta hydroxy acids, and lightening or brightening agents such as hydroquinone or magnesium ascorbyl phosphate. In this case study, a series of 30 percent alpha hydroxy acid exfoliation treatments showed this improvement in three weeks. | 381 |
-| FIGURE 19-4 | Tinea versicolor. | 382 |
-| FIGURE 19-5 | Long-term sun damage. | 384 |
-| FIGURE 19-6 | Basal cell carcinoma. | 385 |
-| FIGURE 19-7 | Squamous cell carcinoma. | 386 |
+| FIGURE 18-2 | Elastosis. | 2 |
+| FIGURE 18-3 | Although it is not the same as a face lift, microcurrent, when applied correctly, has been shown in university studies to improve elasticity, collagen content, and elastin content. | 360 |
+| FIGURE 19-1 | The spectrum of light—wavelengths. | 1 |
+| FIGURE 19-2 | Chloasma, or liver spots, are spots of concentrated melanin caused by sun damage. | 366 |
+| FIGURE 19-3 | Hyperpigmentation, often caused by cumulative sun exposure, can be improved with the use of alpha hydroxy and beta hydroxy acids, and lightening or brightening agents such as hydroquinone or magnesium ascorbyl phosphate. In this case study, a series of 30 percent alpha hydroxy acid exfoliation treatments showed this improvement in three weeks. | 366 |
+| FIGURE 19-4 | Tinea versicolor. | 4 |
+| FIGURE 19-5 | Long-term sun damage. | 5 |
+| FIGURE 19-6 | Basal cell carcinoma. | 5 |
+| FIGURE 19-7 | Squamous cell carcinoma. | 372 |
 | FIGURE 19-8 | FIGURE 19-8A1 Benign mole—symmetrical. Common moles are usua... | 387 |
-| FIGURE 19-9 | Actinic keratosis is frequently seen in sun-damaged clients. | 389 |
-| FIGURE 19-10 | Multiple sebaceous hyperplasia in an adult male with oily skin and sun damage. Sebaceous hyperplasias are typically found on the forehead, temple, and upper cheeks but can appear anywhere on the face. | 389 |
-| FIGURE 19-11 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; F, Fitzpatrick VI. | 393 |
-| FIGURE 19-12 | Proper application of a well-formulated DHA self-tanning product produces beautiful results in a short period of time and is the only safe way to “tan.” | 401 |
-| FIGURE 20-1 | Poikiloderma of civatte is a condition of the neck skin with hyperpigmentation and telangiectasias caused by years of cumulative sun exposure. | 407 |
-| FIGURE 20-2 | A–D, Dramatic improvement is seen in the appearance of this skin treated with alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 410 |
-| FIGURE 20-3 | A–D, Many clients are concerned about loss of elasticity. This client shows great improvement after using alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 412 |
-| FIGURE 20-4 | Microdermabrasion. | 414 |
-| FIGURE 20-5 | A–D, This client was treated with a combination of products containing acetyl hexapeptide-8, lipids, daily sunscreen and alpha hydroxy acids for eight weeks to achieve these positive results in smoothness and the appearance of wrinkle reduction. | 416 |
-| FIGURE 20-6 | A–D, Use of specialty eye products (creams or serums) containing a mixture of peptides for firming and reduction of puffiness, along with fl avonoids to reduce dark circles, can achieve results like these shown over four weeks. | 417 |
-| FIGURE 20-7 | Clients must take a program approach to achieve global improvement as seen here. This client used a home-care product system for six months with peptides, AHAs, lipids, antioxidants, and daily sunscreen. | 418 |
-| FIGURE 20-8 | LED treatment has been shown to reduce redness and increase collagen content in the skin. | 421 |
-| FIGURE 21-1 | Glycolic acid is applied to the skin of a client who has been using a lower-strength glycolic treatment product for at least two weeks at home. This treatment is applied with cotton swabs and carefully monitored according to manufacturer’s directions. | 433 |
-| FIGURE 21-2 | AND B Glycolic treatment is popular for lessening the appearance of facial wrinkles. Shown here are before and after photos of the eye area. | 434 |
-| FIGURE 21-3 | AND B Routine use of home alpha hydroxy acid products along with a series of AHA professional treatments can dramatically affect the appearance of wrinkles in aging skin. | 435 |
-| FIGURE 21-4 | AND B Glycolic treatment can signifi cantly improve the appearance of problem and acne–prone skin (before and after). | 436 |
-| FIGURE 21-5 | AND B Treatment at home with alpha hydroxy and beta hydroxy acid, along with professional AHA and extraction treatments, can help clear blemishes and improve hyperpigmentation in the skin of color. | 437 |
-| FIGURE 21-6 | AND B Glycolic treatment can help the appearance of hyperpigmented skin conditions. | 437 |
-| FIGURE 21-7 | AND B Hyperpigmentation can be improved by the daily use of alpha hydroxy acids and hydroquinone—and of course, daily use of sunscreen at home—as well as professional AHA treatments in the salon or clinic. | 438 |
-| FIGURE 21-8 | A, Phenol solution is used on the wrinkled lip of this patient. Shown here is the “frosting” effect after application of the phenol solution. B, Several months after the peel, the lip is much smoother. | 439 |
-| FIGURE 21-9 | AND B In-depth phenol peel (before and after). | 439 |
-| FIGURE 21-10 | Application of salicylic acid using a large swab. | 443 |
-| FIGURE 21-11 | E, F Temporary hyperpigmentation and discoloration can occur during the first one or two weeks following salicylic treatment. In this more extreme case, dark splotches exfoliate to reveal smoother texture and tone. | 444 |
-| FIGURE 22-1 | A–D, Rhytidectomy, or face lifting, can dramatically improve the appearance of sagging facial skin and elastosis. A forehead lift has also been performed on this patient. | 452 |
-| FIGURE 22-2 | (continued) | 453 |
-| FIGURE 22-3 | Blepharoplasty, or eyelid surgery, can help signifi cantly restructure the eye contours, achieving a more alert, youthful look. | 458 |
-| FIGURE 22-4 | This patient had an endoscopic forehead lift, with a blepharoplasty (eyelift), achieving more youthful contours in both the forehead and eye areas. Notice how much more open her eyes appear. | 459 |
-| FIGURE 22-5 | A–D, These views feature the patient before and after a rhinoplasty. Note the reduction of the nasal bone protrusion, the straightening of the nostrils, and the softer look of the face in general after surgery. | 460 |
-| FIGURE 22-6 | A, Acne scarring in the cheek of this former acne patient. B, After dermabrasion, the cheek area is much smoother. C, This patient needed both dermabrasion and revision of this large surgical scar. D, Notice how much smoother the scar appears. | 462 |
-| FIGURE 22-7 | Post-laser treatment. | 466 |
-| FIGURE 22-8 | A, The patient arrived 11 days post-CO2 laser resurfacing, concerned with extreme redness and dry, tight skin. B, The patient complained of extreme tightness around the mouth, and dryness was evident from crusty fl aking above the upper lip. The patient was instructed in the use of proper camoufl age makeup and how to achieve as natural a look as possible. The patient was instructed to use a fragrance-free moisturizer along with a lipid-based serum to increase hydration. The patient was also instructed in proper cleansing of the skin, using a nonfoaming, gentle cleanser. A facial treatment using a lipid-based hydrator with hyaluronic acid and sodium PCA and a gentle steam treatment to increase hydration were administered. Cool steam was applied, over which high-frequency current was applied to provide a gentle massage. After this, cold cryogenic globes were applied over gauze. These are special glass or Pyrex® balls filled with cold refrigerant chemicals, like those used in chemical ice packs. Another layer of hydrator was applied over the entire face and allowed to sit for 20 minutes. After the treatment, a lipid serum was applied. C, The patient experienced signifi cantly lessened redness in five days. D, Flakiness and dryness were lessened and smoothness was achieved in five days. The patient reported ease of dryness and discomfort almost immediately. E, This patient had an extreme amount of redness after full-face CO2 laser resurfacing and full face lift. She had an important engagement in only a few weeks and was very concerned about having a natural appearance for this event. Again, this patient was given the same hydrating cream, lipid serum, and gentle cleanser and was instructed in the use of camoufl age makeup to cover the redness. F, The patient had tremendous improvement in only five days. Within a short period of time, she was able to discontinue the heavier camoufl age makeup and return to the use of a lighter-weight liquid makeup. | 469 |
-| FIGURE 22-9 | A, Note the deep nasolabial folds on this patient. B, By injecting collagen, the surgeon achieves a remarkable reduction in wrinkles. | 476 |
-| FIGURE 22-10 | Unretouched clinical photos taken before Botox® Cosmetic and after treatment with Botox® Cosmetic at day 14. Results may vary. | 477 |
-| FIGURE 23-1 | Medical spas try to combine the relaxed atmosphere of a spa with medical cosmetic services. | 484 |
-| FIGURE 23-2 | A, Aging face. B, Aging face resurfacing with nonablative laser. | 485 |
-| FIGURE 23-3 | A, Rhinophyma. B, Rhinophyma after laser treatment. | 486 |
-| FIGURE 23-4 | Ellipse intense pulsed light system. | 487 |
-| FIGURE 23-5 | A, Before radio frequency treatment. B, 6 months after treatment. | 488 |
-| FIGURE 23-6 | A, Prominent oral commissures. B, Same patient after injection with hyaluronic acid. | 489 |
-| FIGURE 23-7 | A, Nasolabial lines. B, Same patient after injection with hyaluronic acid. | 490 |
+| FIGURE 19-9 | Actinic keratosis is frequently seen in sun-damaged clients. | 374 |
+| FIGURE 19-10 | Multiple sebaceous hyperplasia in an adult male with oily skin and sun damage. Sebaceous hyperplasias are typically found on the forehead, temple, and upper cheeks but can appear anywhere on the face. | 376 |
+| FIGURE 19-11 | A, Fitzpatrick I; B, Fitzpatrick II; C, Fitzpatrick III; D, Fitzpatrick IV; E, Fitzpatrick V; F, Fitzpatrick VI. | 378 |
+| FIGURE 19-12 | Proper application of a well-formulated DHA self-tanning product produces beautiful results in a short period of time and is the only safe way to “tan.” | 388 |
+| FIGURE 20-1 | Poikiloderma of civatte is a condition of the neck skin with hyperpigmentation and telangiectasias caused by years of cumulative sun exposure. | 392 |
+| FIGURE 20-2 | A–D, Dramatic improvement is seen in the appearance of this skin treated with alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 396 |
+| FIGURE 20-3 | A–D, Many clients are concerned about loss of elasticity. This client shows great improvement after using alpha hydroxy acids, peptides, collagen stimulants, and sunscreen. | 398 |
+| FIGURE 20-4 | Microdermabrasion. | 4 |
+| FIGURE 20-5 | A–D, This client was treated with a combination of products containing acetyl hexapeptide-8, lipids, daily sunscreen and alpha hydroxy acids for eight weeks to achieve these positive results in smoothness and the appearance of wrinkle reduction. | 402 |
+| FIGURE 20-6 | A–D, Use of specialty eye products (creams or serums) containing a mixture of peptides for firming and reduction of puffiness, along with fl avonoids to reduce dark circles, can achieve results like these shown over four weeks. | 402 |
+| FIGURE 20-7 | Clients must take a program approach to achieve global improvement as seen here. This client used a home-care product system for six months with peptides, AHAs, lipids, antioxidants, and daily sunscreen. | 404 |
+| FIGURE 20-8 | LED treatment has been shown to reduce redness and increase collagen content in the skin. | 408 |
+| FIGURE 21-1 | Glycolic acid is applied to the skin of a client who has been using a lower-strength glycolic treatment product for at least two weeks at home. This treatment is applied with cotton swabs and carefully monitored according to manufacturer’s directions. | 420 |
+| FIGURE 21-2 | AND B Glycolic treatment is popular for lessening the appearance of facial wrinkles. Shown here are before and after photos of the eye area. | 420 |
+| FIGURE 21-3 | AND B Routine use of home alpha hydroxy acid products along with a series of AHA professional treatments can dramatically affect the appearance of wrinkles in aging skin. | 422 |
+| FIGURE 21-4 | AND B Glycolic treatment can signifi cantly improve the appearance of problem and acne–prone skin (before and after). | 422 |
+| FIGURE 21-5 | AND B Treatment at home with alpha hydroxy and beta hydroxy acid, along with professional AHA and extraction treatments, can help clear blemishes and improve hyperpigmentation in the skin of color. | 422 |
+| FIGURE 21-6 | AND B Glycolic treatment can help the appearance of hyperpigmented skin conditions. | 424 |
+| FIGURE 21-7 | AND B Hyperpigmentation can be improved by the daily use of alpha hydroxy acids and hydroquinone—and of course, daily use of sunscreen at home—as well as professional AHA treatments in the salon or clinic. | 424 |
+| FIGURE 21-8 | A, Phenol solution is used on the wrinkled lip of this patient. Shown here is the “frosting” effect after application of the phenol solution. B, Several months after the peel, the lip is much smoother. | 424 |
+| FIGURE 21-9 | AND B In-depth phenol peel (before and after). | 424 |
+| FIGURE 21-10 | Application of salicylic acid using a large swab. | 430 |
+| FIGURE 21-11 | E, F Temporary hyperpigmentation and discoloration can occur during the first one or two weeks following salicylic treatment. In this more extreme case, dark splotches exfoliate to reveal smoother texture and tone. | 430 |
+| FIGURE 22-1 | A–D, Rhytidectomy, or face lifting, can dramatically improve the appearance of sagging facial skin and elastosis. A forehead lift has also been performed on this patient. | 438 |
+| FIGURE 22-2 | (continued) | 440 |
+| FIGURE 22-3 | Blepharoplasty, or eyelid surgery, can help signifi cantly restructure the eye contours, achieving a more alert, youthful look. | 444 |
+| FIGURE 22-4 | This patient had an endoscopic forehead lift, with a blepharoplasty (eyelift), achieving more youthful contours in both the forehead and eye areas. Notice how much more open her eyes appear. | 444 |
+| FIGURE 22-5 | A–D, These views feature the patient before and after a rhinoplasty. Note the reduction of the nasal bone protrusion, the straightening of the nostrils, and the softer look of the face in general after surgery. | 446 |
+| FIGURE 22-6 | A, Acne scarring in the cheek of this former acne patient. B, After dermabrasion, the cheek area is much smoother. C, This patient needed both dermabrasion and revision of this large surgical scar. D, Notice how much smoother the scar appears. | 448 |
+| FIGURE 22-7 | Post-laser treatment. | 7 |
+| FIGURE 22-8 | A, The patient arrived 11 days post-CO2 laser resurfacing, concerned with extreme redness and dry, tight skin. B, The patient complained of extreme tightness around the mouth, and dryness was evident from crusty fl aking above the upper lip. The patient was instructed in the use of proper camoufl age makeup and how to achieve as natural a look as possible. The patient was instructed to use a fragrance-free moisturizer along with a lipid-based serum to increase hydration. The patient was also instructed in proper cleansing of the skin, using a nonfoaming, gentle cleanser. A facial treatment using a lipid-based hydrator with hyaluronic acid and sodium PCA and a gentle steam treatment to increase hydration were administered. Cool steam was applied, over which high-frequency current was applied to provide a gentle massage. After this, cold cryogenic globes were applied over gauze. These are special glass or Pyrex® balls filled with cold refrigerant chemicals, like those used in chemical ice packs. Another layer of hydrator was applied over the entire face and allowed to sit for 20 minutes. After the treatment, a lipid serum was applied. C, The patient experienced signifi cantly lessened redness in five days. D, Flakiness and dryness were lessened and smoothness was achieved in five days. The patient reported ease of dryness and discomfort almost immediately. E, This patient had an extreme amount of redness after full-face CO2 laser resurfacing and full face lift. She had an important engagement in only a few weeks and was very concerned about having a natural appearance for this event. Again, this patient was given the same hydrating cream, lipid serum, and gentle cleanser and was instructed in the use of camoufl age makeup to cover the redness. F, The patient had tremendous improvement in only five days. Within a short period of time, she was able to discontinue the heavier camoufl age makeup and return to the use of a lighter-weight liquid makeup. | 456 |
+| FIGURE 22-9 | A, Note the deep nasolabial folds on this patient. B, By injecting collagen, the surgeon achieves a remarkable reduction in wrinkles. | 462 |
+| FIGURE 22-10 | Unretouched clinical photos taken before Botox® Cosmetic and after treatment with Botox® Cosmetic at day 14. Results may vary. | 464 |
+| FIGURE 23-1 | Medical spas try to combine the relaxed atmosphere of a spa with medical cosmetic services. | 470 |
+| FIGURE 23-2 | A, Aging face. B, Aging face resurfacing with nonablative laser. | 470 |
+| FIGURE 23-3 | A, Rhinophyma. B, Rhinophyma after laser treatment. | 472 |
+| FIGURE 23-4 | Ellipse intense pulsed light system. | 4 |
+| FIGURE 23-5 | A, Before radio frequency treatment. B, 6 months after treatment. | 474 |
+| FIGURE 23-6 | A, Prominent oral commissures. B, Same patient after injection with hyaluronic acid. | 474 |
+| FIGURE 23-7 | A, Nasolabial lines. B, Same patient after injection with hyaluronic acid. | 476 |

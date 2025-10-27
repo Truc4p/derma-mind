@@ -6,21 +6,15 @@ const { convertImagesToHtml, extractImageReferences, containsImageReferences } =
 
 // Test text with image references
 const testText = `
-# Acne Treatment
+# CO2 laser resurfacing and full face lift. She had an important engagement in only a few weeks and was very concerned about having a natural appearance for this event. Again, this patient was given the same hydrating cream, lipid serum, and gentle cleanser and was instructed in the use of camoufl age makeup to cover the redness. F, The patient had tremendous improvement in only five days. Within a short period of time, she was able to discontinue the heavier camoufl age makeup and return to the use of a lighter-weight liquid makeup.
 
-Acne is a common skin condition that affects many people.
+E F
 
-![Figure 15-1](images/figure_15_1.png)
+Courtesy Mark Lees Skin Care, Inc.
 
-Here are some treatment options:
 
-1. Topical treatments
-2. Oral medications
-3. Light therapy
 
-![Figure 15-2](images/figure_15_2.png)
-
-For more information, consult a dermatologist.
+![Figure 22-8](images/figure_22_8.png)
 `;
 
 console.log('🧪 Testing Image Processing Utilities\n');
@@ -43,4 +37,4 @@ console.log('Converted text:\n', htmlText);
 console.log('\n' + '='.repeat(50));
 console.log('✅ All tests completed!');
 console.log('\nTo test image serving, start the backend server and visit:');
-console.log('http://localhost:3004/api/knowledge-images/figure_15_1.png');
+console.log('http://localhost:3004/api/knowledge-images/figure_22_8.png');
