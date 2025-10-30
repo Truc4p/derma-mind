@@ -1,0 +1,4 @@
+This is a placeholder. To add a real icon:
+1. Create a 1024x1024 PNG image
+2. Save it as icon.png in this directory
+3. Restart the Expo server
