@@ -395,13 +395,12 @@ What would you like to know more about?`;
             <View style={styles.welcomeCard}>
               <View style={styles.welcomeHeader}>
                 <Text style={styles.welcomeTitle}>AI Dermatologist</Text>
-                <Text style={styles.welcomeSubtitle}>Board-Certified Virtual Dermatologist</Text>
                 <Text style={styles.welcomeDescription}>
                   Ask me anything about skincare, cosmetics, and facial improvements
                 </Text>
               </View>
 
-              <Text style={styles.welcomeGreeting}>👋 Welcome to Your AI Dermatologist</Text>
+              <Text style={styles.welcomeGreeting}>Welcome to Your AI Dermatologist</Text>
               <Text style={styles.welcomeText}>
                 I'm here to help you with all your skincare concerns. I can assist with:
               </Text>

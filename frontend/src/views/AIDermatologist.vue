@@ -1,5 +1,39 @@
 <template>
     <div class="ai-dermatologist">
+        <!-- History Sidebar -->
+        <div class="history-sidebar" :class="{ 'open': sidebarOpen }">
+            <div class="sidebar-header">
+                <h3>Chat History</h3>
+                <button @click="toggleSidebar" class="close-sidebar-btn">✕</button>
+            </div>
+            <div class="sidebar-content">
+                <div v-if="chatSessions.length === 0" class="no-history">
+                    <p>No chat history yet</p>
+                </div>
+                <div v-else class="chat-sessions-list">
+                    <div v-for="session in sortedChatSessions" 
+                         :key="session.id"
+                         @click="loadChatSession(session.id)"
+                         class="chat-session-item"
+                         :class="{ 'active': session.id === currentSessionId }">
+                        <div class="session-info">
+                            <div class="session-title">{{ session.title }}</div>
+                            <div class="session-date">{{ formatSessionDate(session.timestamp) }}</div>
+                            <div class="session-preview">{{ session.preview }}</div>
+                        </div>
+                        <button @click.stop="deleteChatSession(session.id)" 
+                                class="delete-session-btn"
+                                title="Delete this conversation">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div v-if="sidebarOpen" @click="toggleSidebar" class="sidebar-overlay"></div>
+
         <!-- Chat Container -->
         <div class="chat-container" ref="chatContainer">
             <!-- Welcome Message -->
@@ -7,34 +41,27 @@
                 <div class="welcome-card">
                     <div class="welcome-header">
                         <h1>AI Dermatologist</h1>
-                        <p class="subtitle">Board-Certified Virtual Dermatologist</p>
                         <p class="description">Ask me anything about skincare, cosmetics, and facial improvements</p>
                     </div>
-                    <h2>👋 Welcome to Your AI Dermatologist</h2>
+                    <h2>Welcome to Your AI Dermatologist</h2>
                     <p>I'm here to help you with all your skincare concerns. I can assist with:</p>
                     <div class="capabilities-grid">
                         <div class="capability-item">
-                            <span class="capability-icon">💆</span>
                             <span>Skincare routines</span>
                         </div>
                         <div class="capability-item">
-                            <span class="capability-icon">💄</span>
                             <span>Cosmetic advice</span>
                         </div>
                         <div class="capability-item">
-                            <span class="capability-icon">🧴</span>
                             <span>Product recommendations</span>
                         </div>
                         <div class="capability-item">
-                            <span class="capability-icon">✨</span>
                             <span>Face improvement tips</span>
                         </div>
                         <div class="capability-item">
-                            <span class="capability-icon">🔬</span>
                             <span>Ingredient analysis</span>
                         </div>
                         <div class="capability-item">
-                            <span class="capability-icon">🌟</span>
                             <span>Skin concerns</span>
                         </div>
                     </div>
@@ -76,6 +103,9 @@
         <div class="chat-input-container">
             <!-- Chat Action Buttons -->
             <div v-if="messages.length > 0" class="chat-actions">
+                <button @click="toggleSidebar" class="action-button history-btn">
+                    History
+                </button>
                 <button @click="startNewChat" class="action-button new-chat-btn">
                     New Chat
                 </button>
@@ -131,19 +161,32 @@ export default {
                 "What ingredients should I avoid for sensitive skin?",
                 "Can you recommend products for acne-prone skin?",
                 "How often should I exfoliate?"
-            ]
+            ],
+            // Chat history management
+            currentSessionId: null,
+            chatSessions: [],
+            sidebarOpen: false
+        }
+    },
+
+    computed: {
+        sortedChatSessions() {
+            return [...this.chatSessions].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            )
         }
     },
 
     mounted() {
-        this.loadChatHistory()
+        this.loadAllSessions()
+        this.loadCurrentSession()
         this.adjustTextareaHeight()
     },
 
     watch: {
         messages: {
             handler() {
-                this.saveChatHistory()
+                this.saveCurrentSession()
                 this.$nextTick(() => {
                     this.scrollToBottom()
                 })
@@ -465,38 +508,168 @@ What would you like to know more about?`
             }
         },
 
-        saveChatHistory() {
-            try {
-                localStorage.setItem('aiDermatologistChat', JSON.stringify(this.messages))
-            } catch (error) {
-                console.warn('Failed to save chat history:', error)
+        // Chat History Management Methods
+        generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2)
+        },
+
+        generateSessionTitle(messages) {
+            if (messages.length === 0) return 'New Chat'
+            const firstUserMessage = messages.find(m => m.role === 'user')
+            if (firstUserMessage) {
+                const title = firstUserMessage.content.substring(0, 50)
+                return title.length < firstUserMessage.content.length ? title + '...' : title
             }
+            return 'New Chat'
+        },
+
+        generateSessionPreview(messages) {
+            if (messages.length === 0) return 'No messages yet'
+            const firstUserMessage = messages.find(m => m.role === 'user')
+            if (firstUserMessage) {
+                return firstUserMessage.content.substring(0, 80) + (firstUserMessage.content.length > 80 ? '...' : '')
+            }
+            return 'No messages yet'
+        },
+
+        saveCurrentSession() {
+            if (this.messages.length === 0) return
+
+            if (!this.currentSessionId) {
+                this.currentSessionId = this.generateSessionId()
+            }
+
+            const session = {
+                id: this.currentSessionId,
+                title: this.generateSessionTitle(this.messages),
+                preview: this.generateSessionPreview(this.messages),
+                timestamp: new Date().toISOString(),
+                messages: this.messages
+            }
+
+            // Update or add session
+            const existingIndex = this.chatSessions.findIndex(s => s.id === this.currentSessionId)
+            if (existingIndex >= 0) {
+                this.chatSessions[existingIndex] = session
+            } else {
+                this.chatSessions.push(session)
+            }
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('aiDermatologistSessions', JSON.stringify(this.chatSessions))
+                localStorage.setItem('aiDermatologistCurrentSession', this.currentSessionId)
+            } catch (error) {
+                console.warn('Failed to save chat session:', error)
+            }
+        },
+
+        loadAllSessions() {
+            try {
+                const savedSessions = localStorage.getItem('aiDermatologistSessions')
+                if (savedSessions) {
+                    this.chatSessions = JSON.parse(savedSessions)
+                }
+            } catch (error) {
+                console.warn('Failed to load chat sessions:', error)
+                this.chatSessions = []
+            }
+        },
+
+        loadCurrentSession() {
+            try {
+                const currentSessionId = localStorage.getItem('aiDermatologistCurrentSession')
+                if (currentSessionId) {
+                    this.currentSessionId = currentSessionId
+                    const session = this.chatSessions.find(s => s.id === currentSessionId)
+                    if (session) {
+                        this.messages = session.messages
+                    }
+                }
+            } catch (error) {
+                console.warn('Failed to load current session:', error)
+            }
+        },
+
+        loadChatSession(sessionId) {
+            const session = this.chatSessions.find(s => s.id === sessionId)
+            if (session) {
+                this.currentSessionId = sessionId
+                this.messages = session.messages
+                localStorage.setItem('aiDermatologistCurrentSession', sessionId)
+                this.sidebarOpen = false
+                this.$nextTick(() => {
+                    this.scrollToBottom()
+                })
+            }
+        },
+
+        deleteChatSession(sessionId) {
+            if (confirm('Delete this conversation? This cannot be undone.')) {
+                this.chatSessions = this.chatSessions.filter(s => s.id !== sessionId)
+                localStorage.setItem('aiDermatologistSessions', JSON.stringify(this.chatSessions))
+                
+                // If deleting current session, start a new one
+                if (sessionId === this.currentSessionId) {
+                    this.messages = []
+                    this.currentSessionId = null
+                    localStorage.removeItem('aiDermatologistCurrentSession')
+                }
+            }
+        },
+
+        toggleSidebar() {
+            this.sidebarOpen = !this.sidebarOpen
+        },
+
+        formatSessionDate(timestamp) {
+            const date = new Date(timestamp)
+            const now = new Date()
+            const diff = now - date
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+            if (days === 0) {
+                return 'Today ' + date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+            } else if (days === 1) {
+                return 'Yesterday'
+            } else if (days < 7) {
+                return days + ' days ago'
+            } else {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            }
+        },
+
+        saveChatHistory() {
+            // Legacy method - now handled by saveCurrentSession
+            this.saveCurrentSession()
         },
 
         loadChatHistory() {
-            try {
-                const savedChat = localStorage.getItem('aiDermatologistChat')
-                if (savedChat) {
-                    this.messages = JSON.parse(savedChat)
-                }
-            } catch (error) {
-                console.warn('Failed to load chat history:', error)
-            }
+            // Legacy method - now handled by loadCurrentSession
+            this.loadCurrentSession()
         },
 
         startNewChat() {
-            if (confirm('Start a new chat? Current conversation will be saved.')) {
-                this.messages = []
-                this.userInput = ''
-                localStorage.removeItem('aiDermatologistChat')
+            if (this.messages.length > 0) {
+                if (confirm('Start a new chat? Current conversation will be saved.')) {
+                    this.saveCurrentSession()
+                    this.messages = []
+                    this.userInput = ''
+                    this.currentSessionId = null
+                    localStorage.removeItem('aiDermatologistCurrentSession')
+                }
             }
         },
 
         clearChat() {
-            if (confirm('Clear all chat history? This cannot be undone.')) {
+            if (confirm('Clear this chat? This cannot be undone.')) {
+                if (this.currentSessionId) {
+                    this.deleteChatSession(this.currentSessionId)
+                }
                 this.messages = []
                 this.userInput = ''
-                localStorage.removeItem('aiDermatologistChat')
+                this.currentSessionId = null
+                localStorage.removeItem('aiDermatologistCurrentSession')
             }
         }
     }
@@ -509,6 +682,172 @@ What would you like to know more about?`
     flex-direction: column;
     height: 100vh;
     background: var(--primary-50);
+    position: relative;
+}
+
+/* History Sidebar */
+.history-sidebar {
+    position: fixed;
+    left: -320px;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.history-sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--primary-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary-50);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: var(--primary-800);
+    font-size: 1.25rem;
+}
+
+.close-sidebar-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-600);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.close-sidebar-btn:hover {
+    background: var(--primary-100);
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.no-history {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--primary-400);
+}
+
+.no-history p {
+    margin: 0;
+}
+
+.chat-sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chat-session-item {
+    padding: 1rem;
+    background: var(--primary-50);
+    border: 1px solid var(--primary-200);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.chat-session-item:hover {
+    background: var(--primary-100);
+    border-color: var(--primary-300);
+    transform: translateX(2px);
+}
+
+.chat-session-item.active {
+    background: var(--primary-100);
+    border-color: var(--primary-400);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.session-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.session-title {
+    font-weight: 600;
+    color: var(--primary-800);
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.session-date {
+    font-size: 0.75rem;
+    color: var(--primary-500);
+    margin-bottom: 0.25rem;
+}
+
+.session-preview {
+    font-size: 0.875rem;
+    color: var(--primary-600);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.delete-session-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.chat-session-item:hover .delete-session-btn {
+    opacity: 1;
+}
+
+.delete-session-btn:hover {
+    transform: scale(1.2);
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar-overlay {
+        display: block;
+    }
+    
+    .history-sidebar {
+        width: 280px;
+        left: -280px;
+    }
 }
 
 /* Chat Container */
@@ -553,7 +892,7 @@ What would you like to know more about?`
     font-weight: 700;
 }
 
-.welcome-header .subtitle {
+.welcome-header {
     color: var(--primary-600);
     font-weight: 600;
     margin: 0 0 0.5rem 0;
@@ -592,10 +931,6 @@ What would you like to know more about?`
     border-radius: 8px;
     color: var(--primary-700);
     font-weight: 500;
-}
-
-.capability-icon {
-    font-size: 1.5rem;
 }
 
 .sample-questions {
@@ -856,6 +1191,15 @@ What would you like to know more about?`
     border: none;
 }
 
+.history-btn {
+    background: var(--primary-100);
+    color: var(--primary-600);
+}
+
+.history-btn:hover {
+    background: white;
+}
+
 .new-chat-btn {
     background: var(--primary-100);
     color: var(--primary-600);
@@ -961,7 +1305,7 @@ What would you like to know more about?`
         font-size: 1.5rem;
     }
 
-    .welcome-header .subtitle {
+    .welcome-header {
         font-size: 0.875rem;
     }
 
