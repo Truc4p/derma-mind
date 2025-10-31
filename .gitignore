@@ -174,10 +174,6 @@ coverage/
 *.seed
 *.pid.lock
 
-# PDF Source Files (large files)
-backend/knowledge-sources/pdfs/*.pdf
-# Note: Keep .gitkeep or README in pdfs/ to maintain folder structure
-
 # Jupyter Notebook outputs and checkpoints
 .ipynb_checkpoints/
 *.ipynb_checkpoints/

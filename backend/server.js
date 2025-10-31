@@ -18,15 +18,8 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 // Middleware
-// Configure helmet with relaxed CSP for images
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" },
-  contentSecurityPolicy: {
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "img-src": ["'self'", "data:", "http://localhost:3004", "http://localhost:5175"],
-    },
-  },
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }))
 
 app.use(cors({
@@ -49,9 +42,6 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
-
-// Serve static images from knowledge base
-app.use('/api/knowledge-images', express.static(path.join(__dirname, 'knowledge-sources/extracted-content/images')))
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')

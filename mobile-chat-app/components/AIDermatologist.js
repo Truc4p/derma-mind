@@ -9,14 +9,22 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
-  Keyboard
+  Keyboard,
+  Image,
+  useWindowDimensions
 } from 'react-native';
-import Markdown from 'react-native-markdown-display';
-import { Ionicons } from '@expo/vector-icons';
+import RenderHtml from 'react-native-render-html';
 import { aiDermatologistService, chatStorage } from '../services/api';
-import { styles, markdownStyles } from './AIDermatologist.styles';
+import { styles } from './AIDermatologist.styles';
+
+// API base URL - update this based on your setup
+// For iOS Simulator: http://localhost:3004
+// For Android Emulator: http://10.0.2.2:3004
+// For Physical Device: http://YOUR_IP:3004
+const API_BASE_URL = 'http://localhost:3004';
 
 const AIDermatologist = () => {
+  const { width } = useWindowDimensions();
   const [userInput, setUserInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -287,6 +295,33 @@ This will help me give you better tailored advice. You can also ask me about:
 What would you like to know more about?`;
   };
 
+  // Convert markdown to HTML with image support
+  const convertMarkdownToHtml = (markdown) => {
+    if (!markdown) return '';
+    
+    let html = markdown;
+    
+    // Convert markdown images to HTML img tags with full API URLs
+    html = html.replace(
+      /!\[([^\]]*)\]\(images\/([^)]+)\)/g,
+      (match, altText, imagePath) => {
+        return `<img src="${API_BASE_URL}/api/knowledge-images/${imagePath}" alt="${altText}" style="max-width: 100%; border-radius: 8px; margin: 12px 0;" />`;
+      }
+    );
+    
+    // Convert bold text
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert line breaks
+    html = html.replace(/\n\n/g, '</p><p>');
+    html = html.replace(/\n/g, '<br/>');
+    
+    // Wrap in paragraph
+    html = `<p>${html}</p>`;
+    
+    return html;
+  };
+
   const askSampleQuestion = (question) => {
     setUserInput(question);
     // Auto-send after a brief delay to show the question was selected
@@ -416,13 +451,26 @@ What would you like to know more about?`;
               styles.messageContent,
               message.role === 'user' ? styles.messageContentUser : styles.messageContentAssistant
             ]}>
-              <Text style={{
-                fontSize: 15,
-                lineHeight: 24,
-                color: message.role === 'user' ? '#FFFFFF' : '#1F2937'
-              }}>
-                {message.content}
-              </Text>
+              <RenderHtml
+                contentWidth={width * 0.8}
+                source={{ html: convertMarkdownToHtml(message.content) }}
+                tagsStyles={{
+                  p: {
+                    fontSize: 15,
+                    lineHeight: 24,
+                    color: message.role === 'user' ? '#FFFFFF' : '#1F2937',
+                    margin: 0,
+                    marginBottom: 8
+                  },
+                  strong: {
+                    fontWeight: '600',
+                    color: message.role === 'user' ? '#FFFFFF' : '#3730A3'
+                  },
+                  img: {
+                    marginVertical: 12
+                  }
+                }}
+              />
               <Text style={[
                 styles.messageTime,
                 message.role === 'user' && styles.messageTimeUser
@@ -483,7 +531,7 @@ What would you like to know more about?`;
             {isLoading ? (
               <ActivityIndicator color="white" size="small" />
             ) : (
-              <Ionicons name="send" size={20} color="white" />
+              <Text style={{ fontSize: 20, color: 'white' }}>➤</Text>
             )}
           </TouchableOpacity>
         </View>

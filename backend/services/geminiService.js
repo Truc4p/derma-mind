@@ -1,7 +1,6 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
-const { convertImagesToHtml, extractImageReferences } = require('../utils/imageProcessor');
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -32,8 +31,7 @@ IMPORTANT RESPONSE RULES:
 1. Use ALL the information provided in the knowledge base sections
 2. Synthesize information from multiple sources when available to provide comprehensive answers
 3. Provide detailed, thorough responses that cover all relevant aspects found in the knowledge base
-4. When you encounter figure references (e.g., ![Figure 15-1](images/figure_15_1.png)), include the EXACT markdown syntax in your response
-5. Format your responses in clear, easy-to-read markdown with headers, lists, and proper formatting
+4. Format your responses in clear, easy-to-read markdown with headers, lists, and proper formatting
 
 Always strive to be comprehensive by utilizing all available knowledge base information.
 If unsure about something not in the knowledge base, recommend consulting an in-person dermatologist for proper diagnosis.`;
@@ -278,15 +276,8 @@ Respond in JSON format.`;
    - Include all details, measurements, times, and specific instructions from each step
 3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
 4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
-5. **CRITICAL FOR IMAGES**: When you see figure references in the knowledge base:
-   - Return ONLY markdown syntax, NEVER HTML tags
-   - Example: Use ![Figure 1-1](images/figure_1_1.png) NOT <img> tags
-   - DO NOT include URLs or HTML attributes in your response
-   - Keep it simple: just the markdown image reference
-   - Example: "Here is the cell structure: ![Figure 1-1](images/figure_1_1.png)"
 
 DO NOT add "SOURCES_USED" at the end of your response. The source information is tracked separately.
-DO NOT include HTML tags or URLs in your response - only use markdown syntax.
 
 `;
             
@@ -307,13 +298,9 @@ DO NOT include HTML tags or URLs in your response - only use markdown syntax.
 
             console.log('🔍 Raw AI response (first 500 chars):', text.substring(0, 500));
 
-            // Extract image references for metadata (from markdown, not HTML)
-            const imageReferences = extractImageReferences(text);
-
             return {
                 response: text, // Return markdown, let frontend handle HTML conversion
-                method: 'rag-vector-search',
-                images: imageReferences
+                method: 'rag-vector-search'
             };
         } catch (error) {
             console.error('Error generating RAG response:', error);

@@ -52,35 +52,68 @@ class VectorService {
     }
 
     /**
-     * Load and process the markdown knowledge base
+     * Load and process all text files from the knowledge base directory
      */
     async loadKnowledgeBase() {
         try {
             const knowledgeBasePath = path.join(
                 __dirname,
-                '../knowledge-sources/extracted-content/skin-care-beyond-the-basics-4th_figures.md'
+                '../knowledge-sources/extracted-content'
             );
             
-            const content = await fs.readFile(knowledgeBasePath, 'utf-8');
+            // Read all files in the directory
+            const files = await fs.readdir(knowledgeBasePath);
             
-            // Split the text into chunks
-            const textSplitter = new RecursiveCharacterTextSplitter({
-                chunkSize: 1500,  // Increased from 1000 to capture more complete sections
-                chunkOverlap: 300, // Increased overlap to ensure continuity
-                separators: ['\n\n', '\n', '. ', ' ', '']
-            });
+            // Filter for .txt files only
+            const txtFiles = files.filter(file => file.endsWith('.txt'));
+            
+            if (txtFiles.length === 0) {
+                throw new Error('No .txt files found in knowledge-sources/extracted-content/');
+            }
+            
+            console.log(`Found ${txtFiles.length} text files:`);
+            txtFiles.forEach(file => console.log(`  - ${file}`));
+            
+            let allDocuments = [];
+            let globalChunkIndex = 0;
+            
+            // Process each text file
+            for (const file of txtFiles) {
+                const filePath = path.join(knowledgeBasePath, file);
+                const content = await fs.readFile(filePath, 'utf-8');
+                
+                console.log(`\nProcessing: ${file}`);
+                console.log(`  Content length: ${content.length} characters`);
+                
+                // Split the text into chunks
+                const textSplitter = new RecursiveCharacterTextSplitter({
+                    chunkSize: 1500,  // Increased from 1000 to capture more complete sections
+                    chunkOverlap: 300, // Increased overlap to ensure continuity
+                    separators: ['\n\n', '\n', '. ', ' ', '']
+                });
 
-            const chunks = await textSplitter.splitText(content);
+                const chunks = await textSplitter.splitText(content);
+                console.log(`  Created ${chunks.length} chunks`);
+                
+                // Map chunks to documents with metadata
+                const documents = chunks.map((chunk, index) => ({
+                    pageContent: chunk,
+                    metadata: {
+                        source: file.replace('.txt', ''),
+                        fileName: file,
+                        chunkIndex: globalChunkIndex + index,
+                        fileChunkIndex: index,
+                        totalChunksInFile: chunks.length
+                    }
+                }));
+                
+                allDocuments = allDocuments.concat(documents);
+                globalChunkIndex += chunks.length;
+            }
             
-            console.log(`Split knowledge base into ${chunks.length} chunks`);
+            console.log(`\n✅ Total documents created: ${allDocuments.length} from ${txtFiles.length} files`);
             
-            return chunks.map((chunk, index) => ({
-                pageContent: chunk,
-                metadata: {
-                    source: 'skin-care-beyond-the-basics-4th',
-                    chunkIndex: index
-                }
-            }));
+            return allDocuments;
         } catch (error) {
             console.error('Error loading knowledge base:', error);
             throw error;
@@ -94,34 +127,90 @@ class VectorService {
         try {
             console.log(`Indexing ${documents.length} documents...`);
             
-            const batchSize = 100;
+            const batchSize = 50; // Reduced from 100 to prevent timeouts
+            const totalBatches = Math.ceil(documents.length / batchSize);
+            let successfulBatches = 0;
+            let failedBatches = 0;
+            const failedBatchNumbers = [];
+            
             for (let i = 0; i < documents.length; i += batchSize) {
                 const batch = documents.slice(i, i + batchSize);
+                const batchNum = Math.floor(i / batchSize) + 1;
                 
-                // Generate embeddings for batch
-                const texts = batch.map(doc => doc.pageContent);
-                const embeddings = await this.embeddings.embedDocuments(texts);
+                let retries = 3;
+                let success = false;
                 
-                // Prepare points for Qdrant
-                const points = batch.map((doc, index) => ({
-                    id: i + index,
-                    vector: embeddings[index],
-                    payload: {
-                        text: doc.pageContent,
-                        metadata: doc.metadata
+                while (retries > 0 && !success) {
+                    try {
+                        // Generate embeddings for batch
+                        const texts = batch.map(doc => doc.pageContent);
+                        const embeddings = await this.embeddings.embedDocuments(texts);
+                        
+                        // Validate embeddings before uploading
+                        const validEmbeddings = embeddings.every(emb => 
+                            Array.isArray(emb) && emb.length === 768 && emb.some(v => v !== 0)
+                        );
+                        
+                        if (!validEmbeddings) {
+                            throw new Error('Invalid embeddings: empty or wrong dimension');
+                        }
+                        
+                        // Prepare points for Qdrant
+                        const points = batch.map((doc, index) => ({
+                            id: i + index,
+                            vector: embeddings[index],
+                            payload: {
+                                text: doc.pageContent,
+                                metadata: doc.metadata
+                            }
+                        }));
+                        
+                        // Upload to Qdrant
+                        await this.qdrantClient.upsert(this.collectionName, {
+                            wait: true,
+                            points: points
+                        });
+                        
+                        console.log(`Indexed batch ${batchNum}/${totalBatches} (${i + batch.length}/${documents.length} docs)`);
+                        success = true;
+                        successfulBatches++;
+                        
+                        // Small delay between batches to prevent overwhelming Qdrant
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        
+                    } catch (error) {
+                        retries--;
+                        if (retries > 0) {
+                            console.log(`   ⚠️  Batch ${batchNum} failed, retrying... (${retries} attempts left)`);
+                            await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s before retry
+                        } else {
+                            console.log(`   ❌ Batch ${batchNum} failed after 3 attempts - SKIPPING and continuing...`);
+                            console.log(`      Error: ${error.message}`);
+                            failedBatches++;
+                            failedBatchNumbers.push(batchNum);
+                            success = true; // Mark as "success" to continue to next batch
+                        }
                     }
-                }));
-                
-                // Upload to Qdrant
-                await this.qdrantClient.upsert(this.collectionName, {
-                    wait: true,
-                    points: points
-                });
-                
-                console.log(`Indexed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(documents.length / batchSize)}`);
+                }
             }
             
-            console.log('Indexing completed successfully');
+            console.log('\n' + '='.repeat(60));
+            console.log('Indexing Summary:');
+            console.log('='.repeat(60));
+            console.log(`✅ Successful batches: ${successfulBatches}/${totalBatches}`);
+            console.log(`❌ Failed batches: ${failedBatches}/${totalBatches}`);
+            if (failedBatches > 0) {
+                console.log(`   Failed batch numbers: ${failedBatchNumbers.join(', ')}`);
+                console.log(`   Documents skipped: ~${failedBatches * batchSize}`);
+            }
+            console.log(`📊 Total documents indexed: ~${successfulBatches * batchSize}/${documents.length}`);
+            console.log('='.repeat(60));
+            
+            if (failedBatches === totalBatches) {
+                throw new Error('All batches failed - check Gemini API key and rate limits');
+            }
+            
+            console.log('\n✅ Indexing completed with some batches skipped');
         } catch (error) {
             console.error('Error indexing documents:', error);
             throw error;
@@ -184,13 +273,6 @@ class VectorService {
     }
 
     /**
-     * Helper: Detect if chunk contains figures
-     */
-    hasFigures(text) {
-        return /!\[Figure|\(images\/figure_/i.test(text);
-    }
-
-    /**
      * Complete RAG pipeline: search + generate response with detailed scoring
      */
     async ragQuery(userQuery, conversationHistory = [], debugMode = false) {
@@ -224,8 +306,6 @@ class VectorService {
                 const chunkId = doc.metadata.chunkIndex;
                 const score = doc.score;
                 const category = this.scoreCategory(score);
-                const hasFigs = this.hasFigures(doc.content);
-                const figLabel = hasFigs ? '📸 HAS FIGURES' : '   ';
                 const preview = doc.content
                     .substring(0, 120)
                     .replace(/\n/g, ' ')
@@ -233,7 +313,7 @@ class VectorService {
                     .trim();
                 
                 console.log(`   ${idx + 1}. Chunk #${chunkId}`);
-                console.log(`      Score: ${score.toFixed(4)} (${(score * 100).toFixed(1)}%) ${category} ${figLabel}`);
+                console.log(`      Score: ${score.toFixed(4)} (${(score * 100).toFixed(1)}%) ${category}`);
                 console.log(`      Text: "${preview}..."`);
                 console.log(`      Length: ${doc.content.length} chars`);
                 console.log('');
@@ -259,14 +339,9 @@ class VectorService {
                     content.toLowerCase().includes(w) && w.length > 3
                 );
                 
-                const figureMatch = /Figure \d+/i.test(userQuery) && /Figure \d+/.test(content);
-                
                 console.log(`   Chunk ${idx + 1} (${score.toFixed(4)}):`);
                 if (matchedWords.length > 0) {
                     console.log(`      ✓ Matching keywords: ${matchedWords.slice(0, 3).join(', ')}`);
-                }
-                if (figureMatch) {
-                    console.log(`      ✓ Figure reference match detected`);
                 }
                 if (score < 0.50) {
                     console.log(`      ⚠ Lower score: may be tangentially related or semantic drift`);
@@ -333,6 +408,50 @@ class VectorService {
         } catch (error) {
             console.error('Error getting stats:', error);
             return null;
+        }
+    }
+
+    /**
+     * Delete the collection (reset the vector database)
+     */
+    async deleteCollection() {
+        try {
+            const collections = await this.qdrantClient.getCollections();
+            const exists = collections.collections.some(
+                col => col.name === this.collectionName
+            );
+
+            if (exists) {
+                await this.qdrantClient.deleteCollection(this.collectionName);
+                console.log(`✅ Collection '${this.collectionName}' deleted successfully`);
+                return true;
+            } else {
+                console.log(`ℹ️  Collection '${this.collectionName}' does not exist`);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error deleting collection:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Reset and rebuild the entire vector database
+     */
+    async reset() {
+        try {
+            console.log('🔄 Resetting vector database...\n');
+            
+            // 1. Delete existing collection
+            await this.deleteCollection();
+            
+            // 2. Run setup again
+            await this.setup();
+            
+            console.log('\n✅ Vector database reset completed!');
+        } catch (error) {
+            console.error('Error during reset:', error);
+            throw error;
         }
     }
 }
