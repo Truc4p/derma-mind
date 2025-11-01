@@ -290,22 +290,21 @@ CITATION REQUIREMENT (Numbered Reference Style):
 6. Cite sources consistently throughout your entire response - don't let citations drop off in later sections
 7. When paraphrasing or directly referencing specific information, always include the source citation
 8. At the END of your response, add a "### References" section with UNIQUE book titles (NO DUPLICATES):
-   - Extract the book title from the [Source X - "Book Title"] headers in the knowledge base above
-   - IMPORTANT: If multiple source numbers refer to the SAME book, list that book only ONCE
-   - Combine all source numbers for the same book together, e.g., [1,5,8]
-   - Format: "[numbers] Book/Textbook Title"
-   - Clean up book titles to be readable (remove dashes, use proper capitalization)
-   - Do NOT include the detailed research paper citations that appear in the text content
-   - Do NOT copy-paste long text from the chunks
-   - Only list each unique source book/textbook name once in a clean, concise format
+   - Look CAREFULLY at each [Source X - "Book Title"] header in the knowledge base above
+   - Extract the EXACT book title from the quotes after the dash in each header
+   - CRITICAL: Group sources ONLY if they have the EXACT SAME book title string
+   - Example: [Source 1 - "Book A"] and [Source 5 - "Book A"] → same book
+   - Example: [Source 2 - "Book A"] and [Source 3 - "Book B"] → DIFFERENT books, do NOT group
+   - Be precise - even slight differences in titles mean they are different books
+   - Combine source numbers only when the book titles match character-by-character
+   - Format: "[numbers] Book Title" (copy the exact title from the source headers)
    - List them in order of first appearance
    - Example format:
      ### References
-     [1,3,7] Cosmetic Dermatology: Principles and Practice
-     [2,5,8] Skin Care: Beyond the Basics, 4th Edition
-     [4] Cosmeceuticals and Cosmetic Ingredients
-     [6] Cosmetics and Dermatological Problems and Solutions
-
+     [1,5,8] Skin Care: Beyond the Basics, 4th Edition
+     [2,6] Lasers in Dermatology and Medicine: Dermatologic Applications by Keyvan Nouri
+     [3] Textbook of Cosmetic Dermatology
+     [4,7] Cosmetic Dermatology: Principles and Practice
 `;
             
             // Add conversation history
