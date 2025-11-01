@@ -1,16 +1,18 @@
 import { StyleSheet, Platform } from 'react-native';
 
-// Color palette matching the Vue frontend
+// Color palette matching the Vue frontend - Pink/Rose theme
 const colors = {
-  primary50: '#EEF2FF',
-  primary100: '#E0E7FF',
-  primary200: '#C7D2FE',
-  primary300: '#A5B4FC',
-  primary400: '#818CF8',
-  primary500: '#6366F1',
-  primary600: '#4F46E5',
-  primary700: '#4338CA',
-  primary800: '#3730A3',
+  primary50: '#FDFBF7',
+  primary100: '#FDF6F0',
+  primary200: '#F8EAE1',
+  primary300: '#F0D7CC',
+  primary400: '#E4BCC0',
+  primary500: '#C97F98',
+  primary600: '#A44A6B',
+  primary700: '#8C3154',
+  primary800: '#7F2548',
+  primary900: '#671C39',
+  primary950: '#3E0E21',
   white: '#FFFFFF',
   gray100: '#F3F4F6',
   gray400: '#9CA3AF',
@@ -65,23 +67,7 @@ export const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '700',
     color: colors.primary800,
-    marginBottom: 8
-  },
-  welcomeSubtitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.primary600,
-    marginBottom: 8
-  },
-  welcomeDescription: {
-    fontSize: 14,
-    color: colors.primary500
-  },
-  welcomeGreeting: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: colors.primary800,
-    marginBottom: 12
+    margin: 0
   },
   welcomeText: {
     fontSize: 15,
@@ -105,10 +91,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary50,
     borderRadius: 8,
     marginBottom: 12
-  },
-  capabilityIcon: {
-    fontSize: 24,
-    marginRight: 8
   },
   capabilityText: {
     fontSize: 14,

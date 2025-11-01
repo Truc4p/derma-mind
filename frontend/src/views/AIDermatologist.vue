@@ -41,9 +41,7 @@
                 <div class="welcome-card">
                     <div class="welcome-header">
                         <h1>AI Dermatologist</h1>
-                        <p class="description">Ask me anything about skincare, cosmetics, and facial improvements</p>
                     </div>
-                    <h2>Welcome to Your AI Dermatologist</h2>
                     <p>I'm here to help you with all your skincare concerns. I can assist with:</p>
                     <div class="capabilities-grid">
                         <div class="capability-item">
@@ -459,7 +457,7 @@ What would you like to know more about?`
         },
 
         formatMessage(content) {
-            // Use marked to parse markdown properly
+            // Use marked to parse markdown
             try {
                 // Configure marked to support HTML
                 marked.setOptions({
@@ -470,18 +468,8 @@ What would you like to know more about?`
                     sanitize: false
                 })
                 
-                // First, convert markdown image references to full URLs
-                // The vite proxy already handles /api routes, so we can use relative paths
-                const convertedContent = content.replace(
-                    /!\[([^\]]*)\]\(images\/([^)]+)\)/g,
-                    (match, altText, imagePath) => {
-                        // Use relative path since vite proxy handles /api routes
-                        return `![${altText}](/api/knowledge-images/${imagePath})`
-                    }
-                )
-                
-                // Then let marked parse the markdown to HTML
-                return marked.parse(convertedContent)
+                // Parse the markdown to HTML (no image processing needed)
+                return marked.parse(content)
             } catch (error) {
                 console.error('Error parsing markdown:', error)
                 // Fallback to simple formatting
@@ -1012,24 +1000,6 @@ What would you like to know more about?`
     margin: 1rem 0 0.5rem 0;
     font-weight: 600;
     color: var(--primary-800);
-}
-
-/* Image styling for knowledge base figures */
-.message-text :deep(img.knowledge-figure) {
-    max-width: 100%;
-    height: auto;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--primary-200);
-    display: block;
-}
-
-.message-text :deep(img) {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 1rem 0;
 }
 
 .message.user .message-text :deep(h1),

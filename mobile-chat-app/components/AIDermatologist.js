@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   Alert,
   Keyboard,
-  Image,
   useWindowDimensions
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
@@ -37,6 +36,110 @@ const AIDermatologist = () => {
     "Can you recommend products for acne-prone skin?",
     "How often should I exfoliate?"
   ];
+
+  // Memoized tag styles for RenderHtml to prevent unnecessary re-renders
+  const userTagsStyles = useMemo(() => ({
+    p: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#FFFFFF',
+      margin: 0,
+      marginBottom: 8
+    },
+    strong: {
+      fontWeight: '600',
+      color: '#FFFFFF'
+    },
+    h1: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: '#FFFFFF',
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h2: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: '#FFFFFF',
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h3: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#FFFFFF',
+      marginTop: 10,
+      marginBottom: 6
+    },
+    ul: {
+      marginTop: 8,
+      marginBottom: 8,
+      paddingLeft: 20
+    },
+    ol: {
+      marginTop: 8,
+      marginBottom: 8,
+      paddingLeft: 20
+    },
+    li: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#FFFFFF',
+      marginBottom: 4
+    }
+  }), []);
+
+  const assistantTagsStyles = useMemo(() => ({
+    p: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#1F2937',
+      margin: 0,
+      marginBottom: 8
+    },
+    strong: {
+      fontWeight: '600',
+      color: '#7F2548' // primary800 - matching web frontend
+    },
+    h1: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: '#7F2548',
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h2: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: '#7F2548',
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h3: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#7F2548',
+      marginTop: 10,
+      marginBottom: 6
+    },
+    ul: {
+      marginTop: 8,
+      marginBottom: 8,
+      lineHeight: 24,
+      paddingLeft: 20
+    },
+    ol: {
+      marginTop: 8,
+      marginBottom: 8,
+      paddingLeft: 20
+    },
+    li: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#1F2937',
+      marginBottom: 4
+    }
+  }), []);
 
   // Load chat history on mount
   useEffect(() => {
@@ -295,30 +398,46 @@ This will help me give you better tailored advice. You can also ask me about:
 What would you like to know more about?`;
   };
 
-  // Convert markdown to HTML with image support
+  // Convert markdown to HTML
   const convertMarkdownToHtml = (markdown) => {
     if (!markdown) return '';
-    
+
     let html = markdown;
-    
-    // Convert markdown images to HTML img tags with full API URLs
-    html = html.replace(
-      /!\[([^\]]*)\]\(images\/([^)]+)\)/g,
-      (match, altText, imagePath) => {
-        return `<img src="${API_BASE_URL}/api/knowledge-images/${imagePath}" alt="${altText}" style="max-width: 100%; border-radius: 8px; margin: 12px 0;" />`;
-      }
-    );
-    
-    // Convert bold text
+
+    // Convert headers (must be done before other conversions)
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+    // Convert bold text (before lists to handle bold in list items)
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    
-    // Convert line breaks
+
+    // Convert unordered lists (both * and - formats)
+    html = html.replace(/(?:^[\*\-] .+$\n?)+/gm, (match) => {
+      const items = match
+        .trim()
+        .split('\n')
+        .filter(line => line.trim())
+        .map(line => {
+          const content = line.replace(/^[\*\-] (.+)$/, '$1').trim();
+          return `<li>${content}</li>`;
+        })
+        .join('');
+      return `<ul>${items}</ul>`;
+    });
+
+    // Convert numbered lists
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+    // Convert line breaks (preserve intentional breaks)
     html = html.replace(/\n\n/g, '</p><p>');
     html = html.replace(/\n/g, '<br/>');
-    
-    // Wrap in paragraph
-    html = `<p>${html}</p>`;
-    
+
+    // Wrap in paragraph (but don't wrap if already has block elements)
+    if (!html.match(/<h[1-6]>|<ul>|<ol>/)) {
+      html = `<p>${html}</p>`;
+    }
+
     return html;
   };
 
@@ -395,27 +514,22 @@ What would you like to know more about?`;
             <View style={styles.welcomeCard}>
               <View style={styles.welcomeHeader}>
                 <Text style={styles.welcomeTitle}>AI Dermatologist</Text>
-                <Text style={styles.welcomeDescription}>
-                  Ask me anything about skincare, cosmetics, and facial improvements
-                </Text>
               </View>
 
-              <Text style={styles.welcomeGreeting}>Welcome to Your AI Dermatologist</Text>
               <Text style={styles.welcomeText}>
                 I'm here to help you with all your skincare concerns. I can assist with:
               </Text>
 
               <View style={styles.capabilitiesGrid}>
                 {[
-                  { icon: '💆', text: 'Skincare routines' },
-                  { icon: '💄', text: 'Cosmetic advice' },
-                  { icon: '🧴', text: 'Product recommendations' },
-                  { icon: '✨', text: 'Face improvement tips' },
-                  { icon: '🔬', text: 'Ingredient analysis' },
-                  { icon: '🌟', text: 'Skin concerns' }
+                  { text: 'Skincare routines' },
+                  { text: 'Cosmetic advice' },
+                  { text: 'Product recommendations' },
+                  { text: 'Face improvement tips' },
+                  { text: 'Ingredient analysis' },
+                  { text: 'Skin concerns' }
                 ].map((item, index) => (
                   <View key={index} style={styles.capabilityItem}>
-                    <Text style={styles.capabilityIcon}>{item.icon}</Text>
                     <Text style={styles.capabilityText}>{item.text}</Text>
                   </View>
                 ))}
@@ -453,22 +567,7 @@ What would you like to know more about?`;
               <RenderHtml
                 contentWidth={width * 0.8}
                 source={{ html: convertMarkdownToHtml(message.content) }}
-                tagsStyles={{
-                  p: {
-                    fontSize: 15,
-                    lineHeight: 24,
-                    color: message.role === 'user' ? '#FFFFFF' : '#1F2937',
-                    margin: 0,
-                    marginBottom: 8
-                  },
-                  strong: {
-                    fontWeight: '600',
-                    color: message.role === 'user' ? '#FFFFFF' : '#3730A3'
-                  },
-                  img: {
-                    marginVertical: 12
-                  }
-                }}
+                tagsStyles={message.role === 'user' ? userTagsStyles : assistantTagsStyles}
               />
               <Text style={[
                 styles.messageTime,
