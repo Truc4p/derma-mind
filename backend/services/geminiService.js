@@ -296,7 +296,7 @@ DO NOT add "SOURCES_USED" at the end of your response. The source information is
             const response = await result.response;
             let text = response.text();
 
-            console.log('🔍 Raw AI response (first 500 chars):', text.substring(0, 500));
+            console.log('🔍 Raw AI response (first 4000 chars):', text.substring(0, 4000));
 
             return {
                 response: text, // Return markdown, let frontend handle HTML conversion

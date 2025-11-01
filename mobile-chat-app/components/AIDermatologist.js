@@ -71,6 +71,13 @@ const AIDermatologist = () => {
       marginTop: 10,
       marginBottom: 6
     },
+    h4: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: '#FFFFFF',
+      marginTop: 8,
+      marginBottom: 4
+    },
     ul: {
       marginTop: 8,
       marginBottom: 8,
@@ -82,6 +89,28 @@ const AIDermatologist = () => {
       paddingLeft: 20
     },
     li: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#FFFFFF',
+      marginBottom: 4
+    },
+    'ul ul': {
+      marginTop: 4,
+      marginBottom: 4,
+      paddingLeft: 20
+    },
+    'ul ul li': {
+      fontSize: 15,
+      lineHeight: 24,
+      color: '#FFFFFF',
+      marginBottom: 4
+    },
+    'ul ul ul': {
+      marginTop: 4,
+      marginBottom: 4,
+      paddingLeft: 20
+    },
+    'ul ul ul li': {
       fontSize: 15,
       lineHeight: 24,
       color: '#FFFFFF',
@@ -127,6 +156,13 @@ const AIDermatologist = () => {
       marginTop: 10,
       marginBottom: 6
     },
+    h4: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.primary800,
+      marginTop: 8,
+      marginBottom: 4
+    },
     ul: {
       marginTop: 8,
       marginBottom: 8,
@@ -139,6 +175,28 @@ const AIDermatologist = () => {
       paddingLeft: 20
     },
     li: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.gray800,
+      marginBottom: 4
+    },
+    'ul ul': {
+      marginTop: 4,
+      marginBottom: 4,
+      paddingLeft: 20
+    },
+    'ul ul li': {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.gray800,
+      marginBottom: 4
+    },
+    'ul ul ul': {
+      marginTop: 4,
+      marginBottom: 4,
+      paddingLeft: 20
+    },
+    'ul ul ul li': {
       fontSize: 15,
       lineHeight: 24,
       color: colors.gray800,
@@ -383,7 +441,7 @@ What's your skin type? I can give you more specific recommendations!`;
     }
 
     // Generic response
-    console.log('ℹ️ No specific pattern matched, using generic response');
+    console.log('No specific pattern matched, using generic response');
     return `Thank you for your question! As a virtual dermatologist, I'm here to help with skincare, cosmetic, and facial improvement advice.
 
 To provide you with the most accurate and personalized recommendation, could you tell me more about:
@@ -410,6 +468,7 @@ What would you like to know more about?`;
     let html = markdown;
 
     // Convert headers (must be done before other conversions)
+    html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
     html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
     html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
     html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
@@ -417,18 +476,73 @@ What would you like to know more about?`;
     // Convert bold text (before lists to handle bold in list items)
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 
-    // Convert unordered lists (support *, -, and • bullet points)
-    html = html.replace(/(?:^[\*\-•] .+$\n?)+/gm, (match) => {
-      const items = match
-        .trim()
-        .split('\n')
-        .filter(line => line.trim())
-        .map(line => {
-          const content = line.replace(/^[\*\-•] (.+)$/, '$1').trim();
-          return `<li>${content}</li>`;
-        })
-        .join('');
-      return `<ul>${items}</ul>`;
+    // Convert unordered lists with nested support (support *, -, and • bullet points)
+    // Support up to 3 levels: parent (0 spaces), child (2-4 spaces), grandchild (4-8 spaces)
+    html = html.replace(/(?:^[\*\-•] .+$\n?(?:^ {2,8}[\*\-•] .+$\n?)*)+/gm, (match) => {
+      const lines = match.trim().split('\n').filter(line => line.trim());
+      let result = '<ul>';
+      let nestedLevel = 0; // Track nesting level
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const level1Match = line.match(/^ {2,4}[\*\-•] /);
+        const level2Match = line.match(/^ {5,8}[\*\-•] /);
+        
+        let currentLevel = 0;
+        let content = '';
+        
+        if (level2Match) {
+          // Grandchild (level 2)
+          currentLevel = 2;
+          content = line.replace(/^ {5,8}[\*\-•] (.+)$/, '$1').trim();
+        } else if (level1Match) {
+          // Child (level 1)
+          currentLevel = 1;
+          content = line.replace(/^ {2,4}[\*\-•] (.+)$/, '$1').trim();
+        } else {
+          // Parent (level 0)
+          currentLevel = 0;
+          content = line.replace(/^[\*\-•] (.+)$/, '$1').trim();
+        }
+        
+        // Open nested lists if going deeper
+        while (nestedLevel < currentLevel) {
+          result += '<ul>';
+          nestedLevel++;
+        }
+        
+        // Close nested lists if going shallower
+        while (nestedLevel > currentLevel) {
+          result += '</ul></li>';
+          nestedLevel--;
+        }
+        
+        // Add the list item
+        result += `<li>${content}`;
+        
+        // Check if next line is at a deeper level
+        const nextLine = i < lines.length - 1 ? lines[i + 1] : null;
+        if (nextLine) {
+          const nextLevel1 = nextLine.match(/^ {2,4}[\*\-•] /);
+          const nextLevel2 = nextLine.match(/^ {5,8}[\*\-•] /);
+          const nextLevel = nextLevel2 ? 2 : (nextLevel1 ? 1 : 0);
+          
+          if (nextLevel <= currentLevel) {
+            result += '</li>';
+          }
+        } else {
+          result += '</li>';
+        }
+      }
+      
+      // Close all remaining nested lists
+      while (nestedLevel > 0) {
+        result += '</ul></li>';
+        nestedLevel--;
+      }
+      
+      result += '</ul>';
+      return result;
     });
 
     // Convert numbered lists
