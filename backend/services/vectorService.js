@@ -353,8 +353,11 @@ class VectorService {
             
             // 2. Build context from retrieved documents
             const context = relevantDocs
-                .map((doc, idx) => `[Source ${idx + 1} - Chunk ${doc.metadata.chunkIndex}]: ${doc.content}`)
-                .join('\n\n');
+                .map((doc, idx) => {
+                    const bookTitle = doc.metadata.source || doc.metadata.fileName?.replace('.txt', '') || 'Unknown Source';
+                    return `[Source ${idx + 1} - "${bookTitle}"]\n${doc.content}`;
+                })
+                .join('\n\n---\n\n');
             
             // 3. Return context and sources for use with Gemini
             return {

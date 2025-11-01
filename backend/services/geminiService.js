@@ -277,7 +277,34 @@ Respond in JSON format.`;
 3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
 4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
 
-DO NOT add "SOURCES_USED" at the end of your response. The source information is tracked separately.
+CITATION REQUIREMENT (Numbered Reference Style):
+5. ALWAYS cite your sources inline using bracketed numbers when making statements based on the knowledge base
+   - Use bracketed superscript format: [1], [2], [3], etc. to reference the source chunks
+   - Place citation numbers at the end of sentences or clauses where you use information from that source
+   - For multiple sources, list them together: [1,3] or [1-3] for consecutive numbers
+   - Place citations after the final punctuation mark
+   - Examples:
+     * "The successful treatment of acne scars often requires a combination of treatments.[1,3]"
+     * "CO2 laser resurfacing is a great technique but may not adequately treat deeper scars.[1]"
+     * "A serial, multimodal approach is essential.[1] Three sessions of combined therapy are recommended.[1]"
+6. Cite sources consistently throughout your entire response - don't let citations drop off in later sections
+7. When paraphrasing or directly referencing specific information, always include the source citation
+8. At the END of your response, add a "### References" section with UNIQUE book titles (NO DUPLICATES):
+   - Extract the book title from the [Source X - "Book Title"] headers in the knowledge base above
+   - IMPORTANT: If multiple source numbers refer to the SAME book, list that book only ONCE
+   - Combine all source numbers for the same book together, e.g., [1,5,8]
+   - Format: "[numbers] Book/Textbook Title"
+   - Clean up book titles to be readable (remove dashes, use proper capitalization)
+   - Do NOT include the detailed research paper citations that appear in the text content
+   - Do NOT copy-paste long text from the chunks
+   - Only list each unique source book/textbook name once in a clean, concise format
+   - List them in order of first appearance
+   - Example format:
+     ### References
+     [1,3,7] Cosmetic Dermatology: Principles and Practice
+     [2,5,8] Skin Care: Beyond the Basics, 4th Edition
+     [4] Cosmeceuticals and Cosmetic Ingredients
+     [6] Cosmetics and Dermatological Problems and Solutions
 
 `;
             
