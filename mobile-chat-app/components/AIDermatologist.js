@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { aiDermatologistService, chatStorage } from '../services/api';
-import { styles } from './AIDermatologist.styles';
+import { styles, colors } from './AIDermatologist.styles';
 
 // API base URL - update this based on your setup
 // For iOS Simulator: http://localhost:3004
@@ -90,35 +90,40 @@ const AIDermatologist = () => {
   }), []);
 
   const assistantTagsStyles = useMemo(() => ({
+    body: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.gray800
+    },
     p: {
       fontSize: 15,
       lineHeight: 24,
-      color: '#1F2937',
+      color: colors.gray800,
       margin: 0,
       marginBottom: 8
     },
     strong: {
       fontWeight: '600',
-      color: '#7F2548' // primary800 - matching web frontend
+      color: colors.primary800
     },
     h1: {
       fontSize: 20,
       fontWeight: '600',
-      color: '#7F2548',
+      color: colors.primary800,
       marginTop: 12,
       marginBottom: 8
     },
     h2: {
       fontSize: 18,
       fontWeight: '600',
-      color: '#7F2548',
+      color: colors.primary800,
       marginTop: 12,
       marginBottom: 8
     },
     h3: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#7F2548',
+      color: colors.primary800,
       marginTop: 10,
       marginBottom: 6
     },
@@ -136,7 +141,7 @@ const AIDermatologist = () => {
     li: {
       fontSize: 15,
       lineHeight: 24,
-      color: '#1F2937',
+      color: colors.gray800,
       marginBottom: 4
     }
   }), []);
@@ -412,14 +417,14 @@ What would you like to know more about?`;
     // Convert bold text (before lists to handle bold in list items)
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 
-    // Convert unordered lists (both * and - formats)
-    html = html.replace(/(?:^[\*\-] .+$\n?)+/gm, (match) => {
+    // Convert unordered lists (support *, -, and • bullet points)
+    html = html.replace(/(?:^[\*\-•] .+$\n?)+/gm, (match) => {
       const items = match
         .trim()
         .split('\n')
         .filter(line => line.trim())
         .map(line => {
-          const content = line.replace(/^[\*\-] (.+)$/, '$1').trim();
+          const content = line.replace(/^[\*\-•] (.+)$/, '$1').trim();
           return `<li>${content}</li>`;
         })
         .join('');
@@ -429,14 +434,20 @@ What would you like to know more about?`;
     // Convert numbered lists
     html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
 
-    // Convert line breaks (preserve intentional breaks)
-    html = html.replace(/\n\n/g, '</p><p>');
-    html = html.replace(/\n/g, '<br/>');
-
-    // Wrap in paragraph (but don't wrap if already has block elements)
-    if (!html.match(/<h[1-6]>|<ul>|<ol>/)) {
-      html = `<p>${html}</p>`;
-    }
+    // Split by double line breaks to identify paragraphs
+    const blocks = html.split(/\n\n+/);
+    html = blocks.map(block => {
+      block = block.trim();
+      if (!block) return '';
+      
+      // Don't wrap if it's already a block element
+      if (block.match(/^<(h[1-6]|ul|ol|li)/)) {
+        return block;
+      }
+      
+      // Wrap in paragraph and convert single line breaks to <br/>
+      return `<p>${block.replace(/\n/g, '<br/>')}</p>`;
+    }).join('');
 
     return html;
   };
@@ -568,6 +579,7 @@ What would you like to know more about?`;
                 contentWidth={width * 0.8}
                 source={{ html: convertMarkdownToHtml(message.content) }}
                 tagsStyles={message.role === 'user' ? userTagsStyles : assistantTagsStyles}
+                baseStyle={message.role === 'user' ? { color: '#FFFFFF' } : { color: colors.gray800 }}
               />
               <Text style={[
                 styles.messageTime,

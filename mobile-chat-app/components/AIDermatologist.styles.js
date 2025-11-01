@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 // Color palette matching the Vue frontend - Pink/Rose theme
-const colors = {
+export const colors = {
   primary50: '#FDFBF7',
   primary100: '#FDF6F0',
   primary200: '#F8EAE1',
@@ -17,7 +17,7 @@ const colors = {
   gray100: '#F3F4F6',
   gray400: '#9CA3AF',
   gray700: '#374151',
-  gray800: '#1F2937',
+  gray800: '#1e293b',
   red500: '#EF4444',
   red50: '#FEF2F2'
 };
@@ -304,7 +304,7 @@ export const markdownStyles = {
       marginBottom: 12
     },
     ordered_list: {
-      marginBottom: 12
+      marginBottom: 12,
     },
     list_item: {
       marginBottom: 4,
