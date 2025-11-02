@@ -9,16 +9,4 @@ const aiDermatologistController = require('../controllers/aiDermatologistControl
  */
 router.post('/chat', aiDermatologistController.chat);
 
-/**
- * POST /api/ai-dermatologist/analyze
- * Analyze a skin concern or query
- */
-router.post('/analyze', auth, aiDermatologistController.analyzeQuery);
-
-/**
- * POST /api/ai-dermatologist/routine
- * Generate a personalized skincare routine
- */
-router.post('/routine', auth, aiDermatologistController.generateRoutine);
-
 module.exports = router;
