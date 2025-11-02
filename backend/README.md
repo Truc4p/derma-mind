@@ -418,6 +418,57 @@ RATE_LIMIT_MAX_REQUESTS=100
 - `npm run lint` - Run ESLint
 - `npm run test` - Run tests (when implemented)
 
+## 🔍 Vector Database Setup (Qdrant)
+
+The application uses **Qdrant** vector database for RAG (Retrieval-Augmented Generation) to power the AI Dermatologist feature with semantic search over dermatology textbooks.
+
+### Prerequisites
+- **Qdrant** installed and running (via Docker recommended)
+- **Gemini API Key** for embeddings
+
+### Setup Vector Database
+
+```bash
+# 1. Start Qdrant using Docker Compose
+cd backend
+docker-compose -f docker-compose.qdrant.yml up -d
+
+# 2. Setup the vector database (initial setup)
+node scripts/vectorDB/setupVectorDB.js
+
+# 3. Verify the setup
+# Check that backend/qdrant_storage/ directory is created (203MB)
+```
+
+### Vector Database Scripts
+
+Located in `scripts/vectorDB/`:
+- **setupVectorDB.js** - Initial setup, creates collection and indexes documents
+- **continueVectorDB.js** - Resume interrupted indexing process
+- **resetVectorDB.js** - Delete and recreate the collection
+- **deleteVectorDB.js** - Remove the entire vector database
+- **retryFailedBatches.js** - Retry failed document batches
+
+### Important Notes
+
+⚠️ **The `backend/qdrant_storage/` directory is NOT tracked in Git** (203MB of binary data)
+- Vector database files are generated locally
+- Each environment (dev/production) must run the setup scripts
+- The directory is automatically created when running `setupVectorDB.js`
+
+### RAG Architecture
+
+The AI Dermatologist uses RAG to provide evidence-based responses:
+1. **User Query** → Converted to embedding using Gemini
+2. **Vector Search** → Finds relevant dermatology knowledge in Qdrant
+3. **Context Retrieval** → Top matching chunks retrieved
+4. **AI Response** → Gemini generates answer with citations
+
+For detailed RAG documentation, see:
+- `md-files/RAG_ARCHITECTURE.md`
+- `md-files/RAG_SETUP_GUIDE.md`
+- `md-files/QUICK_START_RAG.md`
+
 ## 🔒 Security Features
 
 ### Authentication & Authorization
