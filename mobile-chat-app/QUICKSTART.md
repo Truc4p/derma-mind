@@ -93,11 +93,7 @@ mobile-app/
 
 ## 🎨 Styling
 
-The app uses the same color palette as the web app:
-
-- **Primary**: #6366F1 (Indigo)
-- **Background**: #EEF2FF (Light Indigo)
-- **Accent**: #4F46E5 (Dark Indigo)
+The app uses the same color palette as the web app
 
 All styles are in `components/AIDermatologist.styles.js` for easy customization.
 
