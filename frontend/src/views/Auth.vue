@@ -160,29 +160,6 @@
                         {{ successMessage }}
                     </div>
                 </form>
-
-                <!-- Features Section -->
-                <div class="features-section">
-                    <p class="features-title">What you'll get:</p>
-                    <div class="features-list">
-                        <div class="feature-item">
-                            <span class="feature-icon">🤖</span>
-                            <span>AI Dermatologist Chat</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📊</span>
-                            <span>Skin Analysis Tools</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">💼</span>
-                            <span>Personalized Routines</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📚</span>
-                            <span>Educational Resources</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -354,9 +331,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(243, 176, 250, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(230, 120, 249, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(252, 248, 252, 0.1) 0%, transparent 50%),
+        var(--gradient-hero);
     padding: 2rem 1rem;
 }
+
 
 .auth-container {
     width: 100%;
@@ -366,13 +348,11 @@ export default {
 .auth-card {
     background: white;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
 /* Header */
 .auth-header {
-    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
     color: white;
     text-align: center;
     padding: 2rem;
@@ -393,7 +373,7 @@ export default {
 /* Tabs */
 .auth-tabs {
     display: flex;
-    background: #f5f5f5;
+    background: white;
 }
 
 .auth-tabs .tab {
@@ -410,13 +390,8 @@ export default {
 }
 
 .auth-tabs .tab.active {
-    background: white;
     color: var(--primary-600);
     border-bottom-color: var(--primary-500);
-}
-
-.auth-tabs .tab:hover:not(.active) {
-    background: #e9e9e9;
 }
 
 /* Form */
@@ -630,38 +605,6 @@ export default {
     border-radius: 8px;
     font-size: 0.9rem;
     border-left: 4px solid #4caf50;
-}
-
-/* Features Section */
-.features-section {
-    background: #f9f9f9;
-    padding: 1.5rem 2rem;
-    border-top: 1px solid #e0e0e0;
-}
-
-.features-title {
-    margin: 0 0 1rem 0;
-    color: #666;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.features-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.feature-icon {
-    font-size: 1.2rem;
 }
 
 /* Responsive */

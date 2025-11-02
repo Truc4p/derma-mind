@@ -6,12 +6,27 @@
                 <h3>Chat History</h3>
                 <button @click="toggleSidebar" class="close-sidebar-btn">✕</button>
             </div>
+            
+            <!-- Search Input -->
+            <div class="sidebar-search">
+                <input 
+                    v-model="searchQuery" 
+                    type="text" 
+                    placeholder="Search conversations..."
+                    class="search-input"
+                />
+                <span v-if="searchQuery" @click="searchQuery = ''" class="clear-search">✕</span>
+            </div>
+            
             <div class="sidebar-content">
-                <div v-if="chatSessions.length === 0" class="no-history">
+                <div v-if="filteredChatSessions.length === 0 && !searchQuery" class="no-history">
                     <p>No chat history yet</p>
                 </div>
+                <div v-else-if="filteredChatSessions.length === 0 && searchQuery" class="no-history">
+                    <p>No results found for "{{ searchQuery }}"</p>
+                </div>
                 <div v-else class="chat-sessions-list">
-                    <div v-for="session in sortedChatSessions" 
+                    <div v-for="session in filteredChatSessions" 
                          :key="session.id"
                          @click="loadChatSession(session.id)"
                          class="chat-session-item"
@@ -163,7 +178,8 @@ export default {
             // Chat history management
             currentSessionId: null,
             chatSessions: [],
-            sidebarOpen: false
+            sidebarOpen: false,
+            searchQuery: ''
         }
     },
 
@@ -172,6 +188,34 @@ export default {
             return [...this.chatSessions].sort((a, b) => 
                 new Date(b.timestamp) - new Date(a.timestamp)
             )
+        },
+        
+        filteredChatSessions() {
+            if (!this.searchQuery.trim()) {
+                return this.sortedChatSessions
+            }
+            
+            const query = this.searchQuery.toLowerCase().trim()
+            return this.sortedChatSessions.filter(session => {
+                // Search in title
+                if (session.title.toLowerCase().includes(query)) {
+                    return true
+                }
+                
+                // Search in preview
+                if (session.preview.toLowerCase().includes(query)) {
+                    return true
+                }
+                
+                // Search in messages
+                if (session.messages && session.messages.some(msg => 
+                    msg.content.toLowerCase().includes(query)
+                )) {
+                    return true
+                }
+                
+                return false
+            })
         }
     },
 
@@ -720,6 +764,53 @@ What would you like to know more about?`
 
 .close-sidebar-btn:hover {
     background: var(--primary-100);
+}
+
+/* Search Input */
+.sidebar-search {
+    padding: 1rem 1.5rem;
+    padding-bottom: 0;
+    background: white;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 1px solid var(--primary-200);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    background: var(--primary-50);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--primary-600);
+}
+
+.clear-search {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-400);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.clear-search:hover {
+    background: var(--primary-100);
+    color: var(--primary-600);
 }
 
 .sidebar-content {
