@@ -934,6 +934,7 @@ What would you like to know more about?`
     flex: 1;
     overflow-y: auto;
     padding: 2rem;
+    padding-bottom: 150px; /* Space for fixed input area */
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
@@ -1227,7 +1228,13 @@ What would you like to know more about?`
 
 /* Input Area */
 .chat-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 1rem 2rem;
+    background: var(--primary-50);
+    z-index: 100;
 }
 
 /* Chat Action Buttons */
@@ -1360,6 +1367,7 @@ What would you like to know more about?`
 @media (max-width: 768px) {
     .chat-container {
         padding: 1rem;
+        padding-bottom: 180px; /* Increased space for fixed input area on mobile */
     }
 
     .welcome-header h1 {
