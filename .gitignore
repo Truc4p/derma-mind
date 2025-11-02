@@ -148,6 +148,9 @@ Thumbs.db
 *.sqlite3
 *.db
 
+# Qdrant vector database storage (generated data)
+backend/qdrant_storage/
+
 # Temporary files
 *.tmp
 *.temp
