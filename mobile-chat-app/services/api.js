@@ -81,21 +81,37 @@ export const liveChatService = {
     return response.data;
   },
   
-  // Future: Add audio transcription endpoint
+  // Audio transcription endpoint
   async transcribeAudio(audioUri) {
-    const formData = new FormData();
-    formData.append('audio', {
-      uri: audioUri,
-      type: 'audio/m4a',
-      name: 'recording.m4a'
-    });
-    
-    const response = await api.post('/ai-dermatologist/transcribe', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    return response.data;
+    try {
+      console.log('📤 Uploading audio for transcription:', audioUri);
+      
+      const formData = new FormData();
+      
+      // Prepare the audio file for upload
+      const audioFile = {
+        uri: audioUri,
+        type: 'audio/m4a', // iOS/Android recording format
+        name: 'recording.m4a'
+      };
+      
+      formData.append('audio', audioFile);
+      
+      console.log('📦 FormData prepared, sending request...');
+      
+      const response = await api.post('/ai-dermatologist/transcribe', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        timeout: 30000 // 30 seconds timeout for transcription
+      });
+      
+      console.log('✅ Transcription received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ Transcription error:', error.response?.data || error.message);
+      throw error;
+    }
   }
 };
 

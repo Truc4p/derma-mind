@@ -191,67 +191,96 @@ const LiveChatAI = ({ navigation }) => {
     try {
       console.log('🔄 Processing audio from:', audioUri);
       
-      // TODO: In production, send audio to backend for transcription
-      // For now, prompt user to type what they said (since we don't have speech-to-text API yet)
+      // Step 1: Try automatic transcription with Gemini
+      setTranscribedText('Transcribing your voice...');
       
-      // Show a prompt to manually enter what was said
-      Alert.prompt(
-        'Voice Transcription',
-        'Please type what you said (automatic speech-to-text coming soon):',
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-            onPress: () => {
-              setIsProcessing(false);
-              setTranscribedText('Tap to start talking');
-            }
-          },
-          {
-            text: 'Send',
-            onPress: async (userMessage) => {
-              if (!userMessage || !userMessage.trim()) {
+      try {
+        const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
+        const userMessage = transcriptionResult.transcription;
+        
+        if (!userMessage || !userMessage.trim()) {
+          throw new Error('Empty transcription');
+        }
+        
+        console.log('✅ Auto-transcription successful:', userMessage);
+        await sendToAI(userMessage.trim());
+        
+      } catch (transcriptionError) {
+        console.log('⚠️ Auto-transcription failed:', transcriptionError.message);
+        
+        // Fall back to manual input
+        console.log('🔄 Falling back to manual input...');
+        setTranscribedText('Transcription failed. Please type your question:');
+        
+        Alert.prompt(
+          'Manual Input',
+          'Automatic transcription is not available yet. Please type what you said:',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+              onPress: () => {
                 setIsProcessing(false);
                 setTranscribedText('Tap to start talking');
-                return;
               }
-              
-              console.log('📝 User message:', userMessage);
-              setTranscribedText(`You: ${userMessage}`);
-              
-              // Add to conversation history
-              const newHistory = [
-                ...conversationHistory,
-                { role: 'user', content: userMessage.trim() }
-              ];
-              setConversationHistory(newHistory);
-
-              // Get AI response from backend
-              console.log('🤖 Sending to AI...');
-              const response = await liveChatService.chat(userMessage.trim(), newHistory);
-              console.log('✅ AI response received:', response.response.substring(0, 100) + '...');
-              
-              setIsProcessing(false);
-              
-              // Add AI response to history
-              setConversationHistory([
-                ...newHistory,
-                { role: 'assistant', content: response.response }
-              ]);
-
-              // Speak the AI response
-              await speakAIResponse(response.response);
+            },
+            {
+              text: 'Send',
+              onPress: async (userMessage) => {
+                if (!userMessage || !userMessage.trim()) {
+                  setIsProcessing(false);
+                  setTranscribedText('Tap to start talking');
+                  return;
+                }
+                await sendToAI(userMessage.trim());
+              }
             }
-          }
-        ],
-        'plain-text'
-      );
+          ],
+          'plain-text'
+        );
+      }
       
     } catch (error) {
       console.error('❌ Error processing audio:', error);
       setIsProcessing(false);
-      setTranscribedText('Sorry, there was an error processing your request.');
-      Alert.alert('Error', error.message || 'Failed to get AI response');
+      setTranscribedText('Error occurred. Tap to try again.');
+      Alert.alert('Error', 'Failed to process audio. Please try again.');
+    }
+  };
+
+  const sendToAI = async (userMessage) => {
+    try {
+      console.log('📝 User message:', userMessage);
+      setTranscribedText(`You: ${userMessage}`);
+      
+      // Add to conversation history
+      const newHistory = [
+        ...conversationHistory,
+        { role: 'user', content: userMessage }
+      ];
+      setConversationHistory(newHistory);
+
+      // Get AI response from backend
+      console.log('🤖 Sending to AI...');
+      const response = await liveChatService.chat(userMessage, newHistory);
+      console.log('✅ AI response received:', response.response.substring(0, 100) + '...');
+      
+      setIsProcessing(false);
+      
+      // Add AI response to history
+      setConversationHistory([
+        ...newHistory,
+        { role: 'assistant', content: response.response }
+      ]);
+
+      // Speak the AI response
+      await speakAIResponse(response.response);
+      
+    } catch (error) {
+      console.error('❌ Error getting AI response:', error);
+      setIsProcessing(false);
+      setTranscribedText('Sorry, there was an error. Tap to try again.');
+      Alert.alert('Error', 'Failed to get AI response');
     }
   };
 

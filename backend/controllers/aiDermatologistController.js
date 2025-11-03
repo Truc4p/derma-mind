@@ -1,5 +1,7 @@
 const geminiService = require('../services/geminiService');
 const vectorService = require('../services/vectorService');
+const fs = require('fs').promises;
+const path = require('path');
 
 /**
  * @desc    Send a message to the AI Dermatologist
@@ -47,6 +49,63 @@ exports.chat = async (req, res) => {
         
         res.status(statusCode).json({ 
             error: userMessage,
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+
+/**
+ * @desc    Transcribe audio to text using Gemini
+ * @route   POST /api/ai-dermatologist/transcribe
+ * @access  Public
+ */
+exports.transcribeAudio = async (req, res) => {
+    let tempFilePath = null;
+    
+    try {
+        console.log('📥 Received audio transcription request');
+        
+        // Check if file was uploaded
+        if (!req.file) {
+            return res.status(400).json({ error: 'No audio file provided' });
+        }
+
+        console.log('📁 File details:', {
+            originalName: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            path: req.file.path
+        });
+
+        tempFilePath = req.file.path;
+
+        // Transcribe the audio using Gemini
+        const transcribedText = await geminiService.transcribeAudio(tempFilePath);
+
+        // Clean up the temporary file
+        await fs.unlink(tempFilePath);
+        tempFilePath = null;
+
+        console.log('✅ Successfully transcribed audio');
+
+        res.json({
+            transcription: transcribedText,
+            timestamp: new Date()
+        });
+    } catch (error) {
+        console.error('❌ Audio transcription error:', error);
+        
+        // Clean up temp file if it exists
+        if (tempFilePath) {
+            try {
+                await fs.unlink(tempFilePath);
+            } catch (unlinkError) {
+                console.error('Error deleting temp file:', unlinkError);
+            }
+        }
+        
+        res.status(500).json({ 
+            error: 'Failed to transcribe audio',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }

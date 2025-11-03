@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
+const fs = require('fs').promises;
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -155,6 +156,90 @@ CITATION REQUIREMENT (Numbered Reference Style):
             
             throw new Error('Failed to generate response with RAG context');
         }
+    }
+
+    /**
+     * Transcribe audio file to text using Gemini's multimodal capabilities
+     * Note: Gemini currently has limited audio transcription support
+     * For production, consider using Google Cloud Speech-to-Text API instead
+     * @param {string} audioFilePath - Path to the audio file
+     * @returns {Promise<string>} - Transcribed text
+     */
+    async transcribeAudio(audioFilePath) {
+        try {
+            console.log('🎤 Starting audio transcription:', audioFilePath);
+            
+            // Temporary workaround: For now, we'll use a simple approach
+            // In production, integrate Google Cloud Speech-to-Text API
+            
+            // Check if we have Google Cloud Speech API credentials
+            // For now, return an informative message
+            console.log('⚠️ Note: Gemini API audio transcription support is limited');
+            console.log('� Recommendation: Integrate Google Cloud Speech-to-Text API for production');
+            
+            // Attempt Gemini transcription (may not work with all API tiers)
+            try {
+                const audioData = await fs.readFile(audioFilePath);
+                const audioBase64 = audioData.toString('base64');
+                const mimeType = this.getMimeType(audioFilePath);
+                
+                console.log('📁 File:', mimeType, '-', audioData.length, 'bytes');
+                
+                // Try with models/gemini-1.5-pro-latest (supports audio on some API tiers)
+                const audioModel = genAI.getGenerativeModel({ 
+                    model: 'models/gemini-1.5-pro-latest'
+                });
+                
+                const result = await audioModel.generateContent([
+                    {
+                        inlineData: {
+                            mimeType: mimeType,
+                            data: audioBase64
+                        }
+                    },
+                    'Transcribe this audio exactly. Return only the transcribed text.'
+                ]);
+                
+                const response = await result.response;
+                const text = response.text().trim();
+                
+                console.log('✅ Gemini transcription:', text);
+                return text;
+                
+            } catch (geminiError) {
+                console.log('⚠️ Gemini audio transcription not available:', geminiError.message);
+                
+                // Fallback: Ask user to manually enter (as we had before)
+                throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
+            }
+            
+        } catch (error) {
+            console.error('❌ Transcription error:', error.message);
+            
+            if (error.message === 'TRANSCRIPTION_NOT_AVAILABLE') {
+                // This will trigger the manual input prompt on the client
+                throw error;
+            }
+            
+            throw new Error('Failed to transcribe audio. Please try again.');
+        }
+    }
+
+    /**
+     * Helper function to determine MIME type from file path
+     */
+    getMimeType(filePath) {
+        const extension = filePath.split('.').pop().toLowerCase();
+        const mimeTypes = {
+            'm4a': 'audio/mp4',
+            'mp4': 'audio/mp4',
+            'mp3': 'audio/mpeg',
+            'wav': 'audio/wav',
+            'aac': 'audio/aac',
+            'ogg': 'audio/ogg',
+            'flac': 'audio/flac'
+        };
+        return mimeTypes[extension] || 'audio/mp4'; // Default to mp4
     }
 }
 
