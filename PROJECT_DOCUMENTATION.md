@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Skin Study** is a comprehensive web and mobile platform that leverages artificial intelligence and vector search technology to provide personalized skincare advice, ingredient analysis, and dermatological education. The platform features an AI-powered dermatologist assistant, RAG (Retrieval-Augmented Generation) system, and extensive skincare knowledge base.
+**Skin Study** is a comprehensive web and mobile platform that leverages artificial intelligence and vector search technology to provide personalized skincare advice, ingredient analysis, and dermatological education. The platform features an AI-powered dermatologist assistant with RAG (Retrieval-Augmented Generation) system, voice-to-text and text-to-speech capabilities, live voice chat, searchable conversation history, and an extensive skincare knowledge base powered by 10 professional dermatology textbooks.
 
 ## Technology Stack
 
@@ -15,6 +15,7 @@
   - Qdrant Vector Database (@qdrant/js-client-rest 1.15.1)
 - **Authentication**: JWT (jsonwebtoken 9.0.2) + bcryptjs 3.0.2
 - **Security**: Helmet 8.1.0, CORS 2.8.5
+- **Audio Transcription**: AssemblyAI (assemblyai 4.10.1)
 - **File Processing**: Multer 2.0.2, pdf-parse 2.4.3
 - **Utilities**: uuid 13.0.0, morgan 1.10.1
 
@@ -34,6 +35,8 @@
 - **Storage**: AsyncStorage 1.23.1
 - **Markdown**: react-native-markdown-display 7.0.2
 - **HTTP Client**: Axios 1.6.2
+- **Audio**: Expo Audio & Speech (Live chat voice features)
+- **Speech Recognition**: AssemblyAI (audio transcription)
 
 ## Project Architecture
 
@@ -68,6 +71,7 @@ skin-study/
 │   │
 │   ├── services/                     # External services
 │   │   ├── geminiService.js         # Google Gemini AI integration
+│   │   ├── speechService.js         # AssemblyAI audio transcription
 │   │   └── vectorService.js         # Qdrant vector search
 │   │
 │   ├── middleware/                   # Express middleware
@@ -129,7 +133,9 @@ skin-study/
     │
     ├── components/                  # React Native components
     │   ├── AIDermatologist.js      # AI chat screen
-    │   └── AIDermatologist.styles.js
+    │   ├── AIDermatologist.styles.js
+    │   ├── ChatHistory.js          # Chat history with search
+    │   └── LiveChatAI.js           # Live voice chat screen
     │
     ├── services/                    # API client
     │   └── api.js                   # Axios + AsyncStorage
@@ -149,17 +155,21 @@ skin-study/
 - **Vector Search**: Qdrant vector database for semantic similarity matching
 - **Context-Aware**: Retrieves relevant dermatology knowledge before generating responses
 - **Multi-Platform**: Available on web (Vue.js) and mobile (React Native)
-- **Chat History**: Persistent conversation storage
+- **Chat History**: Persistent conversation storage with search functionality
+- **Search Chat**: Search through conversation history across all sessions
 - **Markdown Support**: Rich text formatting in responses
 - **Offline Fallback**: Context-aware responses when backend unavailable
+- **Voice-to-Text**: Audio transcription using AssemblyAI
+- **Text-to-Speech**: AI responses spoken aloud (mobile app)
+- **Live Chat**: Real-time voice conversation with AI (mobile app)
 
 #### How It Works:
-1. User asks question → converted to 768-dimensional vector embedding
-2. Qdrant searches knowledge base for similar content
+1. User asks question (text or voice) → converted to 768-dimensional vector embedding
+2. Qdrant searches knowledge base for similar content (10 dermatology textbooks)
 3. Top matching documents retrieved (cosine similarity scoring)
 4. Context + question sent to Google Gemini AI
 5. AI generates personalized response using retrieved context
-6. Response formatted in markdown and displayed
+6. Response formatted in markdown and displayed/spoken
 
 ### 2. **Skin Analysis System**
 - **6-Question Quiz**: Comprehensive skin assessment
@@ -475,27 +485,55 @@ Send message to AI dermatologist.
 **Request:**
 ```json
 {
-  "question": "What should I do for dehydrated skin?",
-  "userId": "optional_user_id"
+  "message": "What should I do for dehydrated skin?",
+  "conversationHistory": [
+    { "role": "user", "content": "Previous question" },
+    { "role": "assistant", "content": "Previous answer" }
+  ]
 }
 ```
 
 **Response:**
 ```json
 {
-  "success": true,
   "response": "For dehydrated skin, I recommend...",
-  "retrievedContext": [...],
-  "similarityScores": [0.89, 0.85, 0.82]
+  "sources": [...],
+  "images": [],
+  "timestamp": "2025-11-03T..."
 }
 ```
 
 **Features:**
 - RAG-powered responses using vector search
-- Retrieves top 3 most relevant knowledge documents
+- Retrieves top 3 most relevant knowledge documents from 10 dermatology textbooks
 - Uses Google Gemini AI for response generation
 - Markdown-formatted responses
 - Context-aware recommendations
+- Conversation history support
+
+#### POST `/transcribe`
+Transcribe audio to text using AssemblyAI.
+
+**Request:**
+- `multipart/form-data`
+- Field: `audio` (audio file, max 10MB)
+- Supported formats: mp4, mpeg, wav, m4a, aac
+
+**Response:**
+```json
+{
+  "transcription": "What causes acne and how can I treat it?",
+  "timestamp": "2025-11-03T...",
+  "processingTime": 1234
+}
+```
+
+**Features:**
+- High-quality audio transcription
+- AssemblyAI-powered speech recognition
+- Automatic punctuation and formatting
+- English language support
+- Error handling for empty/unclear audio
 
 ### Education Routes (`/api/education`)
 
@@ -648,6 +686,7 @@ NODE_ENV=development
 MONGODB_URI=mongodb+srv://...
 JWT_SECRET=your_secret_key
 GEMINI_API_KEY=your_gemini_key
+ASSEMBLYAI_API_KEY=your_assemblyai_key
 FRONTEND_URL=http://localhost:5175
 
 # Start Qdrant
@@ -824,6 +863,7 @@ PORT=3004
 MONGODB_URI=mongodb+srv://...
 JWT_SECRET=production_secret
 GEMINI_API_KEY=production_key
+ASSEMBLYAI_API_KEY=production_assemblyai_key
 FRONTEND_URL=https://skinstudy.com
 ```
 
@@ -868,6 +908,35 @@ expo build:android
 
 ## Mobile App Features
 
+### Core Features
+
+**Text Chat with AI Dermatologist:**
+- Full-featured chat interface with markdown support
+- Conversation history with search
+- Session management and recovery
+- Offline message queuing
+
+**Live Voice Chat:**
+- Real-time voice conversation with AI
+- Automatic speech-to-text transcription (AssemblyAI)
+- Text-to-speech AI responses (Expo Speech)
+- Visual feedback with pulsing animations
+- Recording controls (pause, resume, stop)
+- Conversation history with timestamps
+
+**Search Functionality:**
+- Search across all chat sessions (text and live)
+- Filter by chat type (text/live/all)
+- Search in message content, titles, and previews
+- Real-time search results
+
+**Session Management:**
+- Save and load conversation sessions
+- Auto-generated session titles from first message
+- Session previews showing last message
+- Delete individual sessions
+- Timestamp display (Today, Yesterday, X days ago)
+
 ### Platform-Specific
 
 **iOS:**
@@ -889,19 +958,31 @@ expo build:android
 ## Knowledge Base
 
 ### Content Sources
-- Dermatology textbooks
-- Medical journals
-- Skincare research papers
-- Expert dermatologist content
+
+The vector database is powered by **10 comprehensive dermatology textbooks** providing expert-level medical knowledge:
+
+1. **Chemical Peels - Procedures in Cosmetic Dermatology Series, 3rd Edition (2020)** by Suzan Obagi
+2. **Cosmeceuticals and Cosmetic Ingredients**
+3. **Cosmetic Dermatology - Principles and Practice**
+4. **Cosmetic Dermatology - Products and Procedures** by Draelos, 2nd Edition (2016)
+5. **Cosmetics and Dermatological Problems and Solutions - A Problem-Based Approach**
+6. **Fitzpatrick's Dermatology in General Medicine (8th Edition)**
+7. **Lasers in Dermatology and Medicine - Dermatologic Applications** by Keyvan Nouri
+8. **Skin Care - Beyond the Basics, 4th Edition**
+9. **Textbook of Cosmetic Dermatology**
+10. **The Art of Skin Health Restoration and Rejuvenation - The Science of Clinical Practice**
+
+All texts are stored in `backend/knowledge-sources/extracted-content/` and processed into vector embeddings for semantic search.
 
 ### Content Processing
 1. PDF extraction with pdfminer
 2. Text cleaning and chunking
-3. Embedding generation (768-dim)
-4. Storage in Qdrant
-5. Indexing for fast retrieval
+3. Embedding generation (768-dim vectors)
+4. Storage in Qdrant vector database
+5. Indexing for fast retrieval using HNSW algorithm
 
 ### Quality Assurance
+- Medical-grade dermatology textbooks
 - Reliability scoring
 - Source verification
 - Regular content updates
@@ -921,6 +1002,35 @@ expo build:android
 - Conversion tracking
 - Performance metrics
 
+## Recent Enhancements (2025)
+
+### Knowledge Base Expansion
+- **10 Professional Dermatology Textbooks**: Expanded vector database with comprehensive medical literature including Fitzpatrick's Dermatology, Cosmetic Dermatology textbooks, and specialized works on chemical peels, lasers, and skin health restoration
+- **Enhanced RAG System**: Improved context retrieval from 10,000+ medical text chunks
+- **Higher Accuracy**: More precise answers backed by authoritative medical sources
+
+### Voice & Audio Features
+- **Audio Transcription**: AssemblyAI integration for high-quality speech-to-text conversion
+- **Text-to-Speech**: AI responses spoken aloud in natural voice (mobile app)
+- **Live Voice Chat**: Real-time voice conversation with AI dermatologist (mobile app)
+- **Recording Controls**: Pause, resume, and stop functionality for voice interactions
+- **Visual Feedback**: Animated pulsing effects during recording and AI speech
+
+### Search & History
+- **Search Chat**: Full-text search across all conversation history
+- **Multi-Session Search**: Search through both text chats and live voice chat sessions
+- **Filter by Type**: Filter search results by chat type (text/live/all)
+- **Session Management**: Load, save, and delete individual chat sessions
+- **Auto-Generated Titles**: Automatic session titles based on first message
+- **Smart Timestamps**: Relative timestamps (Today, Yesterday, X days ago)
+
+### Mobile App Enhancements
+- **ChatHistory Component**: Unified history viewer for all chat types
+- **LiveChatAI Component**: Dedicated live voice chat screen with animations
+- **Session Recovery**: Resume previous conversations seamlessly
+- **Offline Queue**: Queue messages when offline, sync when reconnected
+- **Better UX**: Improved visual design with pink theme and gradient backgrounds
+
 ## Future Enhancements
 
 ### Planned Features
@@ -936,10 +1046,13 @@ expo build:android
 - [ ] Progressive Web App (PWA)
 
 ### Technical Improvements
+- [x] **Advanced RAG System**: 10 dermatology textbooks vectorized for semantic search
+- [x] **Voice Integration**: AssemblyAI speech-to-text + Expo Speech text-to-speech
+- [x] **Search Functionality**: Full-text search across conversation history
+- [x] **Session Management**: Save, load, and search chat sessions
 - [ ] Redis caching layer
 - [ ] GraphQL API
 - [ ] WebSocket real-time updates
-- [ ] Advanced RAG techniques
 - [ ] Multi-modal AI (image analysis)
 - [ ] Microservices architecture
 - [ ] CI/CD pipeline
@@ -1004,7 +1117,7 @@ This project is developed for educational purposes as part of a university final
 ---
 
 **Project**: Skin Study - AI Dermatology Platform  
-**Version**: 1.0.0  
-**Last Updated**: November 1, 2025  
+**Version**: 1.1.0  
+**Last Updated**: November 3, 2025  
 **Repository**: Truc4p/final-project  
 **Type**: Final Year Project (FYP)

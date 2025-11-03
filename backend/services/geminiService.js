@@ -20,7 +20,7 @@ class GeminiService {
         });
         
         // System instruction for the dermatologist
-        this.systemContext = `You are a Board-Certified Virtual Dermatologist with extensive knowledge in:
+        this.systemContext = `You are a Virtual Dermatologist with extensive knowledge in:
 - Dermatology and skin conditions
 - Skincare ingredients and formulations
 - Cosmetic procedures and treatments
