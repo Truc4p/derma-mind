@@ -153,14 +153,39 @@ export const styles = StyleSheet.create({
   messageContentAssistant: {
     backgroundColor: colors.white
   },
+  messageFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8
+  },
   messageTime: {
     fontSize: 12,
-    color: colors.gray400,
-    marginTop: 8
+    color: colors.gray400
   },
   messageTimeUser: {
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'right'
+  },
+  
+  // Voice Button
+  voiceButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.primary100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+    borderWidth: 1,
+    borderColor: colors.primary200
+  },
+  voiceButtonActive: {
+    backgroundColor: colors.primary500,
+    borderColor: colors.primary600
+  },
+  voiceButtonIcon: {
+    fontSize: 16
   },
   
   // Typing Indicator
@@ -182,9 +207,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    paddingBottom: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.primary200
+    paddingBottom: 16
   },
   chatActions: {
     flexDirection: 'row',

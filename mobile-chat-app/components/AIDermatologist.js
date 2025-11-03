@@ -13,6 +13,7 @@ import {
   useWindowDimensions
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import * as Speech from 'expo-speech';
 import { aiDermatologistService, chatStorage } from '../services/api';
 import { styles, colors } from './AIDermatologist.styles';
 
@@ -27,6 +28,8 @@ const AIDermatologist = () => {
   const [userInput, setUserInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [speakingMessageIndex, setSpeakingMessageIndex] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollViewRef = useRef(null);
 
   const sampleQuestions = [
@@ -620,6 +623,89 @@ What would you like to know more about?`;
     );
   };
 
+  // Helper function to strip HTML and markdown for speech
+  const stripFormattingForSpeech = (text) => {
+    if (!text) return '';
+    
+    // Remove HTML tags
+    let cleanText = text.replace(/<[^>]*>/g, ' ');
+    
+    // Remove markdown bold
+    cleanText = cleanText.replace(/\*\*([^*]+)\*\*/g, '$1');
+    
+    // Remove markdown headers
+    cleanText = cleanText.replace(/^#{1,6}\s+/gm, '');
+    
+    // Remove bullet points and list markers
+    cleanText = cleanText.replace(/^[\*\-•]\s+/gm, '');
+    cleanText = cleanText.replace(/^\d+\.\s+/gm, '');
+    
+    // Remove extra whitespace
+    cleanText = cleanText.replace(/\s+/g, ' ').trim();
+    
+    return cleanText;
+  };
+
+  // Text-to-speech functions
+  const handleSpeak = async (messageIndex) => {
+    const message = messages[messageIndex];
+    if (!message || message.role !== 'assistant') return;
+
+    try {
+      // If already speaking this message, stop it
+      if (speakingMessageIndex === messageIndex && isSpeaking) {
+        await Speech.stop();
+        setSpeakingMessageIndex(null);
+        setIsSpeaking(false);
+        return;
+      }
+
+      // Stop any currently speaking message
+      if (isSpeaking) {
+        await Speech.stop();
+      }
+
+      // Clean the text for speech
+      const textToSpeak = stripFormattingForSpeech(message.content);
+      
+      setSpeakingMessageIndex(messageIndex);
+      setIsSpeaking(true);
+
+      // Start speaking
+      Speech.speak(textToSpeak, {
+        language: 'en-US',
+        pitch: 1.0,
+        rate: 0.9,
+        onDone: () => {
+          setSpeakingMessageIndex(null);
+          setIsSpeaking(false);
+        },
+        onStopped: () => {
+          setSpeakingMessageIndex(null);
+          setIsSpeaking(false);
+        },
+        onError: (error) => {
+          console.error('Speech error:', error);
+          setSpeakingMessageIndex(null);
+          setIsSpeaking(false);
+          Alert.alert('Error', 'Failed to speak the message');
+        }
+      });
+    } catch (error) {
+      console.error('Error in handleSpeak:', error);
+      setSpeakingMessageIndex(null);
+      setIsSpeaking(false);
+      Alert.alert('Error', 'Failed to initialize speech');
+    }
+  };
+
+  // Stop speech when component unmounts or messages change significantly
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -695,12 +781,29 @@ What would you like to know more about?`;
                 tagsStyles={message.role === 'user' ? userTagsStyles : assistantTagsStyles}
                 baseStyle={message.role === 'user' ? { color: '#FFFFFF' } : { color: colors.gray800 }}
               />
-              <Text style={[
-                styles.messageTime,
-                message.role === 'user' && styles.messageTimeUser
-              ]}>
-                {formatTime(message.timestamp)}
-              </Text>
+              <View style={styles.messageFooter}>
+                <Text style={[
+                  styles.messageTime,
+                  message.role === 'user' && styles.messageTimeUser
+                ]}>
+                  {formatTime(message.timestamp)}
+                </Text>
+                
+                {/* Voice Button for Assistant Messages */}
+                {message.role === 'assistant' && (
+                  <TouchableOpacity
+                    style={[
+                      styles.voiceButton,
+                      speakingMessageIndex === index && isSpeaking && styles.voiceButtonActive
+                    ]}
+                    onPress={() => handleSpeak(index)}
+                  >
+                    <Text style={styles.voiceButtonIcon}>
+                      {speakingMessageIndex === index && isSpeaking ? '⏸' : '🔊'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
         ))}
