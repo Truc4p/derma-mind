@@ -84,7 +84,10 @@ export const liveChatService = {
   // Audio transcription endpoint
   async transcribeAudio(audioUri) {
     try {
-      console.log('📤 Uploading audio for transcription:', audioUri);
+      const startTime = Date.now();
+      console.log('📤 [FRONTEND] Starting transcription upload at:', new Date().toISOString());
+      console.log('📤 [FRONTEND] Audio URI:', audioUri);
+      console.log('📤 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatologist/transcribe`);
       
       const formData = new FormData();
       
@@ -97,19 +100,34 @@ export const liveChatService = {
       
       formData.append('audio', audioFile);
       
-      console.log('📦 FormData prepared, sending request...');
+      console.log('📦 [FRONTEND] FormData prepared with:', {
+        fileName: audioFile.name,
+        fileType: audioFile.type,
+        fileUri: audioFile.uri
+      });
+      console.log('🚀 [FRONTEND] Sending POST request...');
       
       const response = await api.post('/ai-dermatologist/transcribe', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
-        timeout: 30000 // 30 seconds timeout for transcription
+        timeout: 90000, // Increased to 90 seconds for transcription
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log(`📊 [FRONTEND] Upload progress: ${percentCompleted}%`);
+        }
       });
       
-      console.log('✅ Transcription received:', response.data);
+      const duration = Date.now() - startTime;
+      console.log(`✅ [FRONTEND] Transcription received in ${duration}ms:`, response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Transcription error:', error.response?.data || error.message);
+      const duration = Date.now() - startTime;
+      console.error(`❌ [FRONTEND] Transcription failed after ${duration}ms`);
+      console.error('❌ [FRONTEND] Error type:', error.code || error.name);
+      console.error('❌ [FRONTEND] Error message:', error.message);
+      console.error('❌ [FRONTEND] Error response:', error.response?.data);
+      console.error('❌ [FRONTEND] Error status:', error.response?.status);
       throw error;
     }
   }

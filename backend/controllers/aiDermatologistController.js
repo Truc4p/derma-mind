@@ -63,41 +63,60 @@ exports.transcribeAudio = async (req, res) => {
     let tempFilePath = null;
     
     try {
-        console.log('📥 Received audio transcription request');
+        const requestStartTime = Date.now();
+        console.log('\n=== 📥 [BACKEND] TRANSCRIPTION REQUEST RECEIVED ===');
+        console.log('⏰ [BACKEND] Request time:', new Date().toISOString());
         
         // Check if file was uploaded
         if (!req.file) {
+            console.error('❌ [BACKEND] No file in request');
             return res.status(400).json({ error: 'No audio file provided' });
         }
 
-        console.log('📁 File details:', {
+        console.log('📁 [BACKEND] File details:', {
             originalName: req.file.originalname,
             mimetype: req.file.mimetype,
             size: req.file.size,
-            path: req.file.path
+            path: req.file.path,
+            sizeInMB: (req.file.size / 1024 / 1024).toFixed(2) + ' MB'
         });
 
         tempFilePath = req.file.path;
 
-        // Transcribe the audio using Gemini
+        console.log('🎤 [BACKEND] Calling geminiService.transcribeAudio...');
+        const transcribeStartTime = Date.now();
+        
+        // Transcribe the audio using Gemini/AssemblyAI
         const transcribedText = await geminiService.transcribeAudio(tempFilePath);
+        
+        const transcribeDuration = Date.now() - transcribeStartTime;
+        console.log(`✅ [BACKEND] Transcription completed in ${transcribeDuration}ms`);
 
         // Clean up the temporary file
+        console.log('🗑️ [BACKEND] Cleaning up temp file:', tempFilePath);
         await fs.unlink(tempFilePath);
         tempFilePath = null;
 
-        console.log('✅ Successfully transcribed audio');
+        const totalDuration = Date.now() - requestStartTime;
+        console.log(`✅ [BACKEND] Request completed in ${totalDuration}ms`);
+        console.log('=== ✅ [BACKEND] TRANSCRIPTION SUCCESS ===\n');
 
         res.json({
             transcription: transcribedText,
-            timestamp: new Date()
+            timestamp: new Date(),
+            processingTime: totalDuration
         });
     } catch (error) {
-        console.error('❌ Audio transcription error:', error);
+        console.error('\n=== ❌ [BACKEND] TRANSCRIPTION ERROR ===');
+        console.error('❌ [BACKEND] Error type:', error.name);
+        console.error('❌ [BACKEND] Error message:', error.message);
+        console.error('❌ [BACKEND] Full error:', error);
+        console.error('=== ❌ [BACKEND] ERROR END ===\n');
         
         // Clean up temp file if it exists
         if (tempFilePath) {
             try {
+                console.log('🗑️ [BACKEND] Cleaning up temp file after error');
                 await fs.unlink(tempFilePath);
             } catch (unlinkError) {
                 console.error('Error deleting temp file:', unlinkError);

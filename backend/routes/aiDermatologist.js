@@ -22,11 +22,19 @@ const upload = multer({
         fileSize: 10 * 1024 * 1024 // 10MB limit
     },
     fileFilter: function (req, file, cb) {
+        console.log('📋 [MULTER] Incoming file:', {
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size
+        });
+        
         // Accept audio files only
         const allowedMimes = ['audio/mp4', 'audio/mpeg', 'audio/wav', 'audio/x-m4a', 'audio/aac'];
         if (allowedMimes.includes(file.mimetype) || file.mimetype.startsWith('audio/')) {
+            console.log('✅ [MULTER] File accepted');
             cb(null, true);
         } else {
+            console.error('❌ [MULTER] File rejected - invalid mimetype');
             cb(new Error('Only audio files are allowed'));
         }
     }

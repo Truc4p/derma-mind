@@ -1,14 +1,11 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const { GoogleAIFileManager } = require('@google/generative-ai/server');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
 const fs = require('fs').promises;
-const path = require('path');
 const speechService = require('./speechService');
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const fileManager = new GoogleAIFileManager(process.env.GEMINI_API_KEY);
 
 class GeminiService {
     constructor() {
@@ -163,94 +160,47 @@ CITATION REQUIREMENT (Numbered Reference Style):
     }
 
     /**
-     * Transcribe audio file to text using FREE Gemini File API
+     * Transcribe audio file to text using Google Cloud Speech-to-Text API
      */
     async transcribeAudio(audioFilePath) {
+        const startTime = Date.now();
         try {
-            console.log('🎤 Starting Gemini audio transcription:', audioFilePath);
+            console.log('\n=== �️ [GEMINI SERVICE] TRANSCRIPTION REQUEST ===');
+            console.log('⏰ [GEMINI SERVICE] Start time:', new Date().toISOString());
+            console.log('📁 [GEMINI SERVICE] Audio file:', audioFilePath);
             
-            // Get MIME type from file extension
-            const mimeType = this.getMimeType(audioFilePath);
-            console.log('📄 Audio MIME type:', mimeType);
-            
-            // Upload audio file to Gemini
-            console.log('📤 Uploading audio file to Gemini...');
-            const uploadResult = await fileManager.uploadFile(audioFilePath, {
-                mimeType: mimeType,
-                displayName: path.basename(audioFilePath),
-            });
-            console.log('✅ Upload successful! File URI:', uploadResult.file.uri);
-            
-            // Use Gemini to transcribe the audio
-            console.log('🤖 Requesting transcription from Gemini...');
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            
-            const result = await model.generateContent([
-                {
-                    fileData: {
-                        mimeType: uploadResult.file.mimeType,
-                        fileUri: uploadResult.file.uri
-                    }
-                },
-                { text: "Please transcribe the speech in this audio file. Only return the transcribed text without any additional commentary or formatting." },
-            ]);
-            
-            const transcription = result.response.text().trim();
-            console.log('✅ Gemini transcription successful:', transcription);
-            
-            // Clean up: delete the uploaded file from Gemini
+            // Try AssemblyAI Speech-to-Text
             try {
-                await fileManager.deleteFile(uploadResult.file.name);
-                console.log('🗑️ Cleaned up uploaded file from Gemini');
-            } catch (deleteError) {
-                console.log('⚠️ Failed to delete file from Gemini:', deleteError.message);
-            }
-            
-            return transcription;
-            
-        } catch (error) {
-            console.error('❌ Gemini transcription error:', error);
-            
-            // Check if it's a model availability error
-            if (error.message && error.message.includes('not found')) {
-                console.log('⚠️ Gemini model not available, trying gemini-1.5-pro...');
+                console.log('🚀 [GEMINI SERVICE] Calling speechService.transcribeAudio...');
+                const transcription = await speechService.transcribeAudio(audioFilePath);
                 
-                try {
-                    // Try with gemini-1.5-pro as fallback
-                    const uploadResult = await fileManager.uploadFile(audioFilePath, {
-                        mimeType: this.getMimeType(audioFilePath),
-                        displayName: path.basename(audioFilePath),
-                    });
-                    
-                    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-                    const result = await model.generateContent([
-                        {
-                            fileData: {
-                                mimeType: uploadResult.file.mimeType,
-                                fileUri: uploadResult.file.uri
-                            }
-                        },
-                        { text: "Please transcribe the speech in this audio file. Only return the transcribed text without any additional commentary or formatting." },
-                    ]);
-                    
-                    const transcription = result.response.text().trim();
-                    
-                    // Cleanup
-                    try {
-                        await fileManager.deleteFile(uploadResult.file.name);
-                    } catch (deleteError) {
-                        console.log('⚠️ Failed to delete file:', deleteError.message);
-                    }
-                    
-                    return transcription;
-                    
-                } catch (fallbackError) {
-                    console.error('❌ Fallback to gemini-1.5-pro also failed:', fallbackError);
-                    throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
+                const duration = Date.now() - startTime;
+                console.log(`✅ [GEMINI SERVICE] Transcription completed in ${duration}ms`);
+                console.log('📝 [GEMINI SERVICE] Result:', transcription);
+                console.log('=== ✅ [GEMINI SERVICE] SUCCESS ===\n');
+                
+                return transcription;
+            } catch (speechError) {
+                const duration = Date.now() - startTime;
+                console.log(`⚠️ [GEMINI SERVICE] AssemblyAI failed after ${duration}ms`);
+                console.log('⚠️ [GEMINI SERVICE] Error:', speechError.message);
+                
+                // Check if it's missing API key
+                if (speechError.message.includes('ASSEMBLYAI_API_KEY')) {
+                    console.log('📖 [GEMINI SERVICE] Please add ASSEMBLYAI_API_KEY to your .env file');
+                    console.log('📖 [GEMINI SERVICE] Get free API key from: https://www.assemblyai.com/');
                 }
+                
+                console.log('=== ⚠️ [GEMINI SERVICE] TRANSCRIPTION NOT AVAILABLE ===\n');
+                throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
             }
-            
-            throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
+        } catch (error) {
+            if (error.message === 'TRANSCRIPTION_NOT_AVAILABLE') {
+                throw error;
+            }
+            const duration = Date.now() - startTime;
+            console.error(`❌ [GEMINI SERVICE] Unexpected error after ${duration}ms:`, error.message);
+            throw new Error('Failed to transcribe audio');
         }
     }
 
