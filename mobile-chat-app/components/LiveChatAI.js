@@ -48,8 +48,8 @@ const LiveChatAI = ({ navigation, route }) => {
   useEffect(() => {
     console.log('📝 [LiveChatAI] conversationHistory updated:', conversationHistory.length, 'messages');
     if (conversationHistory.length > 0) {
-      console.log('📋 [LiveChatAI] First message:', conversationHistory[0]);
-      console.log('📋 [LiveChatAI] Last message:', conversationHistory[conversationHistory.length - 1]);
+      // console.log('📋 [LiveChatAI] First message:', conversationHistory[0]);
+      // console.log('📋 [LiveChatAI] Last message:', conversationHistory[conversationHistory.length - 1]);
     }
   }, [conversationHistory]);
   
@@ -687,7 +687,7 @@ const LiveChatAI = ({ navigation, route }) => {
                   ]}
                 >
                   <Text style={styles.conversationRole}>
-                    {message.role === 'user' ? '👤 You' : '🤖 AI Dermatologist'}
+                    {message.role === 'user' ? 'You' : 'AI Dermatologist'}
                   </Text>
                   <Text style={styles.conversationContent}>
                     {message.content}

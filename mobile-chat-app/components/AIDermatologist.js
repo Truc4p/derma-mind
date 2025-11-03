@@ -45,8 +45,8 @@ const AIDermatologist = ({ navigation }) => {
   useEffect(() => {
     console.log('📝 [AIDermatologist] messages updated:', messages.length, 'messages');
     if (messages.length > 0) {
-      console.log('📋 [AIDermatologist] First message:', messages[0]);
-      console.log('📋 [AIDermatologist] Last message:', messages[messages.length - 1]);
+      // console.log('📋 [AIDermatologist] First message:', messages[0]);
+      // console.log('📋 [AIDermatologist] Last message:', messages[messages.length - 1]);
     }
   }, [messages]);
 
@@ -649,7 +649,7 @@ What would you like to know more about?`;
     if (session.type === 'text') {
       // Load text chat
       console.log('💬 [AIDermatologist] Loading text chat session');
-      console.log('📝 [AIDermatologist] Setting messages:', session.messages);
+      // console.log('📝 [AIDermatologist] Setting messages:', session.messages);
       setMessages(session.messages);
       console.log('✅ [AIDermatologist] Messages set successfully');
     } else if (session.type === 'live') {

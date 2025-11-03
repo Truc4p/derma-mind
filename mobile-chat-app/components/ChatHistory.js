@@ -154,7 +154,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
     console.log('📋 [ChatHistory] Session type:', session.type);
     console.log('📋 [ChatHistory] Session ID:', session.id);
     console.log('📋 [ChatHistory] Session messages count:', session.messages?.length);
-    console.log('📋 [ChatHistory] Full session:', JSON.stringify(session, null, 2));
+    // console.log('📋 [ChatHistory] Full session:', JSON.stringify(session, null, 2));
     
     if (session.type === 'text') {
       // Load text chat
