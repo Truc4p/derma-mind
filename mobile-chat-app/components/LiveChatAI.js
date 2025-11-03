@@ -7,12 +7,14 @@ import {
   Animated,
   Dimensions,
   Alert,
-  Platform
+  Platform,
+  ScrollView,
+  Modal
 } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
 import { liveChatService, liveChatStorage } from '../services/api';
-import LiveChatHistory from './LiveChatHistory';
+import ChatHistory from './ChatHistory';
 
 const { width, height } = Dimensions.get('window');
 
@@ -25,6 +27,16 @@ const LiveChatAI = ({ navigation, route }) => {
   const [conversationHistory, setConversationHistory] = useState([]);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
   const [currentSessionId, setCurrentSessionId] = useState('current');
+  const [showConversationModal, setShowConversationModal] = useState(false);
+  
+  // Add logging whenever conversationHistory changes
+  useEffect(() => {
+    console.log('📝 [LiveChatAI] conversationHistory updated:', conversationHistory.length, 'messages');
+    if (conversationHistory.length > 0) {
+      console.log('📋 [LiveChatAI] First message:', conversationHistory[0]);
+      console.log('📋 [LiveChatAI] Last message:', conversationHistory[conversationHistory.length - 1]);
+    }
+  }, [conversationHistory]);
   
   // Animation values
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -33,17 +45,25 @@ const LiveChatAI = ({ navigation, route }) => {
   const waveAnim3 = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    console.log('🔄 [LiveChatAI] Component mounted');
+    console.log('📋 [LiveChatAI] Route params:', route?.params);
+    
     // Request audio permissions on mount
     requestPermissions();
     
     // Load conversation history or session from route params
     if (route?.params?.loadSession) {
       const session = route.params.loadSession;
+      console.log('📥 [LiveChatAI] Loading session from route params');
+      console.log('📋 [LiveChatAI] Session ID:', session.id);
+      console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
       setCurrentSessionId(session.id);
+      console.log('✅ [LiveChatAI] Session loaded successfully');
       // Clear the route param
       navigation.setParams({ loadSession: undefined });
     } else {
+      console.log('📖 [LiveChatAI] No session in params, loading default history');
       loadChatHistory();
     }
     
@@ -58,10 +78,17 @@ const LiveChatAI = ({ navigation, route }) => {
 
   // Watch for route params changes
   useEffect(() => {
+    console.log('🔄 [LiveChatAI] Route params changed');
+    console.log('📋 [LiveChatAI] New route params:', route?.params);
+    
     if (route?.params?.loadSession) {
       const session = route.params.loadSession;
+      console.log('📥 [LiveChatAI] Loading NEW session from updated params');
+      console.log('📋 [LiveChatAI] Session ID:', session.id);
+      console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
       setCurrentSessionId(session.id);
+      console.log('✅ [LiveChatAI] Session updated successfully');
       navigation.setParams({ loadSession: undefined });
     }
   }, [route?.params?.loadSession]);
@@ -385,11 +412,18 @@ const LiveChatAI = ({ navigation, route }) => {
   };
 
   const handleLoadSession = (session) => {
+    console.log('🔍 [LiveChatAI] handleLoadSession called');
+    console.log('📋 [LiveChatAI] Session:', JSON.stringify(session, null, 2));
+    
     if (session && session.messages) {
+      console.log('✅ [LiveChatAI] Session has messages, loading...');
+      console.log('📝 [LiveChatAI] Messages count:', session.messages.length);
       setConversationHistory(session.messages);
       setCurrentSessionId(session.id);
       setTranscribedText('Chat history loaded');
-      console.log('📖 Loaded session:', session.title);
+      console.log('📖 [LiveChatAI] Loaded session:', session.title);
+    } else {
+      console.error('❌ [LiveChatAI] Session or messages is undefined!');
     }
   };
 
@@ -495,11 +529,12 @@ const LiveChatAI = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* Chat History Modal */}
-      <LiveChatHistory
+      <ChatHistory
         visible={historyModalVisible}
         onClose={() => setHistoryModalVisible(false)}
         onLoadSession={handleLoadSession}
-        currentSessionId={currentSessionId}
+        currentChatType="live"
+        navigation={navigation}
       />
 
       {/* Header */}
@@ -582,7 +617,69 @@ const LiveChatAI = ({ navigation, route }) => {
             💬 {conversationHistory.length} messages in history
           </Text>
         )}
+        {conversationHistory.length > 0 && (
+          <TouchableOpacity 
+            style={styles.viewHistoryButton}
+            onPress={() => {
+              console.log('📜 [LiveChatAI] View conversation history clicked');
+              console.log('📋 [LiveChatAI] Current history:', JSON.stringify(conversationHistory, null, 2));
+              setShowConversationModal(true);
+            }}
+          >
+            <Text style={styles.viewHistoryText}>Tap to view conversation</Text>
+          </TouchableOpacity>
+        )}
       </View>
+
+      {/* Conversation History Modal */}
+      <Modal
+        visible={showConversationModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowConversationModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Conversation History</Text>
+              <TouchableOpacity 
+                onPress={() => setShowConversationModal(false)}
+                style={styles.closeModalButton}
+              >
+                <Text style={styles.closeModalText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView style={styles.conversationScroll}>
+              {conversationHistory.map((message, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.conversationMessage,
+                    message.role === 'user' 
+                      ? styles.conversationMessageUser 
+                      : styles.conversationMessageAssistant
+                  ]}
+                >
+                  <Text style={styles.conversationRole}>
+                    {message.role === 'user' ? '👤 You' : '🤖 AI Dermatologist'}
+                  </Text>
+                  <Text style={styles.conversationContent}>
+                    {message.content}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+            
+            <TouchableOpacity 
+              style={styles.closeButton}
+              onPress={() => setShowConversationModal(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Control Buttons */}
       <View style={styles.controlsContainer}>
@@ -733,6 +830,21 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontStyle: 'italic'
   },
+  viewHistoryButton: {
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(59, 130, 246, 0.3)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.5)'
+  },
+  viewHistoryText: {
+    fontSize: 12,
+    color: '#3B82F6',
+    textAlign: 'center',
+    fontWeight: '500'
+  },
   controlsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -787,6 +899,89 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255,255,255,0.7)',
     textAlign: 'center'
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContent: {
+    width: width * 0.9,
+    maxHeight: height * 0.8,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)'
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#fff'
+  },
+  closeModalButton: {
+    padding: 4
+  },
+  closeModalText: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: '600'
+  },
+  conversationScroll: {
+    maxHeight: height * 0.6
+  },
+  conversationMessage: {
+    marginBottom: 16,
+    padding: 12,
+    borderRadius: 12
+  },
+  conversationMessageUser: {
+    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+    borderLeftWidth: 3,
+    borderLeftColor: '#3B82F6'
+  },
+  conversationMessageAssistant: {
+    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+    borderLeftWidth: 3,
+    borderLeftColor: '#22C55E'
+  },
+  conversationRole: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: 6,
+    opacity: 0.8
+  },
+  conversationContent: {
+    fontSize: 14,
+    color: '#fff',
+    lineHeight: 20
+  },
+  closeButton: {
+    marginTop: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    backgroundColor: '#3B82F6',
+    borderRadius: 12,
+    alignItems: 'center'
+  },
+  closeButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff'
   }
 });
 

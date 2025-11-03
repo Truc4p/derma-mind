@@ -30,12 +30,14 @@ const colors = {
   primary950: '#3E0E21'
 };
 
-const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
+const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigation }) => {
   const [allSessions, setAllSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'text', 'live'
 
   useEffect(() => {
+    console.log('🔄 [ChatHistory] Component rendered/updated');
+    console.log('📋 [ChatHistory] Props:', { visible, currentChatType, hasNavigation: !!navigation });
     if (visible) {
       loadAllSessions();
     }
@@ -43,10 +45,12 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
 
   const loadAllSessions = async () => {
     try {
+      console.log('📖 [ChatHistory] Loading all sessions...');
       const sessions = [];
 
       // Load text chat history
       const textHistory = await chatStorage.loadChatHistory();
+      console.log('💬 [ChatHistory] Text chat history loaded:', textHistory.length, 'messages');
       if (textHistory.length > 0) {
         sessions.push({
           id: 'text-chat-current',
@@ -61,6 +65,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
 
       // Load live chat sessions
       const liveSessions = await liveChatStorage.loadAllSessions();
+      console.log('🎤 [ChatHistory] Live chat sessions loaded:', liveSessions.length, 'sessions');
       const liveSessionsWithType = liveSessions.map(session => ({
         ...session,
         type: 'live'
@@ -72,9 +77,10 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
         new Date(b.timestamp) - new Date(a.timestamp)
       );
 
+      console.log('✅ [ChatHistory] Total sessions loaded:', sorted.length);
       setAllSessions(sorted);
     } catch (error) {
-      console.error('Failed to load sessions:', error);
+      console.error('❌ [ChatHistory] Failed to load sessions:', error);
       setAllSessions([]);
     }
   };
@@ -141,6 +147,36 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
         }
       ]
     );
+  };
+
+  const handleLoadSession = (session) => {
+    console.log('🔍 [ChatHistory] handleLoadSession called');
+    console.log('📋 [ChatHistory] Session type:', session.type);
+    console.log('📋 [ChatHistory] Session ID:', session.id);
+    console.log('📋 [ChatHistory] Session messages count:', session.messages?.length);
+    console.log('📋 [ChatHistory] Full session:', JSON.stringify(session, null, 2));
+    
+    if (session.type === 'text') {
+      // Load text chat
+      console.log('💬 [ChatHistory] Loading text chat session');
+      console.log('📝 [ChatHistory] Calling onLoadSession with session');
+      onLoadSession(session);
+    } else if (session.type === 'live') {
+      // Navigate to LiveChatAI and load live chat session
+      console.log('🎤 [ChatHistory] Loading live chat session');
+      console.log('🧭 [ChatHistory] Attempting to navigate to LiveChatAI');
+      console.log('🧭 [ChatHistory] Navigation available:', !!navigation);
+      if (navigation) {
+        console.log('✅ [ChatHistory] Calling navigation.navigate()');
+        navigation.navigate('LiveChatAI', { loadSession: session });
+        console.log('✅ [ChatHistory] Navigation called successfully');
+      } else {
+        console.error('❌ [ChatHistory] Navigation object is undefined!');
+        console.error('❌ [ChatHistory] Cannot navigate to live chat. Falling back to onLoadSession');
+        // Fallback: try calling onLoadSession anyway
+        onLoadSession(session);
+      }
+    }
   };
 
   const filteredSessions = allSessions
@@ -247,7 +283,9 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
               key={session.id}
               style={styles.sessionItem}
               onPress={() => {
-                onLoadSession(session);
+                console.log('👆 [ChatHistory] Session item clicked');
+                console.log('📋 [ChatHistory] Session clicked:', session.id, session.type);
+                handleLoadSession(session);
                 onClose();
               }}
             >

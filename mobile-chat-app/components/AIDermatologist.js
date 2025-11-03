@@ -34,6 +34,22 @@ const AIDermatologist = ({ navigation }) => {
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
   const scrollViewRef = useRef(null);
 
+  // Log component mount and navigation availability
+  useEffect(() => {
+    console.log('🔄 [AIDermatologist] Component mounted');
+    console.log('🧭 [AIDermatologist] Navigation available on mount:', !!navigation);
+    console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+  }, []);
+
+  // Add logging whenever messages change
+  useEffect(() => {
+    console.log('📝 [AIDermatologist] messages updated:', messages.length, 'messages');
+    if (messages.length > 0) {
+      console.log('📋 [AIDermatologist] First message:', messages[0]);
+      console.log('📋 [AIDermatologist] Last message:', messages[messages.length - 1]);
+    }
+  }, [messages]);
+
   const sampleQuestions = [
     "What's a good routine for oily skin?",
     "How do I reduce wrinkles naturally?",
@@ -626,11 +642,19 @@ What would you like to know more about?`;
   };
 
   const handleLoadSession = (session) => {
+    console.log('🔍 [AIDermatologist] handleLoadSession called');
+    console.log('📋 [AIDermatologist] Session type:', session.type);
+    console.log('📋 [AIDermatologist] Session messages:', session.messages?.length);
+    
     if (session.type === 'text') {
       // Load text chat
+      console.log('💬 [AIDermatologist] Loading text chat session');
+      console.log('📝 [AIDermatologist] Setting messages:', session.messages);
       setMessages(session.messages);
+      console.log('✅ [AIDermatologist] Messages set successfully');
     } else if (session.type === 'live') {
       // Navigate to LiveChatAI and load live chat session
+      console.log('🎤 [AIDermatologist] Loading live chat session, navigating...');
       navigation.navigate('LiveChatAI', { loadSession: session });
     }
   };
@@ -741,6 +765,7 @@ What would you like to know more about?`;
         onClose={() => setHistoryModalVisible(false)}
         onLoadSession={handleLoadSession}
         currentChatType="text"
+        navigation={navigation}
       />
 
       {/* Chat Container */}
@@ -858,7 +883,18 @@ What would you like to know more about?`;
         {/* Live Chat Button */}
         <TouchableOpacity 
           style={styles.liveChatButton}
-          onPress={() => navigation.navigate('LiveChatAI')}
+          onPress={() => {
+            console.log('🎤 [AIDermatologist] Go Live with AI button pressed');
+            console.log('🧭 [AIDermatologist] Navigation available:', !!navigation);
+            console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+            if (navigation) {
+              console.log('✅ [AIDermatologist] Calling navigation.navigate("LiveChatAI")');
+              navigation.navigate('LiveChatAI');
+              console.log('✅ [AIDermatologist] Navigation called');
+            } else {
+              console.error('❌ [AIDermatologist] Navigation is undefined!');
+            }
+          }}
         >
           <Text style={styles.liveChatIcon}>🎤</Text>
           <Text style={styles.liveChatButtonText}>Go Live with AI</Text>
