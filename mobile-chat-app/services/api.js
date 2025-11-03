@@ -1,9 +1,19 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 // API Configuration
-// Change this to your backend URL when deploying
-const API_BASE_URL = 'http://localhost:3004/api';
+// For iOS Simulator: http://localhost:3004
+// For Android Emulator: http://10.0.2.2:3004
+// For Physical Device: http://YOUR_IP:3004 (e.g., http://192.168.1.100:3004)
+const getApiBaseUrl = () => {
+  if (Platform.OS === 'android') {
+    return 'http://192.168.88.55:3004/api'; // Android Physical Device - Backend API port
+  }
+  return 'http://localhost:3004/api'; // iOS Simulator or other platforms
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Create axios instance with base configuration
 const api = axios.create({

@@ -666,7 +666,18 @@ What would you like to know more about?`;
       }
 
       // Clean the text for speech
-      const textToSpeak = stripFormattingForSpeech(message.content);
+      let textToSpeak = stripFormattingForSpeech(message.content);
+      
+      // Check if text is too long (limit is 4000 characters)
+      const MAX_SPEECH_LENGTH = 3900; // Leave some buffer
+      if (textToSpeak.length > MAX_SPEECH_LENGTH) {
+        textToSpeak = textToSpeak.substring(0, MAX_SPEECH_LENGTH) + '... Message truncated due to length.';
+        Alert.alert(
+          'Long Message',
+          'This message is too long. Only the first part will be spoken.',
+          [{ text: 'OK' }]
+        );
+      }
       
       setSpeakingMessageIndex(messageIndex);
       setIsSpeaking(true);
