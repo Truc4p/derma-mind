@@ -622,25 +622,6 @@ What would you like to know more about?`;
     );
   };
 
-  const clearChat = () => {
-    Alert.alert(
-      'Clear Chat',
-      'Clear all chat history? This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: async () => {
-            setMessages([]);
-            setUserInput('');
-            await chatStorage.clearChatHistory();
-          }
-        }
-      ]
-    );
-  };
-
   const handleLoadSession = (session) => {
     console.log('🔍 [AIDermatologist] handleLoadSession called');
     console.log('📋 [AIDermatologist] Session type:', session.type);
@@ -880,46 +861,45 @@ What would you like to know more about?`;
 
       {/* Input Area */}
       <View style={styles.inputContainer}>
-        {/* Live Chat Button */}
-        <TouchableOpacity 
-          style={styles.liveChatButton}
-          onPress={() => {
-            console.log('🎤 [AIDermatologist] Go Live with AI button pressed');
-            console.log('🧭 [AIDermatologist] Navigation available:', !!navigation);
-            console.log('🧭 [AIDermatologist] Navigation object:', navigation);
-            if (navigation) {
-              console.log('✅ [AIDermatologist] Calling navigation.navigate("LiveChatAI")');
-              navigation.navigate('LiveChatAI');
-              console.log('✅ [AIDermatologist] Navigation called');
-            } else {
-              console.error('❌ [AIDermatologist] Navigation is undefined!');
-            }
-          }}
-        >
-          <Text style={styles.liveChatIcon}>🎤</Text>
-          <Text style={styles.liveChatButtonText}>Go Live with AI</Text>
-        </TouchableOpacity>
+        {/* Action Buttons Row */}
+        <View style={styles.actionButtonsRow}>
+          {/* Live Chat Button */}
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => {
+              console.log('🎤 [AIDermatologist] Go Live with AI button pressed');
+              console.log('🧭 [AIDermatologist] Navigation available:', !!navigation);
+              console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+              if (navigation) {
+                console.log('✅ [AIDermatologist] Calling navigation.navigate("LiveChatAI")');
+                navigation.navigate('LiveChatAI');
+                console.log('✅ [AIDermatologist] Navigation called');
+              } else {
+                console.error('❌ [AIDermatologist] Navigation is undefined!');
+              }
+            }}
+          >
+            <Text style={styles.actionButtonText}>Live</Text>
+          </TouchableOpacity>
 
-        {/* Chat Action Buttons */}
-        {messages.length > 0 && (
-          <View style={styles.chatActions}>
-            <TouchableOpacity style={styles.newChatBtn} onPress={startNewChat}>
-              <Text style={styles.newChatBtnText}>New Chat</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.clearChatBtn} onPress={clearChat}>
-              <Text style={styles.clearChatBtnText}>Clear Chat</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          {/* Chat History Button */}
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => setHistoryModalVisible(true)}
+          >
+            <Text style={styles.actionButtonText}>History</Text>
+          </TouchableOpacity>
 
-        {/* Chat History Button */}
-        <TouchableOpacity 
-          style={styles.historyButton}
-          onPress={() => setHistoryModalVisible(true)}
-        >
-          <Text style={styles.historyButtonIcon}>📜</Text>
-          <Text style={styles.historyButtonText}>View Chat History</Text>
-        </TouchableOpacity>
+          {/* New Chat Button */}
+          {messages.length > 0 && (
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={startNewChat}
+            >
+              <Text style={styles.actionButtonText}>New</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
         <View style={styles.inputWrapper}>
           <TextInput

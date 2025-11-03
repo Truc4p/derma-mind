@@ -62,6 +62,7 @@ const LiveChatAI = ({ navigation, route }) => {
   useEffect(() => {
     console.log('🔄 [LiveChatAI] Component mounted');
     console.log('📋 [LiveChatAI] Route params:', route?.params);
+    console.log('🔍 [LiveChatAI] Route object available:', !!route);
     
     // Request audio permissions on mount
     requestPermissions();
@@ -74,6 +75,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
       setCurrentSessionId(session.id);
+      setTranscribedText('Tap to start talking');
       console.log('✅ [LiveChatAI] Session loaded successfully');
       // Clear the route param
       navigation.setParams({ loadSession: undefined });
@@ -422,10 +424,6 @@ const LiveChatAI = ({ navigation, route }) => {
     );
   };
 
-  const handleViewHistory = () => {
-    setHistoryModalVisible(true);
-  };
-
   const handleLoadSession = (session) => {
     console.log('🔍 [LiveChatAI] handleLoadSession called');
     console.log('📋 [LiveChatAI] Session:', JSON.stringify(session, null, 2));
@@ -565,12 +563,6 @@ const LiveChatAI = ({ navigation, route }) => {
           <View style={styles.liveIndicator} />
           <Text style={styles.headerTitle}>Live Chat</Text>
         </View>
-        <TouchableOpacity 
-          style={styles.menuButton}
-          onPress={handleViewHistory}
-        >
-          <Text style={styles.menuIcon}>📋</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Animated Wave Background */}
@@ -639,15 +631,15 @@ const LiveChatAI = ({ navigation, route }) => {
         <Text style={styles.transcriptionText}>{transcribedText}</Text>
         {conversationHistory.length > 0 && (
           <Text style={styles.historyCount}>
-            💬 {conversationHistory.length} messages in history
+            {conversationHistory.length} messages in history
           </Text>
         )}
         {conversationHistory.length > 0 && (
           <TouchableOpacity 
             style={styles.viewHistoryButton}
             onPress={() => {
-              console.log('📜 [LiveChatAI] View conversation history clicked');
-              console.log('📋 [LiveChatAI] Current history:', JSON.stringify(conversationHistory, null, 2));
+              // console.log('📜 [LiveChatAI] View conversation history clicked');
+              // console.log('📋 [LiveChatAI] Current history:', JSON.stringify(conversationHistory, null, 2));
               setShowConversationModal(true);
             }}
           >
@@ -859,15 +851,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: colors.primary800
-  },
-  menuButton: {
-    padding: 8,
-    backgroundColor: colors.primary200,
-    borderRadius: 8
-  },
-  menuIcon: {
-    fontSize: 20,
-    color: colors.primary700
   },
   waveContainer: {
     position: 'absolute',

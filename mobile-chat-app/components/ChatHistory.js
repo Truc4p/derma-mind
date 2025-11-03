@@ -227,7 +227,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
             onPress={() => setActiveTab('text')}
           >
             <Text style={[styles.tabText, activeTab === 'text' && styles.tabTextActive]}>
-              💬 Text Chat
+              Text Chat
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -235,7 +235,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
             onPress={() => setActiveTab('live')}
           >
             <Text style={[styles.tabText, activeTab === 'live' && styles.tabTextActive]}>
-              🎤 Live Chat
+              Live Chat
             </Text>
           </TouchableOpacity>
         </View>
@@ -297,7 +297,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
                     session.type === 'live' ? styles.typeBadgeLive : styles.typeBadgeText
                   ]}>
                     <Text style={styles.typeBadgeText}>
-                      {session.type === 'live' ? '🎤 Live' : '💬 Text'}
+                      {session.type === 'live' ? 'Live' : 'Text'}
                     </Text>
                   </View>
                 </View>

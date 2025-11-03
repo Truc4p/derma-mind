@@ -209,80 +209,26 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingBottom: 16
   },
-  liveChatButton: {
+  actionButtonsRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+    gap: 8
+  },
+  actionButton: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary500,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3
+    backgroundColor: colors.primary200,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    elevation: 2
   },
-  liveChatIcon: {
-    fontSize: 20,
-    marginRight: 8
-  },
-  liveChatButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.white
-  },
-  chatActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 12,
-    gap: 12
-  },
-  newChatBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.primary100,
-    borderRadius: 8
-  },
-  newChatBtnText: {
+  actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.primary600
-  },
-  clearChatBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.white,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.red500
-  },
-  clearChatBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.red500
-  },
-  historyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.primary100,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 2,
-    borderColor: colors.primary300
-  },
-  historyButtonIcon: {
-    fontSize: 18,
-    marginRight: 8
-  },
-  historyButtonText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.primary700
+    color: colors.primary800
   },
   inputWrapper: {
     flexDirection: 'row',
