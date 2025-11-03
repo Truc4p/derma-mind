@@ -263,6 +263,27 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.red500
   },
+  historyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary100,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: colors.primary300
+  },
+  historyButtonIcon: {
+    fontSize: 18,
+    marginRight: 8
+  },
+  historyButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.primary700
+  },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end'

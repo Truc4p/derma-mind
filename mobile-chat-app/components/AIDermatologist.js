@@ -14,8 +14,9 @@ import {
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import * as Speech from 'expo-speech';
-import { aiDermatologistService, chatStorage } from '../services/api';
+import { aiDermatologistService, chatStorage, liveChatStorage } from '../services/api';
 import { styles, colors } from './AIDermatologist.styles';
+import ChatHistory from './ChatHistory';
 
 // API base URL - update this based on your setup
 // For iOS Simulator: http://localhost:3004
@@ -30,6 +31,7 @@ const AIDermatologist = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [speakingMessageIndex, setSpeakingMessageIndex] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [historyModalVisible, setHistoryModalVisible] = useState(false);
   const scrollViewRef = useRef(null);
 
   const sampleQuestions = [
@@ -623,6 +625,16 @@ What would you like to know more about?`;
     );
   };
 
+  const handleLoadSession = (session) => {
+    if (session.type === 'text') {
+      // Load text chat
+      setMessages(session.messages);
+    } else if (session.type === 'live') {
+      // Navigate to LiveChatAI and load live chat session
+      navigation.navigate('LiveChatAI', { loadSession: session });
+    }
+  };
+
   // Helper function to strip HTML and markdown for speech
   const stripFormattingForSpeech = (text) => {
     if (!text) return '';
@@ -723,6 +735,14 @@ What would you like to know more about?`;
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
+      {/* Chat History Modal */}
+      <ChatHistory
+        visible={historyModalVisible}
+        onClose={() => setHistoryModalVisible(false)}
+        onLoadSession={handleLoadSession}
+        currentChatType="text"
+      />
+
       {/* Chat Container */}
       <ScrollView
         ref={scrollViewRef}
@@ -855,6 +875,15 @@ What would you like to know more about?`;
             </TouchableOpacity>
           </View>
         )}
+
+        {/* Chat History Button */}
+        <TouchableOpacity 
+          style={styles.historyButton}
+          onPress={() => setHistoryModalVisible(true)}
+        >
+          <Text style={styles.historyButtonIcon}>📜</Text>
+          <Text style={styles.historyButtonText}>View Chat History</Text>
+        </TouchableOpacity>
 
         <View style={styles.inputWrapper}>
           <TextInput

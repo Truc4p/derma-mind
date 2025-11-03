@@ -1,0 +1,454 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  TextInput,
+  ScrollView,
+  Dimensions,
+  SafeAreaView,
+  Alert
+} from 'react-native';
+import { chatStorage, liveChatStorage } from '../services/api';
+
+const { width, height } = Dimensions.get('window');
+
+// Pink color theme
+const colors = {
+  primary50: '#FDFBF7',
+  primary100: '#FDF6F0',
+  primary200: '#F8EAE1',
+  primary300: '#F0D7CC',
+  primary400: '#E4BCC0',
+  primary500: '#C97F98',
+  primary600: '#A44A6B',
+  primary700: '#8C3154',
+  primary800: '#7F2548',
+  primary900: '#671C39',
+  primary950: '#3E0E21'
+};
+
+const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType }) => {
+  const [allSessions, setAllSessions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'text', 'live'
+
+  useEffect(() => {
+    if (visible) {
+      loadAllSessions();
+    }
+  }, [visible]);
+
+  const loadAllSessions = async () => {
+    try {
+      const sessions = [];
+
+      // Load text chat history
+      const textHistory = await chatStorage.loadChatHistory();
+      if (textHistory.length > 0) {
+        sessions.push({
+          id: 'text-chat-current',
+          type: 'text',
+          title: generateSessionTitle(textHistory),
+          preview: generateSessionPreview(textHistory),
+          timestamp: textHistory[textHistory.length - 1]?.timestamp || new Date().toISOString(),
+          messages: textHistory,
+          messageCount: textHistory.length
+        });
+      }
+
+      // Load live chat sessions
+      const liveSessions = await liveChatStorage.loadAllSessions();
+      const liveSessionsWithType = liveSessions.map(session => ({
+        ...session,
+        type: 'live'
+      }));
+      sessions.push(...liveSessionsWithType);
+
+      // Sort by timestamp, newest first
+      const sorted = sessions.sort((a, b) => 
+        new Date(b.timestamp) - new Date(a.timestamp)
+      );
+
+      setAllSessions(sorted);
+    } catch (error) {
+      console.error('Failed to load sessions:', error);
+      setAllSessions([]);
+    }
+  };
+
+  const generateSessionTitle = (messages) => {
+    if (messages.length === 0) return 'New Chat';
+    const firstUserMessage = messages.find(m => m.role === 'user');
+    if (firstUserMessage) {
+      const title = firstUserMessage.content.substring(0, 50);
+      return title.length < firstUserMessage.content.length ? title + '...' : title;
+    }
+    return 'Chat Session';
+  };
+
+  const generateSessionPreview = (messages) => {
+    if (messages.length === 0) return 'No messages yet';
+    const lastMessage = messages[messages.length - 1];
+    const preview = lastMessage.content.substring(0, 80);
+    return preview + (lastMessage.content.length > 80 ? '...' : '');
+  };
+
+  const formatSessionDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (days === 0) {
+      return 'Today ' + date.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      });
+    } else if (days === 1) {
+      return 'Yesterday';
+    } else if (days < 7) {
+      return days + ' days ago';
+    } else {
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    }
+  };
+
+  const handleDeleteSession = async (session) => {
+    Alert.alert(
+      'Delete Conversation',
+      `Delete this ${session.type === 'text' ? 'text chat' : 'live chat'} conversation? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            if (session.type === 'text') {
+              await chatStorage.clearChatHistory();
+            } else {
+              await liveChatStorage.deleteSession(session.id);
+            }
+            loadAllSessions();
+          }
+        }
+      ]
+    );
+  };
+
+  const filteredSessions = allSessions
+    .filter(session => {
+      // Filter by tab
+      if (activeTab === 'text' && session.type !== 'text') return false;
+      if (activeTab === 'live' && session.type !== 'live') return false;
+
+      // Filter by search query
+      if (!searchQuery.trim()) return true;
+      
+      const query = searchQuery.toLowerCase();
+      return (
+        session.title.toLowerCase().includes(query) ||
+        session.preview.toLowerCase().includes(query) ||
+        session.messages.some(msg => msg.content.toLowerCase().includes(query))
+      );
+    });
+
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={false}
+      onRequestClose={onClose}
+    >
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Chat History</Text>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Tabs */}
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'all' && styles.tabActive]}
+            onPress={() => setActiveTab('all')}
+          >
+            <Text style={[styles.tabText, activeTab === 'all' && styles.tabTextActive]}>
+              All ({allSessions.length})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'text' && styles.tabActive]}
+            onPress={() => setActiveTab('text')}
+          >
+            <Text style={[styles.tabText, activeTab === 'text' && styles.tabTextActive]}>
+              💬 Text Chat
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'live' && styles.tabActive]}
+            onPress={() => setActiveTab('live')}
+          >
+            <Text style={[styles.tabText, activeTab === 'live' && styles.tabTextActive]}>
+              🎤 Live Chat
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search conversations..."
+            placeholderTextColor={colors.primary600}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearSearchButton}
+              onPress={() => setSearchQuery('')}
+            >
+              <Text style={styles.clearSearchText}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Sessions List */}
+        <ScrollView style={styles.sessionsList}>
+          {filteredSessions.length === 0 && !searchQuery && (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>No chat history yet</Text>
+              <Text style={styles.emptyStateSubtext}>
+                Start a conversation to see it here
+              </Text>
+            </View>
+          )}
+
+          {filteredSessions.length === 0 && searchQuery && (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>
+                No results found for "{searchQuery}"
+              </Text>
+            </View>
+          )}
+
+          {filteredSessions.map((session) => (
+            <TouchableOpacity
+              key={session.id}
+              style={styles.sessionItem}
+              onPress={() => {
+                onLoadSession(session);
+                onClose();
+              }}
+            >
+              <View style={styles.sessionInfo}>
+                <View style={styles.sessionHeader}>
+                  <Text style={styles.sessionTitle}>{session.title}</Text>
+                  <View style={[
+                    styles.typeBadge,
+                    session.type === 'live' ? styles.typeBadgeLive : styles.typeBadgeText
+                  ]}>
+                    <Text style={styles.typeBadgeText}>
+                      {session.type === 'live' ? '🎤 Live' : '💬 Text'}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.sessionDate}>
+                  {formatSessionDate(session.timestamp)}
+                </Text>
+                <Text style={styles.sessionPreview}>{session.preview}</Text>
+                <Text style={styles.sessionCount}>
+                  💬 {session.messageCount} messages
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDeleteSession(session)}
+              >
+                <Text style={styles.deleteButtonText}>🗑️</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.primary50
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: colors.primary100,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary200
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: colors.primary950
+  },
+  closeButton: {
+    padding: 8,
+    borderRadius: 8
+  },
+  closeButtonText: {
+    fontSize: 24,
+    color: colors.primary600,
+    fontWeight: '600'
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.primary100,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary200
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent'
+  },
+  tabActive: {
+    borderBottomColor: colors.primary600
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.primary700
+  },
+  tabTextActive: {
+    color: colors.primary600,
+    fontWeight: '600'
+  },
+  searchContainer: {
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+    position: 'relative'
+  },
+  searchInput: {
+    backgroundColor: colors.primary100,
+    borderRadius: 12,
+    padding: 12,
+    paddingRight: 40,
+    fontSize: 14,
+    borderWidth: 1,
+    borderColor: colors.primary200,
+    color: colors.primary950
+  },
+  clearSearchButton: {
+    position: 'absolute',
+    right: 24,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+    padding: 8,
+    borderRadius: 6
+  },
+  clearSearchText: {
+    fontSize: 16,
+    color: colors.primary600
+  },
+  sessionsList: {
+    flex: 1,
+    padding: 16
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 32
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: colors.primary600,
+    marginBottom: 8,
+    textAlign: 'center'
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: colors.primary500,
+    textAlign: 'center'
+  },
+  sessionItem: {
+    backgroundColor: colors.primary100,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: colors.primary200,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
+  },
+  sessionInfo: {
+    flex: 1,
+    marginRight: 12
+  },
+  sessionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4
+  },
+  sessionTitle: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.primary950,
+    marginRight: 8
+  },
+  typeBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12
+  },
+  typeBadgeText: {
+    backgroundColor: colors.primary200,
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.primary800
+  },
+  typeBadgeLive: {
+    backgroundColor: colors.primary300
+  },
+  sessionDate: {
+    fontSize: 12,
+    color: colors.primary700,
+    marginBottom: 4
+  },
+  sessionPreview: {
+    fontSize: 14,
+    color: colors.primary800,
+    marginBottom: 6
+  },
+  sessionCount: {
+    fontSize: 12,
+    color: colors.primary600,
+    fontWeight: '500'
+  },
+  deleteButton: {
+    padding: 8
+  },
+  deleteButtonText: {
+    fontSize: 20
+  }
+});
+
+export default ChatHistory;

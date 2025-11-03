@@ -12,16 +12,19 @@ import {
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
 import { liveChatService, liveChatStorage } from '../services/api';
+import LiveChatHistory from './LiveChatHistory';
 
 const { width, height } = Dimensions.get('window');
 
-const LiveChatAI = ({ navigation }) => {
+const LiveChatAI = ({ navigation, route }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAISpeaking, setIsAISpeaking] = useState(false);
   const [transcribedText, setTranscribedText] = useState('');
   const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
+  const [historyModalVisible, setHistoryModalVisible] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState('current');
   
   // Animation values
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -33,8 +36,16 @@ const LiveChatAI = ({ navigation }) => {
     // Request audio permissions on mount
     requestPermissions();
     
-    // Load conversation history
-    loadChatHistory();
+    // Load conversation history or session from route params
+    if (route?.params?.loadSession) {
+      const session = route.params.loadSession;
+      setConversationHistory(session.messages);
+      setCurrentSessionId(session.id);
+      // Clear the route param
+      navigation.setParams({ loadSession: undefined });
+    } else {
+      loadChatHistory();
+    }
     
     // Cleanup on unmount
     return () => {
@@ -44,6 +55,16 @@ const LiveChatAI = ({ navigation }) => {
       Speech.stop();
     };
   }, []);
+
+  // Watch for route params changes
+  useEffect(() => {
+    if (route?.params?.loadSession) {
+      const session = route.params.loadSession;
+      setConversationHistory(session.messages);
+      setCurrentSessionId(session.id);
+      navigation.setParams({ loadSession: undefined });
+    }
+  }, [route?.params?.loadSession]);
 
   // Start pulsing animation when recording or AI is speaking
   useEffect(() => {
@@ -66,11 +87,41 @@ const LiveChatAI = ({ navigation }) => {
 
   const saveChatHistory = async (messages) => {
     try {
+      // Save messages to history
       await liveChatStorage.saveLiveChatHistory(messages);
+      
+      // Also save as a session
+      const sessionData = {
+        id: currentSessionId,
+        title: generateSessionTitle(messages),
+        preview: generateSessionPreview(messages),
+        timestamp: new Date().toISOString(),
+        messages: messages,
+        messageCount: messages.length
+      };
+      
+      await liveChatStorage.saveSession(currentSessionId, sessionData);
       console.log('💾 Saved live chat history:', messages.length, 'messages');
     } catch (error) {
       console.error('❌ Failed to save chat history:', error);
     }
+  };
+
+  const generateSessionTitle = (messages) => {
+    if (messages.length === 0) return 'New Chat';
+    const firstUserMessage = messages.find(m => m.role === 'user');
+    if (firstUserMessage) {
+      const title = firstUserMessage.content.substring(0, 50);
+      return title.length < firstUserMessage.content.length ? title + '...' : title;
+    }
+    return 'Live Chat Session';
+  };
+
+  const generateSessionPreview = (messages) => {
+    if (messages.length === 0) return 'No messages yet';
+    const lastMessage = messages[messages.length - 1];
+    const preview = lastMessage.content.substring(0, 80);
+    return preview + (lastMessage.content.length > 80 ? '...' : '');
   };
 
   const requestPermissions = async () => {
@@ -330,28 +381,16 @@ const LiveChatAI = ({ navigation }) => {
   };
 
   const handleViewHistory = () => {
-    if (conversationHistory.length === 0) {
-      Alert.alert('No History', 'No conversation history yet. Start chatting!');
-      return;
+    setHistoryModalVisible(true);
+  };
+
+  const handleLoadSession = (session) => {
+    if (session && session.messages) {
+      setConversationHistory(session.messages);
+      setCurrentSessionId(session.id);
+      setTranscribedText('Chat history loaded');
+      console.log('📖 Loaded session:', session.title);
     }
-
-    const historyText = conversationHistory
-      .map((msg, index) => {
-        const role = msg.role === 'user' ? 'You' : 'AI';
-        const preview = msg.content.substring(0, 100);
-        return `${index + 1}. ${role}: ${preview}${msg.content.length > 100 ? '...' : ''}`;
-      })
-      .join('\n\n');
-
-    Alert.alert(
-      `Chat History (${conversationHistory.length} messages)`,
-      historyText,
-      [
-        { text: 'Close', style: 'cancel' },
-        { text: 'Clear History', style: 'destructive', onPress: handleClearHistory }
-      ],
-      { cancelable: true }
-    );
   };
 
   const speakAIResponse = async (text) => {
@@ -455,6 +494,14 @@ const LiveChatAI = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Chat History Modal */}
+      <LiveChatHistory
+        visible={historyModalVisible}
+        onClose={() => setHistoryModalVisible(false)}
+        onLoadSession={handleLoadSession}
+        currentSessionId={currentSessionId}
+      />
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🔴 Live</Text>

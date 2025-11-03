@@ -194,9 +194,65 @@ export const liveChatStorage = {
   async clearLiveChatHistory() {
     try {
       await AsyncStorage.removeItem('liveChatHistory');
+      await AsyncStorage.removeItem('liveChatSessions');
+      await AsyncStorage.removeItem('liveChatCurrentSession');
       console.log('🗑️ Live chat history cleared');
     } catch (error) {
       console.warn('Failed to clear live chat history:', error);
+    }
+  },
+
+  // Session management
+  async saveSession(sessionId, sessionData) {
+    try {
+      const sessions = await this.loadAllSessions();
+      const existingIndex = sessions.findIndex(s => s.id === sessionId);
+      
+      if (existingIndex >= 0) {
+        sessions[existingIndex] = sessionData;
+      } else {
+        sessions.push(sessionData);
+      }
+      
+      await AsyncStorage.setItem('liveChatSessions', JSON.stringify(sessions));
+      await AsyncStorage.setItem('liveChatCurrentSession', sessionId);
+      console.log('💾 Session saved:', sessionId);
+    } catch (error) {
+      console.warn('Failed to save session:', error);
+    }
+  },
+
+  async loadAllSessions() {
+    try {
+      const saved = await AsyncStorage.getItem('liveChatSessions');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      return [];
+    } catch (error) {
+      console.warn('Failed to load sessions:', error);
+      return [];
+    }
+  },
+
+  async loadCurrentSessionId() {
+    try {
+      const sessionId = await AsyncStorage.getItem('liveChatCurrentSession');
+      return sessionId;
+    } catch (error) {
+      console.warn('Failed to load current session ID:', error);
+      return null;
+    }
+  },
+
+  async deleteSession(sessionId) {
+    try {
+      const sessions = await this.loadAllSessions();
+      const filtered = sessions.filter(s => s.id !== sessionId);
+      await AsyncStorage.setItem('liveChatSessions', JSON.stringify(filtered));
+      console.log('🗑️ Session deleted:', sessionId);
+    } catch (error) {
+      console.warn('Failed to delete session:', error);
     }
   }
 };
