@@ -165,4 +165,40 @@ export const chatStorage = {
   }
 };
 
+// Storage utilities for Live Chat history
+export const liveChatStorage = {
+  async saveLiveChatHistory(messages) {
+    try {
+      await AsyncStorage.setItem('liveChatHistory', JSON.stringify(messages));
+      console.log('💾 Live chat history saved:', messages.length, 'messages');
+    } catch (error) {
+      console.warn('Failed to save live chat history:', error);
+    }
+  },
+
+  async loadLiveChatHistory() {
+    try {
+      const savedChat = await AsyncStorage.getItem('liveChatHistory');
+      if (savedChat) {
+        const parsed = JSON.parse(savedChat);
+        console.log('📖 Loaded live chat history:', parsed.length, 'messages');
+        return parsed;
+      }
+      return [];
+    } catch (error) {
+      console.warn('Failed to load live chat history:', error);
+      return [];
+    }
+  },
+
+  async clearLiveChatHistory() {
+    try {
+      await AsyncStorage.removeItem('liveChatHistory');
+      console.log('🗑️ Live chat history cleared');
+    } catch (error) {
+      console.warn('Failed to clear live chat history:', error);
+    }
+  }
+};
+
 export default api;

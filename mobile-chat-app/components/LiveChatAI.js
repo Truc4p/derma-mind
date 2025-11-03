@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
-import { liveChatService } from '../services/api';
+import { liveChatService, liveChatStorage } from '../services/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -33,6 +33,9 @@ const LiveChatAI = ({ navigation }) => {
     // Request audio permissions on mount
     requestPermissions();
     
+    // Load conversation history
+    loadChatHistory();
+    
     // Cleanup on unmount
     return () => {
       if (recording) {
@@ -50,6 +53,25 @@ const LiveChatAI = ({ navigation }) => {
       stopPulseAnimation();
     }
   }, [isRecording, isAISpeaking]);
+
+  const loadChatHistory = async () => {
+    try {
+      const history = await liveChatStorage.loadLiveChatHistory();
+      setConversationHistory(history);
+      console.log('📖 Loaded live chat history:', history.length, 'messages');
+    } catch (error) {
+      console.error('❌ Failed to load chat history:', error);
+    }
+  };
+
+  const saveChatHistory = async (messages) => {
+    try {
+      await liveChatStorage.saveLiveChatHistory(messages);
+      console.log('💾 Saved live chat history:', messages.length, 'messages');
+    } catch (error) {
+      console.error('❌ Failed to save chat history:', error);
+    }
+  };
 
   const requestPermissions = async () => {
     try {
@@ -259,6 +281,7 @@ const LiveChatAI = ({ navigation }) => {
         { role: 'user', content: userMessage }
       ];
       setConversationHistory(newHistory);
+      await saveChatHistory(newHistory);
 
       // Get AI response from backend
       console.log('🤖 Sending to AI...');
@@ -268,10 +291,12 @@ const LiveChatAI = ({ navigation }) => {
       setIsProcessing(false);
       
       // Add AI response to history
-      setConversationHistory([
+      const fullHistory = [
         ...newHistory,
         { role: 'assistant', content: response.response }
-      ]);
+      ];
+      setConversationHistory(fullHistory);
+      await saveChatHistory(fullHistory);
 
       // Speak the AI response
       await speakAIResponse(response.response);
@@ -282,6 +307,51 @@ const LiveChatAI = ({ navigation }) => {
       setTranscribedText('Sorry, there was an error. Tap to try again.');
       Alert.alert('Error', 'Failed to get AI response');
     }
+  };
+
+  const handleClearHistory = () => {
+    Alert.alert(
+      'Clear Live Chat History',
+      'Are you sure you want to clear all conversation history?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress: async () => {
+            setConversationHistory([]);
+            await liveChatStorage.clearLiveChatHistory();
+            setTranscribedText('');
+            Alert.alert('Success', 'Live chat history cleared');
+          }
+        }
+      ]
+    );
+  };
+
+  const handleViewHistory = () => {
+    if (conversationHistory.length === 0) {
+      Alert.alert('No History', 'No conversation history yet. Start chatting!');
+      return;
+    }
+
+    const historyText = conversationHistory
+      .map((msg, index) => {
+        const role = msg.role === 'user' ? 'You' : 'AI';
+        const preview = msg.content.substring(0, 100);
+        return `${index + 1}. ${role}: ${preview}${msg.content.length > 100 ? '...' : ''}`;
+      })
+      .join('\n\n');
+
+    Alert.alert(
+      `Chat History (${conversationHistory.length} messages)`,
+      historyText,
+      [
+        { text: 'Close', style: 'cancel' },
+        { text: 'Clear History', style: 'destructive', onPress: handleClearHistory }
+      ],
+      { cancelable: true }
+    );
   };
 
   const speakAIResponse = async (text) => {
@@ -388,7 +458,10 @@ const LiveChatAI = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🔴 Live</Text>
-        <TouchableOpacity style={styles.menuButton}>
+        <TouchableOpacity 
+          style={styles.menuButton}
+          onPress={handleViewHistory}
+        >
           <Text style={styles.menuIcon}>☰</Text>
         </TouchableOpacity>
       </View>
@@ -457,6 +530,11 @@ const LiveChatAI = ({ navigation }) => {
       {/* Transcription Text */}
       <View style={styles.textContainer}>
         <Text style={styles.transcriptionText}>{transcribedText}</Text>
+        {conversationHistory.length > 0 && (
+          <Text style={styles.historyCount}>
+            💬 {conversationHistory.length} messages in history
+          </Text>
+        )}
       </View>
 
       {/* Control Buttons */}
@@ -600,6 +678,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     maxWidth: width * 0.8
+  },
+  historyCount: {
+    fontSize: 12,
+    color: '#A0A0A0',
+    textAlign: 'center',
+    marginTop: 8,
+    fontStyle: 'italic'
   },
   controlsContainer: {
     flexDirection: 'row',
