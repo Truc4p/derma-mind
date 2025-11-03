@@ -4,13 +4,26 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AIDermatologist from './components/AIDermatologist';
 
-// Suppress defaultProps warnings from react-native-render-html
+// Suppress defaultProps warnings from react-native-render-html library
+// These are expected warnings with React 18.2.0 and will be fixed in future library updates
 LogBox.ignoreLogs([
-  'Support for defaultProps will be removed',
-  'TRenderEngineProvider: Support for defaultProps',
-  'MemoizedTNodeRenderer: Support for defaultProps',
-  'TNodeChildrenRenderer: Support for defaultProps',
+  'Warning: TRenderEngineProvider: Support for defaultProps',
+  'Warning: MemoizedTNodeRenderer: Support for defaultProps',
+  'Warning: TNodeChildrenRenderer: Support for defaultProps',
+  'Warning: bound renderChildren: Support for defaultProps',
 ]);
+
+// Filter console.error for defaultProps warnings (React Native shows these as ERROR in terminal)
+const originalError = console.error;
+console.error = (...args) => {
+  if (
+    typeof args[0] === 'string' &&
+    args[0].includes('Support for defaultProps')
+  ) {
+    return;
+  }
+  originalError(...args);
+};
 
 const Stack = createNativeStackNavigator();
 
