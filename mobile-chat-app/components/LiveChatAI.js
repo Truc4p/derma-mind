@@ -118,9 +118,22 @@ const LiveChatAI = ({ navigation }) => {
 
   const startRecording = async () => {
     try {
+      console.log('🎤 Starting recording...');
+      
       // Stop any ongoing speech
       await Speech.stop();
       setIsAISpeaking(false);
+      
+      // IMPORTANT: Clean up any existing recording first
+      if (recording) {
+        console.log('⚠️ Cleaning up existing recording...');
+        try {
+          await recording.stopAndUnloadAsync();
+        } catch (e) {
+          console.log('Warning: Error cleaning up recording:', e);
+        }
+        setRecording(null);
+      }
       
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -131,22 +144,28 @@ const LiveChatAI = ({ navigation }) => {
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
       
+      console.log('✅ Recording started successfully');
       setRecording(newRecording);
       setIsRecording(true);
-      setTranscribedText('Listening...');
+      setTranscribedText('Listening... Speak now');
     } catch (error) {
-      console.error('Failed to start recording:', error);
+      console.error('❌ Failed to start recording:', error);
       Alert.alert('Error', 'Failed to start recording. Please try again.');
+      setRecording(null);
     }
   };
 
   const stopRecording = async () => {
-    if (!recording) return;
+    if (!recording) {
+      console.log('⚠️ No recording to stop');
+      return;
+    }
 
     try {
+      console.log('🛑 Stopping recording...');
       setIsRecording(false);
       setIsProcessing(true);
-      setTranscribedText('Processing...');
+      setTranscribedText('Processing your voice...');
       
       await recording.stopAndUnloadAsync();
       await Audio.setAudioModeAsync({
@@ -154,57 +173,91 @@ const LiveChatAI = ({ navigation }) => {
       });
 
       const uri = recording.getURI();
+      console.log('📁 Audio file saved at:', uri);
       setRecording(null);
 
       // Send audio to backend for processing
       await processAudioWithAI(uri);
       
     } catch (error) {
-      console.error('Failed to stop recording:', error);
+      console.error('❌ Failed to stop recording:', error);
       setIsProcessing(false);
+      setRecording(null);
       Alert.alert('Error', 'Failed to process recording.');
     }
   };
 
   const processAudioWithAI = async (audioUri) => {
     try {
-      // For now, use speech-to-text simulation
-      // In production, you would send the audio file to your backend
+      console.log('🔄 Processing audio from:', audioUri);
       
-      // Simulated user speech (in production, this would come from transcription)
-      const userMessage = "What's a good skincare routine for dry skin?";
-      setTranscribedText(`You: ${userMessage}`);
+      // TODO: In production, send audio to backend for transcription
+      // For now, prompt user to type what they said (since we don't have speech-to-text API yet)
       
-      // Add to conversation history
-      const newHistory = [
-        ...conversationHistory,
-        { role: 'user', content: userMessage }
-      ];
-      setConversationHistory(newHistory);
+      // Show a prompt to manually enter what was said
+      Alert.prompt(
+        'Voice Transcription',
+        'Please type what you said (automatic speech-to-text coming soon):',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => {
+              setIsProcessing(false);
+              setTranscribedText('Tap to start talking');
+            }
+          },
+          {
+            text: 'Send',
+            onPress: async (userMessage) => {
+              if (!userMessage || !userMessage.trim()) {
+                setIsProcessing(false);
+                setTranscribedText('Tap to start talking');
+                return;
+              }
+              
+              console.log('📝 User message:', userMessage);
+              setTranscribedText(`You: ${userMessage}`);
+              
+              // Add to conversation history
+              const newHistory = [
+                ...conversationHistory,
+                { role: 'user', content: userMessage.trim() }
+              ];
+              setConversationHistory(newHistory);
 
-      // Get AI response from backend
-      const response = await liveChatService.chat(userMessage, newHistory);
-      
-      setIsProcessing(false);
-      
-      // Add AI response to history
-      setConversationHistory([
-        ...newHistory,
-        { role: 'assistant', content: response.response }
-      ]);
+              // Get AI response from backend
+              console.log('🤖 Sending to AI...');
+              const response = await liveChatService.chat(userMessage.trim(), newHistory);
+              console.log('✅ AI response received:', response.response.substring(0, 100) + '...');
+              
+              setIsProcessing(false);
+              
+              // Add AI response to history
+              setConversationHistory([
+                ...newHistory,
+                { role: 'assistant', content: response.response }
+              ]);
 
-      // Speak the AI response
-      await speakAIResponse(response.response);
+              // Speak the AI response
+              await speakAIResponse(response.response);
+            }
+          }
+        ],
+        'plain-text'
+      );
       
     } catch (error) {
-      console.error('Error processing audio:', error);
+      console.error('❌ Error processing audio:', error);
       setIsProcessing(false);
       setTranscribedText('Sorry, there was an error processing your request.');
+      Alert.alert('Error', error.message || 'Failed to get AI response');
     }
   };
 
   const speakAIResponse = async (text) => {
     try {
+      console.log('🔊 Speaking AI response...');
       // Strip HTML/markdown for clean speech
       const cleanText = text
         .replace(/<[^>]*>/g, ' ')
@@ -220,6 +273,7 @@ const LiveChatAI = ({ navigation }) => {
         ? cleanText.substring(0, MAX_SPEECH_LENGTH) + '...'
         : cleanText;
 
+      console.log('📢 Text to speak length:', textToSpeak.length);
       setIsAISpeaking(true);
       setTranscribedText(text);
 
@@ -228,30 +282,36 @@ const LiveChatAI = ({ navigation }) => {
         pitch: 1.0,
         rate: 0.9,
         onDone: () => {
+          console.log('✅ Speech completed');
           setIsAISpeaking(false);
           setTranscribedText('Tap to start talking');
         },
         onStopped: () => {
+          console.log('⏸️ Speech stopped');
           setIsAISpeaking(false);
           setTranscribedText('Tap to start talking');
         },
         onError: (error) => {
-          console.error('Speech error:', error);
+          console.error('❌ Speech error:', error);
           setIsAISpeaking(false);
           setTranscribedText('Tap to start talking');
         }
       });
     } catch (error) {
-      console.error('Error speaking:', error);
+      console.error('❌ Error speaking:', error);
       setIsAISpeaking(false);
       setTranscribedText('Tap to start talking');
     }
   };
 
   const handleMicPress = () => {
+    console.log('👆 Mic button pressed');
+    console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking);
+    
     if (isProcessing || isAISpeaking) {
       // Stop AI speaking if tapped during speech
       if (isAISpeaking) {
+        console.log('⏹️ Stopping AI speech...');
         Speech.stop();
         setIsAISpeaking(false);
         setTranscribedText('Tap to start talking');
@@ -260,8 +320,10 @@ const LiveChatAI = ({ navigation }) => {
     }
 
     if (isRecording) {
+      console.log('⏹️ Stopping recording...');
       stopRecording();
     } else {
+      console.log('▶️ Starting recording...');
       startRecording();
     }
   };
@@ -276,8 +338,13 @@ const LiveChatAI = ({ navigation }) => {
           text: 'End',
           style: 'destructive',
           onPress: async () => {
+            console.log('🔚 Ending session...');
             if (recording) {
-              await recording.stopAndUnloadAsync();
+              try {
+                await recording.stopAndUnloadAsync();
+              } catch (e) {
+                console.log('Warning: Error stopping recording on exit:', e);
+              }
             }
             await Speech.stop();
             navigation.goBack();
