@@ -4,55 +4,12 @@
 ✅ Live voice chat UI is working
 ✅ Audio recording is working  
 ✅ AI response and text-to-speech is working
-✅ **Using FREE on-device speech recognition (expo-speech-recognition)**
+⚠️ Audio transcription currently uses fallback (manual input)
 
-## ✅ IMPLEMENTED: Free On-Device Speech Recognition
+## Why Manual Fallback?
+Gemini API's audio transcription support is limited and may not be available in all API tiers. For production-grade speech-to-text, we recommend using Google Cloud Speech-to-Text API.
 
-We're now using **expo-speech-recognition** which is:
-- ✅ **Completely FREE** - No API costs
-- ✅ **Works offline** - Uses device's built-in recognition
-- ✅ **Good accuracy** - Powered by Apple/Google speech recognition
-- ✅ **Real-time** - Instant transcription
-- ✅ **No backend needed** - Works entirely on device
-
-### How It Works:
-1. Tap mic button
-2. Speech is recognized **on your device** (free!)
-3. Text is sent to AI
-4. AI responds with voice
-
-**No more manual typing needed!**
-
-## Other Free Options (if you need alternatives)
-
-### Option 1: Expo Speech Recognition (CURRENT - Best for Mobile) ⭐
-```bash
-npx expo install expo-speech-recognition
-```
-- ✅ FREE forever
-- ✅ Works on iOS and Android
-- ✅ Built into the device
-- ❌ Requires internet (on some devices)
-
-### Option 2: Vosk (Offline, Open Source)
-
-### Option 2: Vosk (Offline, Open Source)
-```bash
-npm install react-native-vosk
-```
-- ✅ FREE and open source
-- ✅ Works completely offline
-- ✅ No API keys needed
-- ❌ Large model files (50-200MB)
-- ❌ More complex setup
-
-## Paid Options (if you need better accuracy)
-
-### Option 3: Google Cloud Speech-to-Text
-60 free minutes/month, then $0.006/15 sec
-- ✅ Very accurate
-- ✅ Good free tier
-- ❌ Requires billing account
+## Option 1: Google Cloud Speech-to-Text (Recommended)
 
 ### Step 1: Enable the API
 ```bash
