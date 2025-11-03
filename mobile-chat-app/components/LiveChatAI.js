@@ -7,9 +7,9 @@ import {
   Animated,
   Dimensions,
   Alert,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
-import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
 import { liveChatService } from '../services/api';
 
@@ -20,8 +20,9 @@ const LiveChatAI = ({ navigation }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAISpeaking, setIsAISpeaking] = useState(false);
   const [transcribedText, setTranscribedText] = useState('');
-  const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const [showInput, setShowInput] = useState(false);
   
   // Animation values
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -30,14 +31,8 @@ const LiveChatAI = ({ navigation }) => {
   const waveAnim3 = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Request audio permissions on mount
-    requestPermissions();
-    
     // Cleanup on unmount
     return () => {
-      if (recording) {
-        recording.stopAndUnloadAsync();
-      }
       Speech.stop();
     };
   }, []);
@@ -52,18 +47,8 @@ const LiveChatAI = ({ navigation }) => {
   }, [isRecording, isAISpeaking]);
 
   const requestPermissions = async () => {
-    try {
-      const { status } = await Audio.requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission Required',
-          'Please grant microphone permission to use live chat.',
-          [{ text: 'OK' }]
-        );
-      }
-    } catch (error) {
-      console.error('Error requesting permissions:', error);
-    }
+    // No permissions needed for simple text input
+    console.log('✅ Ready to use');
   };
 
   const startPulseAnimation = () => {
@@ -118,133 +103,40 @@ const LiveChatAI = ({ navigation }) => {
 
   const startRecording = async () => {
     try {
-      console.log('🎤 Starting recording...');
-      
-      // Stop any ongoing speech
-      await Speech.stop();
-      setIsAISpeaking(false);
-      
-      // IMPORTANT: Clean up any existing recording first
-      if (recording) {
-        console.log('⚠️ Cleaning up existing recording...');
-        try {
-          await recording.stopAndUnloadAsync();
-        } catch (e) {
-          console.log('Warning: Error cleaning up recording:', e);
-        }
-        setRecording(null);
-      }
-      
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true
-      });
-
-      const { recording: newRecording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
-      
-      console.log('✅ Recording started successfully');
-      setRecording(newRecording);
-      setIsRecording(true);
-      setTranscribedText('Listening... Speak now');
+      console.log('💬 Opening text input...');
+      setShowInput(true);
+      setUserInput('');
+      setTranscribedText('Type your question...');
     } catch (error) {
-      console.error('❌ Failed to start recording:', error);
-      Alert.alert('Error', 'Failed to start recording. Please try again.');
-      setRecording(null);
+      console.error('❌ Failed to show input:', error);
+      Alert.alert('Error', 'Failed to open text input. Please try again.');
     }
   };
 
   const stopRecording = async () => {
-    if (!recording) {
-      console.log('⚠️ No recording to stop');
-      return;
-    }
-
     try {
-      console.log('🛑 Stopping recording...');
-      setIsRecording(false);
-      setIsProcessing(true);
-      setTranscribedText('Processing your voice...');
+      console.log('� Processing text input...');
+      setShowInput(false);
       
-      await recording.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false
-      });
-
-      const uri = recording.getURI();
-      console.log('📁 Audio file saved at:', uri);
-      setRecording(null);
-
-      // Send audio to backend for processing
-      await processAudioWithAI(uri);
+      const finalText = userInput.trim();
+      console.log('📝 User typed:', finalText);
       
-    } catch (error) {
-      console.error('❌ Failed to stop recording:', error);
-      setIsProcessing(false);
-      setRecording(null);
-      Alert.alert('Error', 'Failed to process recording.');
-    }
-  };
-
-  const processAudioWithAI = async (audioUri) => {
-    try {
-      console.log('🔄 Processing audio from:', audioUri);
-      
-      // Step 1: Try automatic transcription with Gemini
-      setTranscribedText('Transcribing your voice...');
-      
-      try {
-        const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
-        const userMessage = transcriptionResult.transcription;
-        
-        if (!userMessage || !userMessage.trim()) {
-          throw new Error('Empty transcription');
-        }
-        
-        console.log('✅ Auto-transcription successful:', userMessage);
-        await sendToAI(userMessage.trim());
-        
-      } catch (transcriptionError) {
-        console.log('⚠️ Auto-transcription failed:', transcriptionError.message);
-        
-        // Fall back to manual input
-        console.log('🔄 Falling back to manual input...');
-        setTranscribedText('Transcription failed. Please type your question:');
-        
-        Alert.prompt(
-          'Manual Input',
-          'Automatic transcription is not available yet. Please type what you said:',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-              onPress: () => {
-                setIsProcessing(false);
-                setTranscribedText('Tap to start talking');
-              }
-            },
-            {
-              text: 'Send',
-              onPress: async (userMessage) => {
-                if (!userMessage || !userMessage.trim()) {
-                  setIsProcessing(false);
-                  setTranscribedText('Tap to start talking');
-                  return;
-                }
-                await sendToAI(userMessage.trim());
-              }
-            }
-          ],
-          'plain-text'
-        );
+      if (!finalText) {
+        setTranscribedText('No text entered. Tap to try again.');
+        Alert.alert('No Text', 'Please type a question first.');
+        return;
       }
       
+      setIsProcessing(true);
+      setTranscribedText('Processing your question...');
+      
+      // Process with AI
+      await sendToAI(finalText);
+      
     } catch (error) {
-      console.error('❌ Error processing audio:', error);
+      console.error('❌ Failed to process text:', error);
       setIsProcessing(false);
-      setTranscribedText('Error occurred. Tap to try again.');
-      Alert.alert('Error', 'Failed to process audio. Please try again.');
+      Alert.alert('Error', 'Failed to process your question.');
     }
   };
 
@@ -368,13 +260,6 @@ const LiveChatAI = ({ navigation }) => {
           style: 'destructive',
           onPress: async () => {
             console.log('🔚 Ending session...');
-            if (recording) {
-              try {
-                await recording.stopAndUnloadAsync();
-              } catch (e) {
-                console.log('Warning: Error stopping recording on exit:', e);
-              }
-            }
             await Speech.stop();
             navigation.goBack();
           }
@@ -528,6 +413,42 @@ const LiveChatAI = ({ navigation }) => {
             : 'Tap to start talking'}
         </Text>
       </View>
+
+      {/* Text Input Overlay */}
+      {showInput && (
+        <View style={styles.inputOverlay}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Type your question:</Text>
+            <TextInput
+              style={styles.textInput}
+              value={userInput}
+              onChangeText={setUserInput}
+              placeholder="Ask about skincare..."
+              placeholderTextColor="#999"
+              multiline
+              autoFocus
+            />
+            <View style={styles.inputButtons}>
+              <TouchableOpacity
+                style={[styles.inputButton, styles.cancelButton]}
+                onPress={() => {
+                  setShowInput(false);
+                  setUserInput('');
+                  setTranscribedText('Tap to start talking');
+                }}
+              >
+                <Text style={styles.inputButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.inputButton, styles.sendButton]}
+                onPress={stopRecording}
+              >
+                <Text style={styles.inputButtonText}>Send</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -655,6 +576,63 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255,255,255,0.7)',
     textAlign: 'center'
+  },
+  inputOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  inputContainer: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: 16,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400
+  },
+  inputLabel: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 12,
+    fontWeight: '600'
+  },
+  textInput: {
+    backgroundColor: '#2a2a2a',
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    color: '#fff',
+    minHeight: 100,
+    maxHeight: 200,
+    textAlignVertical: 'top'
+  },
+  inputButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+    gap: 12
+  },
+  inputButton: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center'
+  },
+  cancelButton: {
+    backgroundColor: '#374151'
+  },
+  sendButton: {
+    backgroundColor: '#3B82F6'
+  },
+  inputButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600'
   }
 });
 
