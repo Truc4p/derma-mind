@@ -1,11 +1,14 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleAIFileManager } = require('@google/generative-ai/server');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
 const fs = require('fs').promises;
+const path = require('path');
 const speechService = require('./speechService');
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const fileManager = new GoogleAIFileManager(process.env.GEMINI_API_KEY);
 
 class GeminiService {
     constructor() {
@@ -160,27 +163,94 @@ CITATION REQUIREMENT (Numbered Reference Style):
     }
 
     /**
-     * Transcribe audio file to text using Google Cloud Speech-to-Text API
+     * Transcribe audio file to text using FREE Gemini File API
      */
     async transcribeAudio(audioFilePath) {
         try {
-            console.log('🎤 Starting audio transcription:', audioFilePath);
+            console.log('🎤 Starting Gemini audio transcription:', audioFilePath);
             
-            // Try Google Cloud Speech-to-Text
+            // Get MIME type from file extension
+            const mimeType = this.getMimeType(audioFilePath);
+            console.log('📄 Audio MIME type:', mimeType);
+            
+            // Upload audio file to Gemini
+            console.log('📤 Uploading audio file to Gemini...');
+            const uploadResult = await fileManager.uploadFile(audioFilePath, {
+                mimeType: mimeType,
+                displayName: path.basename(audioFilePath),
+            });
+            console.log('✅ Upload successful! File URI:', uploadResult.file.uri);
+            
+            // Use Gemini to transcribe the audio
+            console.log('🤖 Requesting transcription from Gemini...');
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            
+            const result = await model.generateContent([
+                {
+                    fileData: {
+                        mimeType: uploadResult.file.mimeType,
+                        fileUri: uploadResult.file.uri
+                    }
+                },
+                { text: "Please transcribe the speech in this audio file. Only return the transcribed text without any additional commentary or formatting." },
+            ]);
+            
+            const transcription = result.response.text().trim();
+            console.log('✅ Gemini transcription successful:', transcription);
+            
+            // Clean up: delete the uploaded file from Gemini
             try {
-                const transcription = await speechService.transcribeAudio(audioFilePath);
-                console.log('✅ Google Cloud transcription:', transcription);
-                return transcription;
-            } catch (speechError) {
-                console.log('⚠️ Google Cloud error:', speechError.message);
-                console.log('📖 See SPEECH_TO_TEXT_GUIDE.md for setup instructions');
-                throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
+                await fileManager.deleteFile(uploadResult.file.name);
+                console.log('🗑️ Cleaned up uploaded file from Gemini');
+            } catch (deleteError) {
+                console.log('⚠️ Failed to delete file from Gemini:', deleteError.message);
             }
+            
+            return transcription;
+            
         } catch (error) {
-            if (error.message === 'TRANSCRIPTION_NOT_AVAILABLE') {
-                throw error;
+            console.error('❌ Gemini transcription error:', error);
+            
+            // Check if it's a model availability error
+            if (error.message && error.message.includes('not found')) {
+                console.log('⚠️ Gemini model not available, trying gemini-1.5-pro...');
+                
+                try {
+                    // Try with gemini-1.5-pro as fallback
+                    const uploadResult = await fileManager.uploadFile(audioFilePath, {
+                        mimeType: this.getMimeType(audioFilePath),
+                        displayName: path.basename(audioFilePath),
+                    });
+                    
+                    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+                    const result = await model.generateContent([
+                        {
+                            fileData: {
+                                mimeType: uploadResult.file.mimeType,
+                                fileUri: uploadResult.file.uri
+                            }
+                        },
+                        { text: "Please transcribe the speech in this audio file. Only return the transcribed text without any additional commentary or formatting." },
+                    ]);
+                    
+                    const transcription = result.response.text().trim();
+                    
+                    // Cleanup
+                    try {
+                        await fileManager.deleteFile(uploadResult.file.name);
+                    } catch (deleteError) {
+                        console.log('⚠️ Failed to delete file:', deleteError.message);
+                    }
+                    
+                    return transcription;
+                    
+                } catch (fallbackError) {
+                    console.error('❌ Fallback to gemini-1.5-pro also failed:', fallbackError);
+                    throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
+                }
             }
-            throw new Error('Failed to transcribe audio');
+            
+            throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
         }
     }
 
