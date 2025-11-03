@@ -23,7 +23,7 @@ import { styles, colors } from './AIDermatologist.styles';
 // For Physical Device: http://YOUR_IP:3004
 const API_BASE_URL = 'http://localhost:3004';
 
-const AIDermatologist = () => {
+const AIDermatologist = ({ navigation }) => {
   const { width } = useWindowDimensions();
   const [userInput, setUserInput] = useState('');
   const [messages, setMessages] = useState([]);
@@ -835,6 +835,15 @@ What would you like to know more about?`;
 
       {/* Input Area */}
       <View style={styles.inputContainer}>
+        {/* Live Chat Button */}
+        <TouchableOpacity 
+          style={styles.liveChatButton}
+          onPress={() => navigation.navigate('LiveChatAI')}
+        >
+          <Text style={styles.liveChatIcon}>🎤</Text>
+          <Text style={styles.liveChatButtonText}>Go Live with AI</Text>
+        </TouchableOpacity>
+
         {/* Chat Action Buttons */}
         {messages.length > 0 && (
           <View style={styles.chatActions}>

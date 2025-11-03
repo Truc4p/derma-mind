@@ -71,6 +71,34 @@ export const aiDermatologistService = {
   }
 };
 
+// Live Chat service (same endpoint, can be extended for voice features)
+export const liveChatService = {
+  async chat(message, conversationHistory = []) {
+    const response = await api.post('/ai-dermatologist/chat', {
+      message,
+      conversationHistory
+    });
+    return response.data;
+  },
+  
+  // Future: Add audio transcription endpoint
+  async transcribeAudio(audioUri) {
+    const formData = new FormData();
+    formData.append('audio', {
+      uri: audioUri,
+      type: 'audio/m4a',
+      name: 'recording.m4a'
+    });
+    
+    const response = await api.post('/ai-dermatologist/transcribe', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  }
+};
+
 // Storage utilities for chat history
 export const chatStorage = {
   async saveChatHistory(messages) {

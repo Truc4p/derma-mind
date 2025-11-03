@@ -209,6 +209,30 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingBottom: 16
   },
+  liveChatButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary500,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  liveChatIcon: {
+    fontSize: 20,
+    marginRight: 8
+  },
+  liveChatButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.white
+  },
   chatActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',

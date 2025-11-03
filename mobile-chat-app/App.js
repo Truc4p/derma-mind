@@ -3,6 +3,7 @@ import { StatusBar, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AIDermatologist from './components/AIDermatologist';
+import LiveChatAI from './components/LiveChatAI';
 
 // Suppress defaultProps warnings from react-native-render-html library
 // These are expected warnings with React 18.2.0 and will be fixed in future library updates
@@ -54,6 +55,15 @@ export default function App() {
             options={{
               title: 'AI Dermatologist',
               headerShown: true
+            }}
+          />
+          <Stack.Screen
+            name="LiveChatAI"
+            component={LiveChatAI}
+            options={{
+              title: 'Live Chat with AI',
+              headerShown: false,
+              presentation: 'fullScreenModal'
             }}
           />
         </Stack.Navigator>

@@ -283,8 +283,8 @@ class VectorService {
             console.log(`📝 User Query: "${userQuery}"`);
             console.log(`📊 Query Length: ${userQuery.length} chars, ${userQuery.split(' ').length} words`);
             
-            // 1. Retrieve relevant context (increased from 5 to 10 for better coverage of split content)
-            const relevantDocs = await this.searchRelevantDocs(userQuery, 10, debugMode);
+            // 1. Retrieve relevant context
+            const relevantDocs = await this.searchRelevantDocs(userQuery, 5, debugMode);
             
             console.log(`\n📚 Retrieved ${relevantDocs.length} chunks from Qdrant:\n`);
             
