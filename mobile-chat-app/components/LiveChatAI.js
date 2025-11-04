@@ -38,6 +38,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [currentSound, setCurrentSound] = useState(null); // Track current playing audio
+  const [isActionInProgress, setIsActionInProgress] = useState(false); // Prevent race conditions
 
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -83,8 +84,11 @@ const LiveChatAI = ({ navigation, route }) => {
 
     // Cleanup on unmount
     return () => {
+      console.log('🧹 Component unmounting, cleaning up...');
       if (recording) {
-        recording.stopAndUnloadAsync();
+        recording.stopAndUnloadAsync().catch(e => 
+          console.log('Warning: Error cleaning up recording on unmount:', e)
+        );
       }
       // Stop gTTS audio
       if (currentSound) {
@@ -186,7 +190,13 @@ const LiveChatAI = ({ navigation, route }) => {
   };
 
   const startRecording = async () => {
+    if (isActionInProgress) {
+      console.log('⏸️ Action already in progress, skipping...');
+      return;
+    }
+
     try {
+      setIsActionInProgress(true);
       console.log('🎤 Starting recording...');
       
       // Stop any ongoing speech
@@ -206,11 +216,18 @@ const LiveChatAI = ({ navigation, route }) => {
       if (recording) {
         console.log('⚠️ Cleaning up existing recording...');
         try {
-          await recording.stopAndUnloadAsync();
+          const status = await recording.getStatusAsync();
+          if (status.isRecording) {
+            await recording.stopAndUnloadAsync();
+          } else {
+            await recording._cleanupForUnloadedRecorder();
+          }
         } catch (e) {
           console.log('Warning: Error cleaning up recording:', e);
         }
         setRecording(null);
+        // Add a small delay to ensure cleanup is complete
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
 
       await Audio.setAudioModeAsync({
@@ -230,28 +247,44 @@ const LiveChatAI = ({ navigation, route }) => {
       console.error('❌ Failed to start recording:', error);
       Alert.alert('Error', 'Failed to start recording. Please try again.');
       setRecording(null);
+      setIsRecording(false);
+    } finally {
+      setIsActionInProgress(false);
     }
   };
 
   const stopRecording = async () => {
     if (!recording) {
       console.log('⚠️ No recording to stop');
+      setIsRecording(false); // Ensure state is consistent
+      return;
+    }
+
+    if (isActionInProgress) {
+      console.log('⏸️ Action already in progress, skipping stop...');
       return;
     }
 
     try {
+      setIsActionInProgress(true);
       console.log('🛑 Stopping recording...');
       setIsRecording(false);
       setIsProcessing(true);
       setTranscribedText('Processing your voice...');
 
-      await recording.stopAndUnloadAsync();
+      const status = await recording.getStatusAsync();
+      if (status.isRecording) {
+        await recording.stopAndUnloadAsync();
+      }
+      
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false
       });
 
       const uri = recording.getURI();
       console.log('📁 Audio file saved at:', uri);
+      
+      const recordingToProcess = recording;
       setRecording(null);
 
       // Send audio to backend for processing
@@ -260,8 +293,11 @@ const LiveChatAI = ({ navigation, route }) => {
     } catch (error) {
       console.error('❌ Failed to stop recording:', error);
       setIsProcessing(false);
+      setIsRecording(false);
       setRecording(null);
       Alert.alert('Error', 'Failed to process recording.');
+    } finally {
+      setIsActionInProgress(false);
     }
   };
 
@@ -418,37 +454,46 @@ const LiveChatAI = ({ navigation, route }) => {
   
   const handleMicPress = async () => {
     console.log('👆 Mic button pressed');
-    console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking);
+    console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking, 'isActionInProgress:', isActionInProgress);
     
-    if (isProcessing || isAISpeaking) {
+    // Prevent rapid tapping
+    if (isActionInProgress) {
+      console.log('⏸️ Action in progress, ignoring press');
+      return;
+    }
+    
+    if (isProcessing) {
+      console.log('⏸️ Currently processing, ignoring press');
+      return;
+    }
+    
+    if (isAISpeaking) {
       // Stop AI speaking if tapped during speech
-      if (isAISpeaking) {
-        console.log('⏹️ Stopping AI speech...');
-        
-        // Stop gTTS audio
-        if (currentSound) {
-          try {
-            await currentSound.stopAsync();
-            await currentSound.unloadAsync();
-            console.log('✅ gTTS audio stopped');
-          } catch (e) {
-            console.log('Warning: Error stopping audio:', e);
-          }
-          setCurrentSound(null);
+      console.log('⏹️ Stopping AI speech...');
+      
+      // Stop gTTS audio
+      if (currentSound) {
+        try {
+          await currentSound.stopAsync();
+          await currentSound.unloadAsync();
+          console.log('✅ gTTS audio stopped');
+        } catch (e) {
+          console.log('Warning: Error stopping audio:', e);
         }
-        
-        setIsAISpeaking(false);
-        setTranscribedText('');
+        setCurrentSound(null);
       }
+      
+      setIsAISpeaking(false);
+      setTranscribedText('');
       return;
     }
 
     if (isRecording) {
       console.log('⏹️ Stopping recording...');
-      stopRecording();
+      await stopRecording();
     } else {
       console.log('▶️ Starting recording...');
-      startRecording();
+      await startRecording();
     }
   };
 
