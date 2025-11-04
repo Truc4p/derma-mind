@@ -13,8 +13,8 @@ import {
   useWindowDimensions
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import * as Speech from 'expo-speech';
-import { aiDermatologistService, chatStorage, liveChatStorage } from '../services/api';
+import { Audio } from 'expo-av';
+import { aiDermatologistService, chatStorage, liveChatStorage, liveChatService } from '../services/api';
 import { styles, colors } from './AIDermatologist.styles';
 import ChatHistory from './ChatHistory';
 
@@ -32,6 +32,7 @@ const AIDermatologist = ({ navigation }) => {
   const [speakingMessageIndex, setSpeakingMessageIndex] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
+  const [sound, setSound] = useState(null);
   const scrollViewRef = useRef(null);
 
   // Log component mount and navigation availability
@@ -663,7 +664,7 @@ What would you like to know more about?`;
     return cleanText;
   };
 
-  // Text-to-speech functions
+  // Text-to-speech functions using backend gTTS
   const handleSpeak = async (messageIndex) => {
     const message = messages[messageIndex];
     if (!message || message.role !== 'assistant') return;
@@ -671,22 +672,29 @@ What would you like to know more about?`;
     try {
       // If already speaking this message, stop it
       if (speakingMessageIndex === messageIndex && isSpeaking) {
-        await Speech.stop();
+        if (sound) {
+          console.log('⏸️ Stopping audio playback');
+          await sound.stopAsync();
+          await sound.unloadAsync();
+          setSound(null);
+        }
         setSpeakingMessageIndex(null);
         setIsSpeaking(false);
         return;
       }
 
-      // Stop any currently speaking message
-      if (isSpeaking) {
-        await Speech.stop();
+      // Stop any currently playing audio
+      if (sound) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(null);
       }
 
       // Clean the text for speech
       let textToSpeak = stripFormattingForSpeech(message.content);
       
-      // Check if text is too long (limit is 4000 characters)
-      const MAX_SPEECH_LENGTH = 3900; // Leave some buffer
+      // Check if text is too long
+      const MAX_SPEECH_LENGTH = 5000;
       if (textToSpeak.length > MAX_SPEECH_LENGTH) {
         textToSpeak = textToSpeak.substring(0, MAX_SPEECH_LENGTH) + '... Message truncated due to length.';
         Alert.alert(
@@ -699,40 +707,62 @@ What would you like to know more about?`;
       setSpeakingMessageIndex(messageIndex);
       setIsSpeaking(true);
 
-      // Start speaking
-      Speech.speak(textToSpeak, {
-        language: 'en-US',
-        pitch: 1.0,
-        rate: 0.9,
-        onDone: () => {
-          setSpeakingMessageIndex(null);
-          setIsSpeaking(false);
-        },
-        onStopped: () => {
-          setSpeakingMessageIndex(null);
-          setIsSpeaking(false);
-        },
-        onError: (error) => {
-          console.error('Speech error:', error);
-          setSpeakingMessageIndex(null);
-          setIsSpeaking(false);
-          Alert.alert('Error', 'Failed to speak the message');
-        }
+      console.log('🔊 [TTS] Requesting audio from backend...');
+      console.log('📝 [TTS] Text length:', textToSpeak.length);
+
+      // Request TTS from backend
+      const response = await liveChatService.textToSpeech(textToSpeak);
+      
+      console.log('✅ [TTS] Audio received, preparing playback...');
+
+      // Set audio mode for playback
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+        staysActiveInBackground: false
       });
+
+      // Create sound from base64 audio
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: `data:audio/mp3;base64,${response.audio}` },
+        { shouldPlay: true },
+        (status) => {
+          if (status.didJustFinish) {
+            console.log('✅ [TTS] Audio playback finished');
+            setSpeakingMessageIndex(null);
+            setIsSpeaking(false);
+          }
+        }
+      );
+
+      setSound(newSound);
+      console.log('▶️ [TTS] Audio playback started');
+
     } catch (error) {
-      console.error('Error in handleSpeak:', error);
+      console.error('❌ [TTS] Error in handleSpeak:', error);
       setSpeakingMessageIndex(null);
       setIsSpeaking(false);
-      Alert.alert('Error', 'Failed to initialize speech');
+      
+      if (sound) {
+        await sound.unloadAsync();
+        setSound(null);
+      }
+      
+      Alert.alert('Error', 'Failed to play the audio. Please ensure the backend is running.');
     }
   };
 
-  // Stop speech when component unmounts or messages change significantly
+  // Cleanup audio on unmount
   useEffect(() => {
     return () => {
-      Speech.stop();
+      if (sound) {
+        console.log('🧹 [TTS] Cleaning up sound on unmount');
+        sound.unloadAsync();
+      }
     };
-  }, []);
+  }, [sound]);
 
   return (
     <KeyboardAvoidingView
