@@ -16,6 +16,7 @@
 - **Authentication**: JWT (jsonwebtoken 9.0.2) + bcryptjs 3.0.2
 - **Security**: Helmet 8.1.0, CORS 2.8.5
 - **Audio Transcription**: AssemblyAI (assemblyai 4.10.1)
+- **Text-to-Speech**: gTTS - Google Text-to-Speech (node-gtts 2.0.2)
 - **File Processing**: Multer 2.0.2, pdf-parse 2.4.3
 - **Utilities**: uuid 13.0.0, morgan 1.10.1
 
@@ -35,7 +36,7 @@
 - **Storage**: AsyncStorage 1.23.1
 - **Markdown**: react-native-markdown-display 7.0.2
 - **HTTP Client**: Axios 1.6.2
-- **Audio**: Expo Audio & Speech (Live chat voice features)
+- **Audio**: Expo Audio (recording and playback)
 - **Speech Recognition**: AssemblyAI (audio transcription)
 
 ## Project Architecture
@@ -72,6 +73,7 @@ skin-study/
 │   ├── services/                     # External services
 │   │   ├── geminiService.js         # Google Gemini AI integration
 │   │   ├── speechService.js         # AssemblyAI audio transcription
+│   │   ├── ttsService.js            # gTTS text-to-speech
 │   │   └── vectorService.js         # Qdrant vector search
 │   │
 │   ├── middleware/                   # Express middleware
@@ -160,7 +162,7 @@ skin-study/
 - **Markdown Support**: Rich text formatting in responses
 - **Offline Fallback**: Context-aware responses when backend unavailable
 - **Voice-to-Text**: Audio transcription using AssemblyAI
-- **Text-to-Speech**: AI responses spoken aloud (mobile app)
+- **Text-to-Speech**: AI responses converted to audio using gTTS (Google Text-to-Speech)
 - **Live Chat**: Real-time voice conversation with AI (mobile app)
 
 #### How It Works:
@@ -534,6 +536,28 @@ Transcribe audio to text using AssemblyAI.
 - Automatic punctuation and formatting
 - English language support
 - Error handling for empty/unclear audio
+
+#### POST `/text-to-speech`
+Convert text to speech audio using gTTS (Google Text-to-Speech).
+
+**Request:**
+```json
+{
+  "text": "For acne-prone skin, I recommend using salicylic acid..."
+}
+```
+
+**Response:**
+- Returns audio file (MP3 format)
+- Content-Type: `audio/mpeg`
+- Generated using Google Translate TTS API
+
+**Features:**
+- Natural-sounding voice synthesis
+- Free Google Text-to-Speech (gTTS)
+- Multiple language support (100+ languages)
+- High-quality audio output
+- Fast audio generation
 
 ### Education Routes (`/api/education`)
 
@@ -919,7 +943,7 @@ expo build:android
 **Live Voice Chat:**
 - Real-time voice conversation with AI
 - Automatic speech-to-text transcription (AssemblyAI)
-- Text-to-speech AI responses (Expo Speech)
+- Text-to-speech AI responses (gTTS - Google Text-to-Speech)
 - Visual feedback with pulsing animations
 - Recording controls (pause, resume, stop)
 - Conversation history with timestamps
@@ -1011,7 +1035,7 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 
 ### Voice & Audio Features
 - **Audio Transcription**: AssemblyAI integration for high-quality speech-to-text conversion
-- **Text-to-Speech**: AI responses spoken aloud in natural voice (mobile app)
+- **Text-to-Speech**: AI responses converted to audio using gTTS (Google Text-to-Speech) with natural-sounding voice synthesis
 - **Live Voice Chat**: Real-time voice conversation with AI dermatologist (mobile app)
 - **Recording Controls**: Pause, resume, and stop functionality for voice interactions
 - **Visual Feedback**: Animated pulsing effects during recording and AI speech
@@ -1019,7 +1043,6 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 ### Search & History
 - **Search Chat**: Full-text search across all conversation history
 - **Multi-Session Search**: Search through both text chats and live voice chat sessions
-- **Filter by Type**: Filter search results by chat type (text/live/all)
 - **Session Management**: Load, save, and delete individual chat sessions
 - **Auto-Generated Titles**: Automatic session titles based on first message
 - **Smart Timestamps**: Relative timestamps (Today, Yesterday, X days ago)
@@ -1047,7 +1070,7 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 
 ### Technical Improvements
 - [x] **Advanced RAG System**: 10 dermatology textbooks vectorized for semantic search
-- [x] **Voice Integration**: AssemblyAI speech-to-text + Expo Speech text-to-speech
+- [x] **Voice Integration**: AssemblyAI speech-to-text + gTTS (Google Text-to-Speech)
 - [x] **Search Functionality**: Full-text search across conversation history
 - [x] **Session Management**: Save, load, and search chat sessions
 - [ ] Redis caching layer
