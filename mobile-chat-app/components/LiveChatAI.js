@@ -7,9 +7,7 @@ import {
   Animated,
   Dimensions,
   Alert,
-  Platform,
-  ScrollView,
-  Modal
+  Platform
 } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
@@ -39,7 +37,6 @@ const LiveChatAI = ({ navigation, route }) => {
   const [transcribedText, setTranscribedText] = useState('');
   const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
-  const [showConversationModal, setShowConversationModal] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   
   // Add logging whenever conversationHistory changes
@@ -73,7 +70,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
       setSessionId(session.id);
-      setTranscribedText('Tap to start talking');
+      setTranscribedText('');
       console.log('✅ [LiveChatAI] Session loaded successfully');
       // Clear the route param
       navigation.setParams({ loadSession: undefined });
@@ -289,7 +286,7 @@ const LiveChatAI = ({ navigation, route }) => {
               style: 'cancel',
               onPress: () => {
                 setIsProcessing(false);
-                setTranscribedText('Tap to start talking');
+                setTranscribedText('');
               }
             },
             {
@@ -297,7 +294,7 @@ const LiveChatAI = ({ navigation, route }) => {
               onPress: async (userMessage) => {
                 if (!userMessage || !userMessage.trim()) {
                   setIsProcessing(false);
-                  setTranscribedText('Tap to start talking');
+                  setTranscribedText('');
                   return;
                 }
                 await sendToAI(userMessage.trim());
@@ -382,23 +379,23 @@ const LiveChatAI = ({ navigation, route }) => {
         onDone: () => {
           console.log('✅ Speech completed');
           setIsAISpeaking(false);
-          setTranscribedText('Tap to start talking');
+          setTranscribedText('');
         },
         onStopped: () => {
           console.log('⏸️ Speech stopped');
           setIsAISpeaking(false);
-          setTranscribedText('Tap to start talking');
+          setTranscribedText('');
         },
         onError: (error) => {
           console.error('❌ Speech error:', error);
           setIsAISpeaking(false);
-          setTranscribedText('Tap to start talking');
+          setTranscribedText('');
         }
       });
     } catch (error) {
       console.error('❌ Error speaking:', error);
       setIsAISpeaking(false);
-      setTranscribedText('Tap to start talking');
+      setTranscribedText('');
     }
   };
 
@@ -412,7 +409,7 @@ const LiveChatAI = ({ navigation, route }) => {
         console.log('⏹️ Stopping AI speech...');
         Speech.stop();
         setIsAISpeaking(false);
-        setTranscribedText('Tap to start talking');
+        setTranscribedText('');
       }
       return;
     }
@@ -578,74 +575,7 @@ const LiveChatAI = ({ navigation, route }) => {
       {/* Transcription Text */}
       <View style={styles.textContainer}>
         <Text style={styles.transcriptionText}>{transcribedText}</Text>
-        {conversationHistory.length > 0 && (
-          <Text style={styles.historyCount}>
-            {conversationHistory.length} messages in history
-          </Text>
-        )}
-        {conversationHistory.length > 0 && (
-          <TouchableOpacity 
-            style={styles.viewHistoryButton}
-            onPress={() => {
-              // console.log('📜 [LiveChatAI] View conversation history clicked');
-              // console.log('📋 [LiveChatAI] Current history:', JSON.stringify(conversationHistory, null, 2));
-              setShowConversationModal(true);
-            }}
-          >
-            <Text style={styles.viewHistoryText}>Tap to view conversation</Text>
-          </TouchableOpacity>
-        )}
       </View>
-
-      {/* Conversation History Modal */}
-      <Modal
-        visible={showConversationModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowConversationModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Conversation History</Text>
-              <TouchableOpacity 
-                onPress={() => setShowConversationModal(false)}
-                style={styles.closeModalButton}
-              >
-                <Text style={styles.closeModalText}>✕</Text>
-              </TouchableOpacity>
-            </View>
-            
-            <ScrollView style={styles.conversationScroll}>
-              {conversationHistory.map((message, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.conversationMessage,
-                    message.role === 'user' 
-                      ? styles.conversationMessageUser 
-                      : styles.conversationMessageAssistant
-                  ]}
-                >
-                  <Text style={styles.conversationRole}>
-                    {message.role === 'user' ? 'You' : 'AI Dermatologist'}
-                  </Text>
-                  <Text style={styles.conversationContent}>
-                    {message.content}
-                  </Text>
-                </View>
-              ))}
-            </ScrollView>
-            
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={() => setShowConversationModal(false)}
-            >
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
       {/* Control Buttons */}
       <View style={styles.controlsContainer}>
@@ -713,7 +643,7 @@ const LiveChatAI = ({ navigation, route }) => {
             ? 'Processing...'
             : isAISpeaking
             ? 'AI is speaking'
-            : 'Tap to start talking'}
+            : ''}
         </Text>
       </View>
     </View>
@@ -858,21 +788,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontStyle: 'italic'
   },
-  viewHistoryButton: {
-    marginTop: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.primary200,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.primary300
-  },
-  viewHistoryText: {
-    fontSize: 12,
-    color: colors.primary700,
-    textAlign: 'center',
-    fontWeight: '500'
-  },
   controlsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -940,103 +855,6 @@ const styles = StyleSheet.create({
     color: colors.primary700,
     textAlign: 'center',
     fontWeight: '500'
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(62, 14, 33, 0.85)',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  modalContent: {
-    width: width * 0.9,
-    maxHeight: height * 0.8,
-    backgroundColor: colors.primary50,
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: colors.primary900,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: colors.primary200
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.primary200
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.primary900
-  },
-  closeModalButton: {
-    padding: 4,
-    backgroundColor: colors.primary200,
-    borderRadius: 8
-  },
-  closeModalText: {
-    fontSize: 20,
-    color: colors.primary700,
-    fontWeight: '600'
-  },
-  conversationScroll: {
-    maxHeight: height * 0.6
-  },
-  conversationMessage: {
-    marginBottom: 16,
-    padding: 12,
-    borderRadius: 12,
-    shadowColor: colors.primary500,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2
-  },
-  conversationMessageUser: {
-    backgroundColor: colors.primary200,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.primary600
-  },
-  conversationMessageAssistant: {
-    backgroundColor: colors.primary100,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.primary500
-  },
-  conversationRole: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.primary800,
-    marginBottom: 6,
-    opacity: 0.9
-  },
-  conversationContent: {
-    fontSize: 14,
-    color: colors.primary900,
-    lineHeight: 20
-  },
-  closeButton: {
-    marginTop: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    backgroundColor: colors.primary600,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: colors.primary700,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3
-  },
-  closeButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.primary50
   }
 });
 
