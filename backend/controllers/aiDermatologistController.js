@@ -1,5 +1,6 @@
 const geminiService = require('../services/geminiService');
 const vectorService = require('../services/vectorService');
+const ttsService = require('../services/ttsService');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -125,6 +126,82 @@ exports.transcribeAudio = async (req, res) => {
         
         res.status(500).json({ 
             error: 'Failed to transcribe audio',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+
+/**
+ * @desc    Convert text to speech using Google Cloud TTS
+ * @route   POST /api/ai-dermatologist/text-to-speech
+ * @access  Public
+ */
+exports.textToSpeech = async (req, res) => {
+    let outputPath = null;
+    
+    try {
+        const requestStartTime = Date.now();
+        console.log('\n=== 🔊 [BACKEND] TEXT-TO-SPEECH REQUEST ===');
+        console.log('⏰ [BACKEND] Request time:', new Date().toISOString());
+        
+        const { text } = req.body;
+        
+        if (!text || text.trim() === '') {
+            console.error('❌ [BACKEND] No text provided');
+            return res.status(400).json({ error: 'Text is required' });
+        }
+        
+        console.log('📝 [BACKEND] Text length:', text.length);
+        
+        // Generate unique filename
+        const timestamp = Date.now();
+        const filename = `tts-${timestamp}.mp3`;
+        outputPath = path.join(__dirname, '..', 'uploads', 'audio', filename);
+        
+        console.log('🚀 [BACKEND] Generating speech...');
+        const ttsStartTime = Date.now();
+        
+        // Generate speech
+        await ttsService.textToSpeech(text, outputPath);
+        
+        const ttsDuration = Date.now() - ttsStartTime;
+        console.log(`✅ [BACKEND] Speech generated in ${ttsDuration}ms`);
+        
+        // Read the audio file
+        const audioBuffer = await fs.readFile(outputPath);
+        const audioBase64 = audioBuffer.toString('base64');
+        
+        // Clean up the file
+        await fs.unlink(outputPath);
+        outputPath = null;
+        
+        const totalDuration = Date.now() - requestStartTime;
+        console.log(`✅ [BACKEND] Request completed in ${totalDuration}ms`);
+        console.log('=== ✅ [BACKEND] TTS SUCCESS ===\n');
+        
+        res.json({
+            audio: audioBase64,
+            format: 'mp3',
+            timestamp: new Date(),
+            processingTime: totalDuration
+        });
+        
+    } catch (error) {
+        console.error('\n=== ❌ [BACKEND] TTS ERROR ===');
+        console.error('❌ [BACKEND] Error:', error.message);
+        console.error('=== ❌ [BACKEND] ERROR END ===\n');
+        
+        // Clean up file if it exists
+        if (outputPath) {
+            try {
+                await fs.unlink(outputPath);
+            } catch (unlinkError) {
+                console.error('Error deleting temp file:', unlinkError);
+            }
+        }
+        
+        res.status(500).json({ 
+            error: 'Failed to generate speech',
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }

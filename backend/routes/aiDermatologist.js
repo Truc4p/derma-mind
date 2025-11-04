@@ -52,4 +52,10 @@ router.post('/chat', aiDermatologistController.chat);
  */
 router.post('/transcribe', upload.single('audio'), aiDermatologistController.transcribeAudio);
 
+/**
+ * POST /api/ai-dermatologist/text-to-speech
+ * Convert text to speech using Google Cloud TTS
+ */
+router.post('/text-to-speech', aiDermatologistController.textToSpeech);
+
 module.exports = router;

@@ -353,6 +353,45 @@ const LiveChatAI = ({ navigation, route }) => {
   const speakAIResponse = async (text) => {
     try {
       console.log('🔊 Speaking AI response...');
+      
+      // Try to use Google Cloud TTS first
+      try {
+        console.log('🌐 Using Google Cloud TTS for high-quality voice...');
+        setTranscribedText('AI is speaking (Google TTS)...');
+        
+        const ttsResponse = await liveChatService.textToSpeech(text);
+        
+        // Convert base64 audio to playable URI
+        const audioBase64 = ttsResponse.audio;
+        const audioUri = `data:audio/mp3;base64,${audioBase64}`;
+        
+        // Create and play audio
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: audioUri },
+          { shouldPlay: true },
+          (status) => {
+            if (status.didJustFinish) {
+              console.log('✅ Google TTS playback finished');
+              setIsAISpeaking(false);
+              setTranscribedText('Tap to speak');
+              sound.unloadAsync(); // Clean up
+            }
+          }
+        );
+        
+        setIsAISpeaking(true);
+        console.log('✅ Google Cloud TTS audio playing');
+        return; // Exit if successful
+        
+      } catch (ttsError) {
+        console.warn('⚠️ Google Cloud TTS failed, falling back to device TTS:', ttsError.message);
+        // Fall back to device TTS below
+      }
+      
+      // Fallback: Use device TTS (Expo Speech)
+      console.log('📱 Using device TTS as fallback...');
+      setTranscribedText('AI is speaking...');
+      
       // Strip HTML/markdown for clean speech
       const cleanText = text
         .replace(/<[^>]*>/g, ' ')
@@ -370,32 +409,31 @@ const LiveChatAI = ({ navigation, route }) => {
 
       console.log('📢 Text to speak length:', textToSpeak.length);
       setIsAISpeaking(true);
-      setTranscribedText(text);
 
       Speech.speak(textToSpeak, {
         language: 'en-US',
         pitch: 1.0,
         rate: 0.9,
         onDone: () => {
-          console.log('✅ Speech completed');
+          console.log('✅ Device TTS finished');
           setIsAISpeaking(false);
-          setTranscribedText('');
+          setTranscribedText('Tap to speak');
         },
         onStopped: () => {
-          console.log('⏸️ Speech stopped');
+          console.log('⏸️ Device TTS stopped');
           setIsAISpeaking(false);
-          setTranscribedText('');
+          setTranscribedText('Tap to speak');
         },
         onError: (error) => {
-          console.error('❌ Speech error:', error);
+          console.error('❌ Device TTS error:', error);
           setIsAISpeaking(false);
-          setTranscribedText('');
+          setTranscribedText('Speech error');
         }
       });
     } catch (error) {
-      console.error('❌ Error speaking:', error);
+      console.error('❌ Critical error in speakAIResponse:', error);
       setIsAISpeaking(false);
-      setTranscribedText('');
+      setTranscribedText('Error occurred');
     }
   };
 

@@ -130,6 +130,31 @@ export const liveChatService = {
       console.error('❌ [FRONTEND] Error status:', error.response?.status);
       throw error;
     }
+  },
+  
+  // Text-to-speech endpoint
+  async textToSpeech(text) {
+    try {
+      const startTime = Date.now();
+      console.log('🔊 [FRONTEND] Starting TTS request at:', new Date().toISOString());
+      console.log('📝 [FRONTEND] Text length:', text.length);
+      console.log('🚀 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatologist/text-to-speech`);
+      
+      const response = await api.post('/ai-dermatologist/text-to-speech', {
+        text
+      }, {
+        timeout: 60000 // 60 seconds for TTS
+      });
+      
+      const duration = Date.now() - startTime;
+      console.log(`✅ [FRONTEND] TTS audio received in ${duration}ms`);
+      return response.data;
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      console.error(`❌ [FRONTEND] TTS failed after ${duration}ms`);
+      console.error('❌ [FRONTEND] Error:', error.message);
+      throw error;
+    }
   }
 };
 
