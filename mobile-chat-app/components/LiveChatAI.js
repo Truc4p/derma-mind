@@ -814,9 +814,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3
   },
-  endButton: {
-    backgroundColor: colors.primary200,
-  },
   controlIcon: {
     fontSize: 24
   },
