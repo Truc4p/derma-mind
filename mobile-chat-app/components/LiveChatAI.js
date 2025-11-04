@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
-import { liveChatService } from '../services/api';
+import { liveChatService, liveChatStorage } from '../services/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,6 +40,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [showConversationModal, setShowConversationModal] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
   
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -71,10 +72,16 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('📋 [LiveChatAI] Session ID:', session.id);
       console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
+      setSessionId(session.id);
       setTranscribedText('Tap to start talking');
       console.log('✅ [LiveChatAI] Session loaded successfully');
       // Clear the route param
       navigation.setParams({ loadSession: undefined });
+    } else {
+      // Generate new session ID for new session
+      const newSessionId = `live-${Date.now()}`;
+      setSessionId(newSessionId);
+      console.log('🆕 [LiveChatAI] New session created:', newSessionId);
     }
     
     // Cleanup on unmount
@@ -97,6 +104,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('📋 [LiveChatAI] Session ID:', session.id);
       console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
+      setSessionId(session.id);
       console.log('✅ [LiveChatAI] Session updated successfully');
       navigation.setParams({ loadSession: undefined });
     }
@@ -372,6 +380,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('✅ [LiveChatAI] Session has messages, loading...');
       console.log('📝 [LiveChatAI] Messages count:', session.messages.length);
       setConversationHistory(session.messages);
+      setSessionId(session.id);
       setTranscribedText('Chat history loaded');
       console.log('📖 [LiveChatAI] Loaded session:', session.title);
     } else {
@@ -452,6 +461,47 @@ const LiveChatAI = ({ navigation, route }) => {
     }
   };
 
+  const generateSessionTitle = (messages) => {
+    if (messages.length === 0) return 'New Live Chat';
+    const firstUserMessage = messages.find(m => m.role === 'user');
+    if (firstUserMessage) {
+      const title = firstUserMessage.content.substring(0, 50);
+      return title.length < firstUserMessage.content.length ? title + '...' : title;
+    }
+    return 'Live Chat Session';
+  };
+
+  const generateSessionPreview = (messages) => {
+    if (messages.length === 0) return 'No messages yet';
+    const lastMessage = messages[messages.length - 1];
+    const preview = lastMessage.content.substring(0, 80);
+    return preview + (lastMessage.content.length > 80 ? '...' : '');
+  };
+
+  const saveSessionToHistory = async () => {
+    if (conversationHistory.length === 0) {
+      console.log('⚠️ [LiveChatAI] No messages to save');
+      return;
+    }
+
+    try {
+      const sessionData = {
+        id: sessionId,
+        type: 'live',
+        title: generateSessionTitle(conversationHistory),
+        preview: generateSessionPreview(conversationHistory),
+        timestamp: new Date().toISOString(),
+        messages: conversationHistory,
+        messageCount: conversationHistory.length
+      };
+
+      await liveChatStorage.saveSession(sessionId, sessionData);
+      console.log('💾 [LiveChatAI] Session saved to history:', sessionId, 'with', conversationHistory.length, 'messages');
+    } catch (error) {
+      console.error('❌ [LiveChatAI] Failed to save session:', error);
+    }
+  };
+
   const handleEndSession = () => {
     Alert.alert(
       'End Session',
@@ -463,6 +513,10 @@ const LiveChatAI = ({ navigation, route }) => {
           style: 'destructive',
           onPress: async () => {
             console.log('🔚 Ending session...');
+            
+            // Save conversation to history before ending
+            await saveSessionToHistory();
+            
             if (recording) {
               try {
                 await recording.stopAndUnloadAsync();
