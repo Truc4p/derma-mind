@@ -38,6 +38,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
+  const [currentSound, setCurrentSound] = useState(null); // Track current playing audio
   
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -86,7 +87,12 @@ const LiveChatAI = ({ navigation, route }) => {
       if (recording) {
         recording.stopAndUnloadAsync();
       }
+      // Stop both device TTS and gTTS audio
       Speech.stop();
+      if (currentSound) {
+        currentSound.stopAsync().catch(console.error);
+        currentSound.unloadAsync().catch(console.error);
+      }
     };
   }, []);
 
@@ -185,8 +191,18 @@ const LiveChatAI = ({ navigation, route }) => {
     try {
       console.log('🎤 Starting recording...');
       
-      // Stop any ongoing speech
+      // Stop any ongoing speech (both types)
       await Speech.stop();
+      if (currentSound) {
+        console.log('⏹️ Stopping gTTS audio...');
+        try {
+          await currentSound.stopAsync();
+          await currentSound.unloadAsync();
+        } catch (e) {
+          console.log('Warning: Error stopping audio:', e);
+        }
+        setCurrentSound(null);
+      }
       setIsAISpeaking(false);
       
       // IMPORTANT: Clean up any existing recording first
@@ -354,10 +370,22 @@ const LiveChatAI = ({ navigation, route }) => {
     try {
       console.log('🔊 Speaking AI response...');
       
-      // Try to use Google Cloud TTS first
+      // Stop any currently playing audio first
+      if (currentSound) {
+        console.log('⏹️ Stopping previous audio...');
+        try {
+          await currentSound.stopAsync();
+          await currentSound.unloadAsync();
+        } catch (e) {
+          console.log('Warning: Error stopping previous audio:', e);
+        }
+        setCurrentSound(null);
+      }
+      
+      // Try to use gTTS first
       try {
-        console.log('🌐 Using Google Cloud TTS for high-quality voice...');
-        setTranscribedText('AI is speaking (Google TTS)...');
+        console.log('🌐 Using gTTS for high-quality voice...');
+        setTranscribedText('AI is speaking (gTTS)...');
         
         const ttsResponse = await liveChatService.textToSpeech(text);
         
@@ -371,20 +399,23 @@ const LiveChatAI = ({ navigation, route }) => {
           { shouldPlay: true },
           (status) => {
             if (status.didJustFinish) {
-              console.log('✅ Google TTS playback finished');
+              console.log('✅ gTTS playback finished');
               setIsAISpeaking(false);
               setTranscribedText('Tap to speak');
+              setCurrentSound(null);
               sound.unloadAsync(); // Clean up
             }
           }
         );
         
+        setCurrentSound(sound); // Save sound reference for stopping
         setIsAISpeaking(true);
-        console.log('✅ Google Cloud TTS audio playing');
+        console.log('✅ gTTS audio playing');
         return; // Exit if successful
         
       } catch (ttsError) {
-        console.warn('⚠️ Google Cloud TTS failed, falling back to device TTS:', ttsError.message);
+        console.warn('⚠️ gTTS failed, falling back to device TTS:', ttsError.message);
+        setCurrentSound(null); // No audio object for device TTS
         // Fall back to device TTS below
       }
       
@@ -434,10 +465,11 @@ const LiveChatAI = ({ navigation, route }) => {
       console.error('❌ Critical error in speakAIResponse:', error);
       setIsAISpeaking(false);
       setTranscribedText('Error occurred');
+      setCurrentSound(null);
     }
   };
 
-  const handleMicPress = () => {
+  const handleMicPress = async () => {
     console.log('👆 Mic button pressed');
     console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking);
     
@@ -445,7 +477,22 @@ const LiveChatAI = ({ navigation, route }) => {
       // Stop AI speaking if tapped during speech
       if (isAISpeaking) {
         console.log('⏹️ Stopping AI speech...');
+        
+        // Stop device TTS
         Speech.stop();
+        
+        // Stop gTTS audio if playing
+        if (currentSound) {
+          try {
+            await currentSound.stopAsync();
+            await currentSound.unloadAsync();
+            console.log('✅ gTTS audio stopped');
+          } catch (e) {
+            console.log('Warning: Error stopping audio:', e);
+          }
+          setCurrentSound(null);
+        }
+        
         setIsAISpeaking(false);
         setTranscribedText('');
       }
@@ -517,6 +564,7 @@ const LiveChatAI = ({ navigation, route }) => {
             // Save conversation to history before ending
             await saveSessionToHistory();
             
+            // Stop recording if active
             if (recording) {
               try {
                 await recording.stopAndUnloadAsync();
@@ -524,7 +572,20 @@ const LiveChatAI = ({ navigation, route }) => {
                 console.log('Warning: Error stopping recording on exit:', e);
               }
             }
+            
+            // Stop device TTS
             await Speech.stop();
+            
+            // Stop gTTS audio if playing
+            if (currentSound) {
+              try {
+                await currentSound.stopAsync();
+                await currentSound.unloadAsync();
+              } catch (e) {
+                console.log('Warning: Error stopping audio on exit:', e);
+              }
+            }
+            
             navigation.goBack();
           }
         }
@@ -634,10 +695,27 @@ const LiveChatAI = ({ navigation, route }) => {
         {/* Pause/Resume Button */}
         <TouchableOpacity 
           style={styles.controlButton}
-          onPress={() => {
+          onPress={async () => {
             if (isAISpeaking) {
+              console.log('⏸️ Pause button pressed - stopping audio...');
+              
+              // Stop device TTS
               Speech.stop();
+              
+              // Stop gTTS audio if playing
+              if (currentSound) {
+                try {
+                  await currentSound.stopAsync();
+                  await currentSound.unloadAsync();
+                  console.log('✅ gTTS audio stopped');
+                } catch (e) {
+                  console.log('Warning: Error stopping audio:', e);
+                }
+                setCurrentSound(null);
+              }
+              
               setIsAISpeaking(false);
+              setTranscribedText('Audio stopped');
             }
           }}
           disabled={!isAISpeaking}
