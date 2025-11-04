@@ -353,41 +353,6 @@ const LiveChatAI = ({ navigation, route }) => {
     }
   };
 
-  const handleClearHistory = () => {
-    Alert.alert(
-      'Clear Live Chat History',
-      'Are you sure you want to clear all conversation history?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: () => {
-            setConversationHistory([]);
-            setTranscribedText('');
-            Alert.alert('Success', 'Live chat history cleared');
-          }
-        }
-      ]
-    );
-  };
-
-  const handleLoadSession = (session) => {
-    console.log('🔍 [LiveChatAI] handleLoadSession called');
-    console.log('📋 [LiveChatAI] Session:', JSON.stringify(session, null, 2));
-    
-    if (session && session.messages) {
-      console.log('✅ [LiveChatAI] Session has messages, loading...');
-      console.log('📝 [LiveChatAI] Messages count:', session.messages.length);
-      setConversationHistory(session.messages);
-      setSessionId(session.id);
-      setTranscribedText('Chat history loaded');
-      console.log('📖 [LiveChatAI] Loaded session:', session.title);
-    } else {
-      console.error('❌ [LiveChatAI] Session or messages is undefined!');
-    }
-  };
-
   const speakAIResponse = async (text) => {
     try {
       console.log('🔊 Speaking AI response...');
