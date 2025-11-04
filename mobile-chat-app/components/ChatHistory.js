@@ -65,6 +65,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
       // Load live chat sessions
       const liveSessions = await liveChatStorage.loadAllSessions();
       console.log('🎤 [ChatHistory] Live chat sessions loaded:', liveSessions.length, 'sessions');
+      console.log('📋 [ChatHistory] Live sessions details:', JSON.stringify(liveSessions, null, 2));
       const liveSessionsWithType = liveSessions.map(session => ({
         ...session,
         type: 'live'
@@ -167,6 +168,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
       console.log('🧭 [ChatHistory] Navigation available:', !!navigation);
       if (navigation) {
         console.log('✅ [ChatHistory] Calling navigation.navigate()');
+        onClose(); // Close the modal first
         navigation.navigate('LiveChatAI', { loadSession: session });
         console.log('✅ [ChatHistory] Navigation called successfully');
       } else {

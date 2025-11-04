@@ -38,7 +38,7 @@ const AIDermatologist = ({ navigation }) => {
   useEffect(() => {
     console.log('🔄 [AIDermatologist] Component mounted');
     console.log('🧭 [AIDermatologist] Navigation available on mount:', !!navigation);
-    console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+    // console.log('🧭 [AIDermatologist] Navigation object:', navigation);
   }, []);
 
   // Add logging whenever messages change
@@ -869,7 +869,7 @@ What would you like to know more about?`;
             onPress={() => {
               console.log('🎤 [AIDermatologist] Go Live with AI button pressed');
               console.log('🧭 [AIDermatologist] Navigation available:', !!navigation);
-              console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+              // console.log('🧭 [AIDermatologist] Navigation object:', navigation);
               if (navigation) {
                 console.log('✅ [AIDermatologist] Calling navigation.navigate("LiveChatAI")');
                 navigation.navigate('LiveChatAI');
