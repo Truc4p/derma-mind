@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#EEF2FF"
+      "backgroundColor": "#FDFBF7"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,7 +21,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#EEF2FF"
+        "backgroundColor": "#FDFBF7"
       },
       "package": "com.skinstudy.mobile"
     },
