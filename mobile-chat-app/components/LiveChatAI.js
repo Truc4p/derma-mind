@@ -39,7 +39,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [currentSound, setCurrentSound] = useState(null); // Track current playing audio
-  
+
   // Add logging whenever conversationHistory changes
   useEffect(() => {
     console.log('📝 [LiveChatAI] conversationHistory updated:', conversationHistory.length, 'messages');
@@ -48,7 +48,7 @@ const LiveChatAI = ({ navigation, route }) => {
       // console.log('📋 [LiveChatAI] Last message:', conversationHistory[conversationHistory.length - 1]);
     }
   }, [conversationHistory]);
-  
+
   // Animation values
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const waveAnim1 = useRef(new Animated.Value(0)).current;
@@ -59,10 +59,10 @@ const LiveChatAI = ({ navigation, route }) => {
     console.log('🔄 [LiveChatAI] Component mounted');
     console.log('📋 [LiveChatAI] Route params:', route?.params);
     console.log('🔍 [LiveChatAI] Route object available:', !!route);
-    
+
     // Request audio permissions on mount
     requestPermissions();
-    
+
     // Load session from route params if available
     if (route?.params?.loadSession) {
       const session = route.params.loadSession;
@@ -81,7 +81,7 @@ const LiveChatAI = ({ navigation, route }) => {
       setSessionId(newSessionId);
       console.log('🆕 [LiveChatAI] New session created:', newSessionId);
     }
-    
+
     // Cleanup on unmount
     return () => {
       if (recording) {
@@ -100,7 +100,7 @@ const LiveChatAI = ({ navigation, route }) => {
   useEffect(() => {
     console.log('🔄 [LiveChatAI] Route params changed');
     console.log('📋 [LiveChatAI] New route params:', route?.params);
-    
+
     if (route?.params?.loadSession) {
       const session = route.params.loadSession;
       console.log('📥 [LiveChatAI] Loading NEW session from updated params');
@@ -190,7 +190,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const startRecording = async () => {
     try {
       console.log('🎤 Starting recording...');
-      
+
       // Stop any ongoing speech (both types)
       await Speech.stop();
       if (currentSound) {
@@ -204,7 +204,7 @@ const LiveChatAI = ({ navigation, route }) => {
         setCurrentSound(null);
       }
       setIsAISpeaking(false);
-      
+
       // IMPORTANT: Clean up any existing recording first
       if (recording) {
         console.log('⚠️ Cleaning up existing recording...');
@@ -215,7 +215,7 @@ const LiveChatAI = ({ navigation, route }) => {
         }
         setRecording(null);
       }
-      
+
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true
@@ -224,7 +224,7 @@ const LiveChatAI = ({ navigation, route }) => {
       const { recording: newRecording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
-      
+
       console.log('✅ Recording started successfully');
       setRecording(newRecording);
       setIsRecording(true);
@@ -247,7 +247,7 @@ const LiveChatAI = ({ navigation, route }) => {
       setIsRecording(false);
       setIsProcessing(true);
       setTranscribedText('Processing your voice...');
-      
+
       await recording.stopAndUnloadAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false
@@ -259,7 +259,7 @@ const LiveChatAI = ({ navigation, route }) => {
 
       // Send audio to backend for processing
       await processAudioWithAI(uri);
-      
+
     } catch (error) {
       console.error('❌ Failed to stop recording:', error);
       setIsProcessing(false);
@@ -271,28 +271,28 @@ const LiveChatAI = ({ navigation, route }) => {
   const processAudioWithAI = async (audioUri) => {
     try {
       console.log('🔄 Processing audio from:', audioUri);
-      
+
       // Step 1: Try automatic transcription with Gemini
       setTranscribedText('Transcribing your voice...');
-      
+
       try {
         const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
         const userMessage = transcriptionResult.transcription;
-        
+
         if (!userMessage || !userMessage.trim()) {
           throw new Error('Empty transcription');
         }
-        
+
         console.log('✅ Auto-transcription successful:', userMessage);
         await sendToAI(userMessage.trim());
-        
+
       } catch (transcriptionError) {
         console.log('⚠️ Auto-transcription failed:', transcriptionError.message);
-        
+
         // Fall back to manual input
         console.log('🔄 Falling back to manual input...');
         setTranscribedText('Transcription failed. Please type your question:');
-        
+
         Alert.prompt(
           'Manual Input',
           'Automatic transcription is not available yet. Please type what you said:',
@@ -320,7 +320,7 @@ const LiveChatAI = ({ navigation, route }) => {
           'plain-text'
         );
       }
-      
+
     } catch (error) {
       console.error('❌ Error processing audio:', error);
       setIsProcessing(false);
@@ -333,7 +333,7 @@ const LiveChatAI = ({ navigation, route }) => {
     try {
       console.log('📝 User message:', userMessage);
       setTranscribedText(`You: ${userMessage}`);
-      
+
       // Add to conversation history
       const newHistory = [
         ...conversationHistory,
@@ -345,9 +345,9 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('🤖 Sending to AI...');
       const response = await liveChatService.chat(userMessage, newHistory);
       console.log('✅ AI response received:', response.response.substring(0, 100) + '...');
-      
+
       setIsProcessing(false);
-      
+
       // Add AI response to history
       const fullHistory = [
         ...newHistory,
@@ -357,7 +357,7 @@ const LiveChatAI = ({ navigation, route }) => {
 
       // Speak the AI response
       await speakAIResponse(response.response);
-      
+
     } catch (error) {
       console.error('❌ Error getting AI response:', error);
       setIsProcessing(false);
@@ -369,7 +369,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const speakAIResponse = async (text) => {
     try {
       console.log('🔊 Speaking AI response...');
-      
+
       // Stop any currently playing audio first
       if (currentSound) {
         console.log('⏹️ Stopping previous audio...');
@@ -381,18 +381,18 @@ const LiveChatAI = ({ navigation, route }) => {
         }
         setCurrentSound(null);
       }
-      
+
       // Try to use gTTS first
       try {
         console.log('🌐 Using gTTS for high-quality voice...');
         setTranscribedText('AI is speaking (gTTS)...');
-        
+
         const ttsResponse = await liveChatService.textToSpeech(text);
-        
+
         // Convert base64 audio to playable URI
         const audioBase64 = ttsResponse.audio;
         const audioUri = `data:audio/mp3;base64,${audioBase64}`;
-        
+
         // Create and play audio
         const { sound } = await Audio.Sound.createAsync(
           { uri: audioUri },
@@ -407,22 +407,22 @@ const LiveChatAI = ({ navigation, route }) => {
             }
           }
         );
-        
+
         setCurrentSound(sound); // Save sound reference for stopping
         setIsAISpeaking(true);
         console.log('✅ gTTS audio playing');
         return; // Exit if successful
-        
+
       } catch (ttsError) {
         console.warn('⚠️ gTTS failed, falling back to device TTS:', ttsError.message);
         setCurrentSound(null); // No audio object for device TTS
         // Fall back to device TTS below
       }
-      
+
       // Fallback: Use device TTS (Expo Speech)
       console.log('📱 Using device TTS as fallback...');
       setTranscribedText('AI is speaking...');
-      
+
       // Strip HTML/markdown for clean speech
       const cleanText = text
         .replace(/<[^>]*>/g, ' ')
@@ -472,15 +472,15 @@ const LiveChatAI = ({ navigation, route }) => {
   const handleMicPress = async () => {
     console.log('👆 Mic button pressed');
     console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking);
-    
+
     if (isProcessing || isAISpeaking) {
       // Stop AI speaking if tapped during speech
       if (isAISpeaking) {
         console.log('⏹️ Stopping AI speech...');
-        
+
         // Stop device TTS
         Speech.stop();
-        
+
         // Stop gTTS audio if playing
         if (currentSound) {
           try {
@@ -492,7 +492,7 @@ const LiveChatAI = ({ navigation, route }) => {
           }
           setCurrentSound(null);
         }
-        
+
         setIsAISpeaking(false);
         setTranscribedText('');
       }
@@ -560,10 +560,10 @@ const LiveChatAI = ({ navigation, route }) => {
           style: 'destructive',
           onPress: async () => {
             console.log('🔚 Ending session...');
-            
+
             // Save conversation to history before ending
             await saveSessionToHistory();
-            
+
             // Stop recording if active
             if (recording) {
               try {
@@ -572,10 +572,10 @@ const LiveChatAI = ({ navigation, route }) => {
                 console.log('Warning: Error stopping recording on exit:', e);
               }
             }
-            
+
             // Stop device TTS
             await Speech.stop();
-            
+
             // Stop gTTS audio if playing
             if (currentSound) {
               try {
@@ -585,7 +585,7 @@ const LiveChatAI = ({ navigation, route }) => {
                 console.log('Warning: Error stopping audio on exit:', e);
               }
             }
-            
+
             navigation.goBack();
           }
         }
@@ -693,15 +693,15 @@ const LiveChatAI = ({ navigation, route }) => {
         </TouchableOpacity>
 
         {/* Pause/Resume Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.controlButton}
           onPress={async () => {
             if (isAISpeaking) {
               console.log('⏸️ Pause button pressed - stopping audio...');
-              
+
               // Stop device TTS
               Speech.stop();
-              
+
               // Stop gTTS audio if playing
               if (currentSound) {
                 try {
@@ -713,7 +713,7 @@ const LiveChatAI = ({ navigation, route }) => {
                 }
                 setCurrentSound(null);
               }
-              
+
               setIsAISpeaking(false);
               setTranscribedText('Audio stopped');
             }
@@ -724,7 +724,7 @@ const LiveChatAI = ({ navigation, route }) => {
         </TouchableOpacity>
 
         {/* End Session Button */}
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.controlButton, styles.endButton]}
           onPress={handleEndSession}
         >
@@ -760,10 +760,10 @@ const LiveChatAI = ({ navigation, route }) => {
           {isRecording
             ? 'Release to send'
             : isProcessing
-            ? 'Processing...'
-            : isAISpeaking
-            ? 'AI is speaking'
-            : ''}
+              ? 'Processing...'
+              : isAISpeaking
+                ? 'AI is speaking'
+                : ''}
         </Text>
       </View>
     </View>
@@ -891,15 +891,14 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     backgroundColor: 'rgba(253, 246, 240, 0.95)',
     padding: 20,
-    borderRadius: 16,
+    borderRadius: 20,
     maxWidth: width * 0.8,
-    borderWidth: 1,
-    borderColor: colors.primary200,
+    elevation: 3,
+    overflow: 'hidden',
     shadowColor: colors.primary500,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3
+    shadowRadius: 8
   },
   historyCount: {
     fontSize: 12,
