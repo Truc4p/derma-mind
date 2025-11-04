@@ -7,7 +7,8 @@ import {
   Animated,
   Dimensions,
   Alert,
-  Platform
+  Platform,
+  ScrollView
 } from 'react-native';
 import { Audio } from 'expo-av';
 import { liveChatService, liveChatStorage } from '../services/api';
@@ -41,6 +42,7 @@ const LiveChatAI = ({ navigation, route }) => {
   const [isActionInProgress, setIsActionInProgress] = useState(false); // Prevent race conditions
   const [aiResponseText, setAiResponseText] = useState(''); // Full AI response for word-by-word display
   const wordDisplayInterval = useRef(null); // Track word display interval
+  const scrollViewRef = useRef(null); // Ref for ScrollView to auto-scroll
 
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -434,6 +436,11 @@ const LiveChatAI = ({ navigation, route }) => {
       const words = text.split(' ');
       let currentIndex = 0;
       
+      // Calculate timing: distribute words evenly across expected audio duration
+      // Estimate: ~150 words per minute = ~400ms per word
+      const wordsPerMinute = 150;
+      const msPerWord = (60 * 1000) / wordsPerMinute;
+      
       // Use gTTS for text-to-speech
       console.log('🌐 Using gTTS for voice...');
       setTranscribedText(''); // Clear before starting
@@ -453,10 +460,10 @@ const LiveChatAI = ({ navigation, route }) => {
         currentIndex = 1;
       }
       
-      // Create and play audio to get duration
+      // Create and play audio
       const { sound } = await Audio.Sound.createAsync(
         { uri: audioUri },
-        { shouldPlay: false }, // Don't play yet
+        { shouldPlay: true },
         (status) => {
           if (status.didJustFinish) {
             console.log('✅ gTTS playback finished');
@@ -484,32 +491,20 @@ const LiveChatAI = ({ navigation, route }) => {
       
       setCurrentSound(sound); // Save sound reference for stopping
       
-      // Get audio duration and calculate word timing
-      const status = await sound.getStatusAsync();
-      const audioDurationMs = status.durationMillis || 0;
-      
-      console.log(`📊 Audio duration: ${audioDurationMs}ms for ${words.length} words`);
-      
-      // Calculate time per word based on actual audio duration
-      // Leave some buffer at the end (90% of duration for words)
-      const msPerWord = audioDurationMs > 0 
-        ? (audioDurationMs * 0.9) / (words.length - 1) // -1 because first word already displayed
-        : 400; // Fallback to ~400ms per word
-      
-      console.log(`⏱️ Displaying words every ${msPerWord.toFixed(0)}ms`);
-      
-      // Now start playing the audio
-      await sound.playAsync();
-      
-      // Start progressive word display with calculated timing
+      // Start progressive word display
       wordDisplayInterval.current = setInterval(() => {
         if (currentIndex < words.length) {
           const displayedText = words.slice(0, currentIndex + 1).join(' ');
           setTranscribedText(displayedText);
+          
+          // Auto-scroll to bottom to show latest words
+          if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: true });
+          }
+          
           currentIndex++;
         } else {
-          // All words displayed, show complete text
-          setTranscribedText(text);
+          // All words displayed
           if (wordDisplayInterval.current) {
             clearInterval(wordDisplayInterval.current);
             wordDisplayInterval.current = null;
@@ -755,7 +750,14 @@ const LiveChatAI = ({ navigation, route }) => {
       {/* Transcription Text - Only show when there's text */}
       {transcribedText ? (
         <View style={styles.textContainer}>
-          <Text style={styles.transcriptionText}>{transcribedText}</Text>
+          <ScrollView 
+            ref={scrollViewRef}
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollViewContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.transcriptionText}>{transcribedText}</Text>
+          </ScrollView>
         </View>
       ) : (
         <View style={styles.textContainer} />
@@ -967,7 +969,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 40,
-    marginTop: 100
+    marginTop: 100,
+    width: '100%'
+  },
+  scrollView: {
+    flex: 1,
+    width: '100%',
+    maxHeight: height * 0.4
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   transcriptionText: {
     fontSize: 16,
@@ -977,9 +990,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(253, 246, 240, 0.95)',
     padding: 20,
     borderRadius: 20,
-    maxWidth: width * 0.8,
+    width: width * 0.8,
     elevation: 3,
-    overflow: 'hidden',
     shadowColor: colors.primary500,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
