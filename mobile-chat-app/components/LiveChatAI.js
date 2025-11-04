@@ -989,7 +989,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     backgroundColor: 'rgba(253, 246, 240, 0.95)',
     padding: 20,
-    borderRadius: 20,
+    borderRadius: 24,
     width: width * 0.8,
     elevation: 3,
     shadowColor: colors.primary500,
