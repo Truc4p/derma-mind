@@ -435,18 +435,15 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   typeBadge: {
+    backgroundColor: colors.primary300,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12
   },
   typeBadgeText: {
-    backgroundColor: colors.primary200,
     fontSize: 11,
     fontWeight: '600',
     color: colors.primary800
-  },
-  typeBadgeLive: {
-    backgroundColor: colors.primary300
   },
   sessionDate: {
     fontSize: 12,

@@ -572,10 +572,14 @@ const LiveChatAI = ({ navigation, route }) => {
         />
       </View>
 
-      {/* Transcription Text */}
-      <View style={styles.textContainer}>
-        <Text style={styles.transcriptionText}>{transcribedText}</Text>
-      </View>
+      {/* Transcription Text - Only show when there's text */}
+      {transcribedText ? (
+        <View style={styles.textContainer}>
+          <Text style={styles.transcriptionText}>{transcribedText}</Text>
+        </View>
+      ) : (
+        <View style={styles.textContainer} />
+      )}
 
       {/* Control Buttons */}
       <View style={styles.controlsContainer}>
@@ -812,7 +816,6 @@ const styles = StyleSheet.create({
   },
   endButton: {
     backgroundColor: colors.primary200,
-    borderColor: colors.primary700
   },
   controlIcon: {
     fontSize: 24
