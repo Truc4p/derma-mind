@@ -33,7 +33,6 @@ const colors = {
 const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigation }) => {
   const [allSessions, setAllSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'text', 'live'
 
   useEffect(() => {
     console.log('🔄 [ChatHistory] Component rendered/updated');
@@ -181,10 +180,6 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
 
   const filteredSessions = allSessions
     .filter(session => {
-      // Filter by tab
-      if (activeTab === 'text' && session.type !== 'text') return false;
-      if (activeTab === 'live' && session.type !== 'live') return false;
-
       // Filter by search query
       if (!searchQuery.trim()) return true;
       
@@ -209,34 +204,6 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
           <Text style={styles.headerTitle}>Chat History</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Tabs */}
-        <View style={styles.tabsContainer}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'all' && styles.tabActive]}
-            onPress={() => setActiveTab('all')}
-          >
-            <Text style={[styles.tabText, activeTab === 'all' && styles.tabTextActive]}>
-              All ({allSessions.length})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'text' && styles.tabActive]}
-            onPress={() => setActiveTab('text')}
-          >
-            <Text style={[styles.tabText, activeTab === 'text' && styles.tabTextActive]}>
-              Text Chat
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'live' && styles.tabActive]}
-            onPress={() => setActiveTab('live')}
-          >
-            <Text style={[styles.tabText, activeTab === 'live' && styles.tabTextActive]}>
-              Live Chat
-            </Text>
           </TouchableOpacity>
         </View>
 
@@ -348,31 +315,6 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 24,
-    color: colors.primary600,
-    fontWeight: '600'
-  },
-  tabsContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.primary100,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.primary200
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent'
-  },
-  tabActive: {
-    borderBottomColor: colors.primary600
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.primary700
-  },
-  tabTextActive: {
     color: colors.primary600,
     fontWeight: '600'
   },
