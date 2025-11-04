@@ -33,12 +33,14 @@ const colors = {
 const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigation }) => {
   const [allSessions, setAllSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSession, setSelectedSession] = useState(null); // Track selected session for detail view
 
   useEffect(() => {
     console.log('🔄 [ChatHistory] Component rendered/updated');
     console.log('📋 [ChatHistory] Props:', { visible, currentChatType, hasNavigation: !!navigation });
     if (visible) {
       loadAllSessions();
+      setSelectedSession(null); // Reset selected session when modal opens
     }
   }, [visible]);
 
@@ -162,21 +164,9 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
       console.log('📝 [ChatHistory] Calling onLoadSession with session');
       onLoadSession(session);
     } else if (session.type === 'live') {
-      // Navigate to LiveChatAI and load live chat session
-      console.log('🎤 [ChatHistory] Loading live chat session');
-      console.log('🧭 [ChatHistory] Attempting to navigate to LiveChatAI');
-      console.log('🧭 [ChatHistory] Navigation available:', !!navigation);
-      if (navigation) {
-        console.log('✅ [ChatHistory] Calling navigation.navigate()');
-        onClose(); // Close the modal first
-        navigation.navigate('LiveChatAI', { loadSession: session });
-        console.log('✅ [ChatHistory] Navigation called successfully');
-      } else {
-        console.error('❌ [ChatHistory] Navigation object is undefined!');
-        console.error('❌ [ChatHistory] Cannot navigate to live chat. Falling back to onLoadSession');
-        // Fallback: try calling onLoadSession anyway
-        onLoadSession(session);
-      }
+      // Show live chat session details in modal instead of navigating
+      console.log('🎤 [ChatHistory] Showing live chat session details');
+      setSelectedSession(session);
     }
   };
 
@@ -201,92 +191,140 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
       onRequestClose={onClose}
     >
       <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Chat History</Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search conversations..."
-            placeholderTextColor={colors.primary600}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity
-              style={styles.clearSearchButton}
-              onPress={() => setSearchQuery('')}
-            >
-              <Text style={styles.clearSearchText}>✕</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* Sessions List */}
-        <ScrollView style={styles.sessionsList}>
-          {filteredSessions.length === 0 && !searchQuery && (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>No chat history yet</Text>
-              <Text style={styles.emptyStateSubtext}>
-                Start a conversation to see it here
-              </Text>
+        {/* Show session detail view if a live session is selected */}
+        {selectedSession ? (
+          <>
+            {/* Detail View Header */}
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => setSelectedSession(null)} style={styles.backButton}>
+                <Text style={styles.backButtonText}>← Back</Text>
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Session Details</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>✕</Text>
+              </TouchableOpacity>
             </View>
-          )}
 
-          {filteredSessions.length === 0 && searchQuery && (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>
-                No results found for "{searchQuery}"
-              </Text>
+            {/* Session Info */}
+            <View style={styles.detailHeader}>
+              <Text style={styles.detailTitle}>{selectedSession.title}</Text>
+              <Text style={styles.detailDate}>{formatSessionDate(selectedSession.timestamp)}</Text>
+              <View style={styles.detailBadge}>
+                <Text style={styles.detailBadgeText}>Live Chat</Text>
+              </View>
+              <Text style={styles.detailCount}>{selectedSession.messageCount} messages</Text>
             </View>
-          )}
 
-          {filteredSessions.map((session) => (
-            <TouchableOpacity
-              key={session.id}
-              style={styles.sessionItem}
-              onPress={() => {
-                console.log('👆 [ChatHistory] Session item clicked');
-                console.log('📋 [ChatHistory] Session clicked:', session.id, session.type);
-                handleLoadSession(session);
-                onClose();
-              }}
-            >
-              <View style={styles.sessionInfo}>
-                <View style={styles.sessionHeader}>
-                  <Text style={styles.sessionTitle}>{session.title}</Text>
-                  <View style={[
-                    styles.typeBadge,
-                    session.type === 'live' ? styles.typeBadgeLive : styles.typeBadgeText
-                  ]}>
-                    <Text style={styles.typeBadgeText}>
-                      {session.type === 'live' ? 'Live' : 'Text'}
+            {/* Messages List */}
+            <ScrollView style={styles.messagesContainer}>
+              {selectedSession.messages.map((message, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.messageItem,
+                    message.role === 'user' ? styles.messageUser : styles.messageAssistant
+                  ]}
+                >
+                  <Text style={styles.messageRole}>
+                    {message.role === 'user' ? 'You' : 'AI Dermatologist'}
+                  </Text>
+                  <Text style={styles.messageContent}>{message.content}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </>
+        ) : (
+          <>
+            {/* List View Header */}
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Chat History</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Search Bar */}
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search conversations..."
+                placeholderTextColor={colors.primary600}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity
+                  style={styles.clearSearchButton}
+                  onPress={() => setSearchQuery('')}
+                >
+                  <Text style={styles.clearSearchText}>✕</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Sessions List */}
+            <ScrollView style={styles.sessionsList}>
+              {filteredSessions.length === 0 && !searchQuery && (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyStateText}>No chat history yet</Text>
+                  <Text style={styles.emptyStateSubtext}>
+                    Start a conversation to see it here
+                  </Text>
+                </View>
+              )}
+
+              {filteredSessions.length === 0 && searchQuery && (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyStateText}>
+                    No results found for "{searchQuery}"
+                  </Text>
+                </View>
+              )}
+
+              {filteredSessions.map((session) => (
+                <TouchableOpacity
+                  key={session.id}
+                  style={styles.sessionItem}
+                  onPress={() => {
+                    console.log('👆 [ChatHistory] Session item clicked');
+                    console.log('📋 [ChatHistory] Session clicked:', session.id, session.type);
+                    handleLoadSession(session);
+                    if (session.type === 'text') {
+                      onClose();
+                    }
+                  }}
+                >
+                  <View style={styles.sessionInfo}>
+                    <View style={styles.sessionHeader}>
+                      <Text style={styles.sessionTitle}>{session.title}</Text>
+                      <View style={[
+                        styles.typeBadge,
+                        session.type === 'live' ? styles.typeBadgeLive : styles.typeBadgeText
+                      ]}>
+                        <Text style={styles.typeBadgeText}>
+                          {session.type === 'live' ? 'Live' : 'Text'}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={styles.sessionDate}>
+                      {formatSessionDate(session.timestamp)}
+                    </Text>
+                    <Text style={styles.sessionPreview}>{session.preview}</Text>
+                    <Text style={styles.sessionCount}>
+                      {session.messageCount} messages
                     </Text>
                   </View>
-                </View>
-                <Text style={styles.sessionDate}>
-                  {formatSessionDate(session.timestamp)}
-                </Text>
-                <Text style={styles.sessionPreview}>{session.preview}</Text>
-                <Text style={styles.sessionCount}>
-                  💬 {session.messageCount} messages
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeleteSession(session)}
-              >
-                <Text style={styles.deleteButtonText}>🗑️</Text>
-              </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDeleteSession(session)}
+                  >
+                    <Text style={styles.deleteButtonText}>🗑️</Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </>
+        )}
       </SafeAreaView>
     </Modal>
   );
@@ -430,6 +468,83 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     fontSize: 20
+  },
+  // Detail View Styles
+  backButton: {
+    padding: 8,
+    borderRadius: 8
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: colors.primary600,
+    fontWeight: '600'
+  },
+  detailHeader: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary200
+  },
+  detailTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.primary950,
+    marginBottom: 8
+  },
+  detailDate: {
+    fontSize: 14,
+    color: colors.primary700,
+    marginBottom: 8
+  },
+  detailBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.primary300,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginBottom: 8
+  },
+  detailBadgeText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.primary800
+  },
+  detailCount: {
+    fontSize: 14,
+    color: colors.primary600,
+    fontWeight: '500'
+  },
+  messagesContainer: {
+    flex: 1,
+    padding: 16
+  },
+  messageItem: {
+    marginBottom: 16,
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1
+  },
+  messageUser: {
+    backgroundColor: colors.primary100,
+    borderColor: colors.primary300,
+    marginLeft: 20
+  },
+  messageAssistant: {
+    backgroundColor: '#FFFFFF',
+    borderColor: colors.primary200,
+    marginRight: 20
+  },
+  messageRole: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.primary700,
+    marginBottom: 8,
+    textTransform: 'uppercase'
+  },
+  messageContent: {
+    fontSize: 15,
+    color: colors.primary950,
+    lineHeight: 22
   }
 });
 
