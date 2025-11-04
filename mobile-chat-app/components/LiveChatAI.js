@@ -414,7 +414,9 @@ const LiveChatAI = ({ navigation, route }) => {
       setTranscribedText('Speech error: ' + error.message);
       setCurrentSound(null);
     }
-  };    const handleMicPress = async () => {
+  };
+  
+  const handleMicPress = async () => {
     console.log('👆 Mic button pressed');
     console.log('📊 Current state - isRecording:', isRecording, 'isProcessing:', isProcessing, 'isAISpeaking:', isAISpeaking);
     
@@ -530,7 +532,9 @@ const LiveChatAI = ({ navigation, route }) => {
         }
       ]
     );
-  };  return (
+  };
+  
+  return (
     <View style={styles.container}>
       {/* Beautiful Gradient Background */}
       <View style={styles.gradientBackground}>
@@ -655,7 +659,9 @@ const LiveChatAI = ({ navigation, route }) => {
           disabled={!isAISpeaking}
         >
           <Text style={styles.controlIcon}>⏸️</Text>
-        </TouchableOpacity>        {/* End Session Button */}
+        </TouchableOpacity>
+        
+        {/* End Session Button */}
         <TouchableOpacity
           style={[styles.controlButton, styles.endButton]}
           onPress={handleEndSession}
