@@ -39,6 +39,8 @@ const LiveChatAI = ({ navigation, route }) => {
   const [sessionId, setSessionId] = useState(null);
   const [currentSound, setCurrentSound] = useState(null); // Track current playing audio
   const [isActionInProgress, setIsActionInProgress] = useState(false); // Prevent race conditions
+  const [aiResponseText, setAiResponseText] = useState(''); // Full AI response for word-by-word display
+  const wordDisplayInterval = useRef(null); // Track word display interval
 
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -94,6 +96,10 @@ const LiveChatAI = ({ navigation, route }) => {
       if (currentSound) {
         currentSound.stopAsync().catch(console.error);
         currentSound.unloadAsync().catch(console.error);
+      }
+      // Clear word display interval
+      if (wordDisplayInterval.current) {
+        clearInterval(wordDisplayInterval.current);
       }
     };
   }, []);
@@ -415,9 +421,22 @@ const LiveChatAI = ({ navigation, route }) => {
         setCurrentSound(null);
       }
       
+      // Clear any existing word display interval
+      if (wordDisplayInterval.current) {
+        clearInterval(wordDisplayInterval.current);
+        wordDisplayInterval.current = null;
+      }
+      
+      // Store the full AI response
+      setAiResponseText(text);
+      
+      // Split text into words for progressive display
+      const words = text.split(' ');
+      let currentIndex = 0;
+      
       // Use gTTS for text-to-speech
       console.log('🌐 Using gTTS for voice...');
-      setTranscribedText('AI is speaking...');
+      setTranscribedText(''); // Clear before starting
       
       const ttsResponse = await liveChatService.textToSpeech(text);
       
@@ -425,15 +444,38 @@ const LiveChatAI = ({ navigation, route }) => {
       const audioBase64 = ttsResponse.audio;
       const audioUri = `data:audio/mp3;base64,${audioBase64}`;
       
-      // Create and play audio
+      // Start word-by-word display animation
+      setIsAISpeaking(true);
+      
+      // Display first word immediately
+      if (words.length > 0) {
+        setTranscribedText(words[0]);
+        currentIndex = 1;
+      }
+      
+      // Create and play audio to get duration
       const { sound } = await Audio.Sound.createAsync(
         { uri: audioUri },
-        { shouldPlay: true },
+        { shouldPlay: false }, // Don't play yet
         (status) => {
           if (status.didJustFinish) {
             console.log('✅ gTTS playback finished');
-            setIsAISpeaking(false);
-            setTranscribedText('Tap to speak');
+            
+            // Clear word display interval
+            if (wordDisplayInterval.current) {
+              clearInterval(wordDisplayInterval.current);
+              wordDisplayInterval.current = null;
+            }
+            
+            // Show complete text briefly before clearing
+            setTranscribedText(text);
+            
+            setTimeout(() => {
+              setIsAISpeaking(false);
+              setTranscribedText('Tap to speak');
+              setAiResponseText('');
+            }, 1500);
+            
             setCurrentSound(null);
             sound.unloadAsync(); // Clean up
           }
@@ -441,14 +483,54 @@ const LiveChatAI = ({ navigation, route }) => {
       );
       
       setCurrentSound(sound); // Save sound reference for stopping
-      setIsAISpeaking(true);
-      console.log('✅ gTTS audio playing');
+      
+      // Get audio duration and calculate word timing
+      const status = await sound.getStatusAsync();
+      const audioDurationMs = status.durationMillis || 0;
+      
+      console.log(`📊 Audio duration: ${audioDurationMs}ms for ${words.length} words`);
+      
+      // Calculate time per word based on actual audio duration
+      // Leave some buffer at the end (90% of duration for words)
+      const msPerWord = audioDurationMs > 0 
+        ? (audioDurationMs * 0.9) / (words.length - 1) // -1 because first word already displayed
+        : 400; // Fallback to ~400ms per word
+      
+      console.log(`⏱️ Displaying words every ${msPerWord.toFixed(0)}ms`);
+      
+      // Now start playing the audio
+      await sound.playAsync();
+      
+      // Start progressive word display with calculated timing
+      wordDisplayInterval.current = setInterval(() => {
+        if (currentIndex < words.length) {
+          const displayedText = words.slice(0, currentIndex + 1).join(' ');
+          setTranscribedText(displayedText);
+          currentIndex++;
+        } else {
+          // All words displayed, show complete text
+          setTranscribedText(text);
+          if (wordDisplayInterval.current) {
+            clearInterval(wordDisplayInterval.current);
+            wordDisplayInterval.current = null;
+          }
+        }
+      }, msPerWord);
+      
+      console.log('✅ gTTS audio playing with real-time transcription');
       
     } catch (error) {
       console.error('❌ Error in speakAIResponse:', error);
       setIsAISpeaking(false);
       setTranscribedText('Speech error: ' + error.message);
       setCurrentSound(null);
+      setAiResponseText('');
+      
+      // Clear interval on error
+      if (wordDisplayInterval.current) {
+        clearInterval(wordDisplayInterval.current);
+        wordDisplayInterval.current = null;
+      }
     }
   };
   
@@ -471,6 +553,12 @@ const LiveChatAI = ({ navigation, route }) => {
       // Stop AI speaking if tapped during speech
       console.log('⏹️ Stopping AI speech...');
       
+      // Clear word display interval
+      if (wordDisplayInterval.current) {
+        clearInterval(wordDisplayInterval.current);
+        wordDisplayInterval.current = null;
+      }
+      
       // Stop gTTS audio
       if (currentSound) {
         try {
@@ -485,6 +573,7 @@ const LiveChatAI = ({ navigation, route }) => {
       
       setIsAISpeaking(false);
       setTranscribedText('');
+      setAiResponseText('');
       return;
     }
 
@@ -560,6 +649,12 @@ const LiveChatAI = ({ navigation, route }) => {
               } catch (e) {
                 console.log('Warning: Error stopping recording on exit:', e);
               }
+            }
+            
+            // Clear word display interval
+            if (wordDisplayInterval.current) {
+              clearInterval(wordDisplayInterval.current);
+              wordDisplayInterval.current = null;
             }
             
             // Stop gTTS audio if playing
@@ -685,6 +780,12 @@ const LiveChatAI = ({ navigation, route }) => {
             if (isAISpeaking) {
               console.log('⏸️ Pause button pressed - stopping audio...');
               
+              // Clear word display interval
+              if (wordDisplayInterval.current) {
+                clearInterval(wordDisplayInterval.current);
+                wordDisplayInterval.current = null;
+              }
+              
               // Stop gTTS audio
               if (currentSound) {
                 try {
@@ -699,6 +800,7 @@ const LiveChatAI = ({ navigation, route }) => {
               
               setIsAISpeaking(false);
               setTranscribedText('Audio stopped');
+              setAiResponseText('');
             }
           }}
           disabled={!isAISpeaking}
