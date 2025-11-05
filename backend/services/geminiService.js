@@ -3,6 +3,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
 const fs = require('fs').promises;
 const speechService = require('./speechService');
+const performanceMonitor = require('../utils/performanceMonitor');
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -10,12 +11,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 class GeminiService {
     constructor() {
         this.model = genAI.getGenerativeModel({ 
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.0-flash-exp', // Using faster experimental model
             generationConfig: {
-                temperature: 0.8,  // Increased for more comprehensive responses
-                topP: 0.9,         // Increased to consider more tokens
-                topK: 50,          // Increased for broader vocabulary
-                maxOutputTokens: 8192,
+                temperature: 0.7,  // Slightly reduced for faster, more focused responses
+                topP: 0.9,
+                topK: 40,          // Reduced for faster token selection
+                maxOutputTokens: 4096, // OPTIMIZED: Reduced from 8192 for faster generation
             }
         });
         
@@ -88,13 +89,12 @@ If unsure about something not in the knowledge base, recommend consulting an in-
             
             fullPrompt += `CRITICAL INSTRUCTIONS:
 1. Use the information from the knowledge base above to provide accurate, evidence-based answers
-2. When the knowledge base contains step-by-step procedures, numbered lists, or treatment protocols:
-   - Include ALL steps in their COMPLETE form
-   - Do NOT summarize, condense, or skip steps
-   - Maintain the original numbering and sequence
-   - Include all details, measurements, times, and specific instructions from each step
-3. Be comprehensive and thorough in your responses, covering all relevant aspects found in the knowledge base
-4. Only summarize when the content is descriptive or explanatory, NOT when it's procedural or instructional
+2. Be comprehensive but concise - focus on the most relevant information for the user's specific question
+3. When the knowledge base contains step-by-step procedures, numbered lists, or treatment protocols:
+   - Include the ALL steps
+   - Maintain the original sequence
+   - Include key details and specific instructions
+4. Structure your response clearly with headers and bullet points for readability
 
 CITATION REQUIREMENT (Numbered Reference Style):
 5. ALWAYS cite your sources inline using bracketed numbers when making statements based on the knowledge base
@@ -137,10 +137,14 @@ CITATION REQUIREMENT (Numbered Reference Style):
             fullPrompt += `\nPatient: ${userMessage}\nDermatologist:`;
 
             // Generate response with retry logic
+            const genStart = performanceMonitor.startTimer();
             const result = await this.generateWithRetry(fullPrompt);
             const response = await result.response;
             let text = response.text();
-
+            const genTime = performanceMonitor.endTimer(genStart);
+            
+            performanceMonitor.record('aiGeneration', genTime);
+            console.log(`⏱️ AI Generation: ${genTime}ms`);
             console.log('🔍 Raw AI response (first 4000 chars):', text.substring(0, 4000));
 
             return {

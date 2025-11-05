@@ -4,6 +4,7 @@ const { RecursiveCharacterTextSplitter } = require('langchain/text_splitter');
 const { Document } = require('langchain/document');
 const fs = require('fs').promises;
 const path = require('path');
+const performanceMonitor = require('../utils/performanceMonitor');
 
 class VectorService {
     constructor() {
@@ -233,11 +234,12 @@ class VectorService {
                 console.log(`   Search Limit: ${limit}`);
             }
             
-            // Search in Qdrant
+            // Search in Qdrant with score threshold to filter out irrelevant results
             const searchResults = await this.qdrantClient.search(this.collectionName, {
                 vector: queryEmbedding,
                 limit: limit,
-                with_payload: true
+                with_payload: true,
+                score_threshold: 0.4 // Only return results with >40% similarity
             });
             
             if (debugMode) {
@@ -277,14 +279,19 @@ class VectorService {
      */
     async ragQuery(userQuery, conversationHistory = [], debugMode = false) {
         try {
+            const startTime = performanceMonitor.startTimer();
+            
             console.log('\n' + '='.repeat(80));
             console.log('🔍 RAG QUERY ANALYSIS');
             console.log('='.repeat(80));
             console.log(`📝 User Query: "${userQuery}"`);
             console.log(`📊 Query Length: ${userQuery.length} chars, ${userQuery.split(' ').length} words`);
             
-            // 1. Retrieve relevant context
-            const relevantDocs = await this.searchRelevantDocs(userQuery, 5, debugMode);
+            // 1. Retrieve relevant context - OPTIMIZED: reduced from 5 to 3 chunks for faster processing
+            const searchStart = performanceMonitor.startTimer();
+            const relevantDocs = await this.searchRelevantDocs(userQuery, 3, debugMode);
+            const searchTime = performanceMonitor.endTimer(searchStart);
+            performanceMonitor.record('vectorSearch', searchTime);
             
             console.log(`\n📚 Retrieved ${relevantDocs.length} chunks from Qdrant:\n`);
             
@@ -358,6 +365,10 @@ class VectorService {
                     return `[Source ${idx + 1} - "${bookTitle}"]\n${doc.content}`;
                 })
                 .join('\n\n---\n\n');
+            
+            // Record metrics
+            performanceMonitor.record('contextSize', context.length);
+            performanceMonitor.record('chunksRetrieved', relevantDocs.length);
             
             // 3. Return context and sources for use with Gemini
             return {

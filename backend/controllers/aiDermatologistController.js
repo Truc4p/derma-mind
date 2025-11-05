@@ -3,6 +3,7 @@ const vectorService = require('../services/vectorService');
 const ttsService = require('../services/ttsService');
 const fs = require('fs').promises;
 const path = require('path');
+const performanceMonitor = require('../utils/performanceMonitor');
 
 /**
  * @desc    Send a message to the AI Dermatologist
@@ -11,6 +12,7 @@ const path = require('path');
  */
 exports.chat = async (req, res) => {
     try {
+        const totalStart = performanceMonitor.startTimer();
         const { message, conversationHistory } = req.body;
 
         if (!message || message.trim() === '') {
@@ -27,11 +29,26 @@ exports.chat = async (req, res) => {
             conversationHistory || []
         );
 
+        const totalTime = performanceMonitor.endTimer(totalStart);
+        performanceMonitor.record('totalTime', totalTime);
+        
+        // Log this request's performance
+        performanceMonitor.logRequest({
+            totalTime,
+            contextSize: ragResult.context.length,
+            chunksRetrieved: ragResult.sources.length
+        });
+
         res.json({
             response: result.response,
             sources: ragResult.sources,
             images: result.images || [],
-            timestamp: new Date()
+            timestamp: new Date(),
+            _performance: process.env.NODE_ENV === 'development' ? {
+                totalTime,
+                contextSize: ragResult.context.length,
+                chunks: ragResult.sources.length
+            } : undefined
         });
     } catch (error) {
         console.error('AI Chat error:', error);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import {
   View,
   Text,
@@ -24,8 +24,80 @@ import ChatHistory from './ChatHistory';
 // For Physical Device: http://YOUR_IP:3004
 const API_BASE_URL = 'http://localhost:3004';
 
+// Memoized Message Component to prevent unnecessary re-renders
+const MessageComponent = memo(({ 
+  message, 
+  index, 
+  contentWidth, 
+  userTagsStyles, 
+  assistantTagsStyles, 
+  convertMarkdownToHtml,
+  formatTime,
+  handleSpeak,
+  speakingMessageIndex,
+  isSpeaking
+}) => {
+  const html = useMemo(() => convertMarkdownToHtml(message.content), [message.content, convertMarkdownToHtml]);
+  
+  return (
+    <View
+      style={[
+        styles.message,
+        message.role === 'user' ? styles.messageUser : styles.messageAssistant
+      ]}
+    >
+      <View style={[
+        styles.messageContent,
+        message.role === 'user' ? styles.messageContentUser : styles.messageContentAssistant
+      ]}>
+        <RenderHtml
+          contentWidth={contentWidth}
+          source={{ html }}
+          tagsStyles={message.role === 'user' ? userTagsStyles : assistantTagsStyles}
+          baseStyle={message.role === 'user' ? { color: '#FFFFFF' } : { color: colors.gray800 }}
+        />
+        <View style={styles.messageFooter}>
+          <Text style={[
+            styles.messageTime,
+            message.role === 'user' && styles.messageTimeUser
+          ]}>
+            {formatTime(message.timestamp)}
+          </Text>
+          
+          {/* Voice Button for Assistant Messages */}
+          {message.role === 'assistant' && (
+            <TouchableOpacity
+              style={[
+                styles.voiceButton,
+                speakingMessageIndex === index && isSpeaking && styles.voiceButtonActive
+              ]}
+              onPress={() => handleSpeak(index)}
+            >
+              <Text style={styles.voiceButtonIcon}>
+                {speakingMessageIndex === index && isSpeaking ? '⏸' : '🔊'}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison function - only re-render if these specific props change
+  return (
+    prevProps.message.content === nextProps.message.content &&
+    prevProps.message.timestamp === nextProps.message.timestamp &&
+    prevProps.speakingMessageIndex === nextProps.speakingMessageIndex &&
+    prevProps.isSpeaking === nextProps.isSpeaking &&
+    prevProps.contentWidth === nextProps.contentWidth
+  );
+});
+
 const AIDermatologist = ({ navigation }) => {
   const { width } = useWindowDimensions();
+  // Memoize the content width to prevent frequent re-renders
+  const contentWidth = useMemo(() => width * 0.8, [width]);
+  
   const [userInput, setUserInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -252,7 +324,7 @@ const AIDermatologist = ({ navigation }) => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!userInput.trim() || isLoading) return;
 
     const userMessage = {
@@ -280,9 +352,9 @@ const AIDermatologist = ({ navigation }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userInput, isLoading, messages]);
 
-  const getAIResponse = async (userMessage) => {
+  const getAIResponse = useCallback(async (userMessage) => {
     try {
       console.log('🔍 Preparing API request...');
       console.log('📚 User query:', userMessage);
@@ -319,7 +391,7 @@ const AIDermatologist = ({ navigation }) => {
         timestamp: new Date().toISOString()
       }]);
     }
-  };
+  }, [messages]);
 
   const generateContextualResponse = (message) => {
     console.log('🔄 Generating contextual fallback response for:', message);
@@ -483,8 +555,8 @@ This will help me give you better tailored advice. You can also ask me about:
 What would you like to know more about?`;
   };
 
-  // Convert markdown to HTML
-  const convertMarkdownToHtml = (markdown) => {
+  // Convert markdown to HTML - memoized version
+  const convertMarkdownToHtml = useMemo(() => (markdown) => {
     if (!markdown) return '';
 
     let html = markdown;
@@ -586,24 +658,24 @@ What would you like to know more about?`;
     }).join('');
 
     return html;
-  };
+  }, []);
 
-  const askSampleQuestion = (question) => {
+  const askSampleQuestion = useCallback((question) => {
     setUserInput(question);
     // Auto-send after a brief delay to show the question was selected
     setTimeout(() => {
       sendMessage();
     }, 100);
-  };
+  }, [sendMessage]);
 
-  const formatTime = (timestamp) => {
+  const formatTime = useCallback((timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
       hour12: true
     });
-  };
+  }, []);
 
   const startNewChat = () => {
     Alert.alert(
@@ -665,7 +737,7 @@ What would you like to know more about?`;
   };
 
   // Text-to-speech functions using backend gTTS
-  const handleSpeak = async (messageIndex) => {
+  const handleSpeak = useCallback(async (messageIndex) => {
     const message = messages[messageIndex];
     if (!message || message.role !== 'assistant') return;
 
@@ -752,7 +824,7 @@ What would you like to know more about?`;
       
       Alert.alert('Error', 'Failed to play the audio. Please ensure the backend is running.');
     }
-  };
+  }, [messages, speakingMessageIndex, isSpeaking, sound]);
 
   // Cleanup audio on unmount
   useEffect(() => {
@@ -831,48 +903,19 @@ What would you like to know more about?`;
 
         {/* Chat Messages */}
         {messages.map((message, index) => (
-          <View
-            key={index}
-            style={[
-              styles.message,
-              message.role === 'user' ? styles.messageUser : styles.messageAssistant
-            ]}
-          >
-            <View style={[
-              styles.messageContent,
-              message.role === 'user' ? styles.messageContentUser : styles.messageContentAssistant
-            ]}>
-              <RenderHtml
-                contentWidth={width * 0.8}
-                source={{ html: convertMarkdownToHtml(message.content) }}
-                tagsStyles={message.role === 'user' ? userTagsStyles : assistantTagsStyles}
-                baseStyle={message.role === 'user' ? { color: '#FFFFFF' } : { color: colors.gray800 }}
-              />
-              <View style={styles.messageFooter}>
-                <Text style={[
-                  styles.messageTime,
-                  message.role === 'user' && styles.messageTimeUser
-                ]}>
-                  {formatTime(message.timestamp)}
-                </Text>
-                
-                {/* Voice Button for Assistant Messages */}
-                {message.role === 'assistant' && (
-                  <TouchableOpacity
-                    style={[
-                      styles.voiceButton,
-                      speakingMessageIndex === index && isSpeaking && styles.voiceButtonActive
-                    ]}
-                    onPress={() => handleSpeak(index)}
-                  >
-                    <Text style={styles.voiceButtonIcon}>
-                      {speakingMessageIndex === index && isSpeaking ? '⏸' : '🔊'}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          </View>
+          <MessageComponent
+            key={`${message.timestamp}-${index}`}
+            message={message}
+            index={index}
+            contentWidth={contentWidth}
+            userTagsStyles={userTagsStyles}
+            assistantTagsStyles={assistantTagsStyles}
+            convertMarkdownToHtml={convertMarkdownToHtml}
+            formatTime={formatTime}
+            handleSpeak={handleSpeak}
+            speakingMessageIndex={speakingMessageIndex}
+            isSpeaking={isSpeaking}
+          />
         ))}
 
         {/* Loading Indicator */}
