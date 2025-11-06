@@ -94,11 +94,20 @@ const LiveChatAI = ({ navigation, route }) => {
           console.log('Warning: Error cleaning up recording on unmount:', e)
         );
       }
-      // Stop gTTS audio
+      
+      // Stop audio playback
+      playbackControlRef.current.shouldContinue = false;
+      
+      if (playbackControlRef.current.currentSound) {
+        playbackControlRef.current.currentSound.stopAsync().catch(console.error);
+        playbackControlRef.current.currentSound.unloadAsync().catch(console.error);
+      }
+      
       if (currentSound) {
         currentSound.stopAsync().catch(console.error);
         currentSound.unloadAsync().catch(console.error);
       }
+      
       // Clear word display interval
       if (wordDisplayInterval.current) {
         clearInterval(wordDisplayInterval.current);
@@ -407,18 +416,75 @@ const LiveChatAI = ({ navigation, route }) => {
     }
   };
 
+  // Clean text for speech - remove markdown formatting and citations
+  const cleanTextForSpeech = (text) => {
+    if (!text) return '';
+    
+    let cleanText = text;
+    
+    // Remove source citations like [1], [2], [3], etc.
+    cleanText = cleanText.replace(/\[\d+\]/g, '');
+    
+    // Remove markdown headers (###, ##, #)
+    cleanText = cleanText.replace(/^#{1,6}\s+/gm, '');
+    
+    // Remove markdown bold/italic markers (**, *, __)
+    cleanText = cleanText.replace(/\*\*([^*]+)\*\*/g, '$1'); // **bold**
+    cleanText = cleanText.replace(/\*([^*]+)\*/g, '$1'); // *italic*
+    cleanText = cleanText.replace(/__([^_]+)__/g, '$1'); // __bold__
+    cleanText = cleanText.replace(/_([^_]+)_/g, '$1'); // _italic_
+    
+    // Remove bullet points and list markers
+    cleanText = cleanText.replace(/^[\*\-•]\s+/gm, '');
+    cleanText = cleanText.replace(/^\d+\.\s+/gm, '');
+    
+    // Remove extra whitespace
+    cleanText = cleanText.replace(/\s+/g, ' ').trim();
+    
+    return cleanText;
+  };
+
+  // Split text into sentences for faster TTS streaming
+  const splitIntoSentences = (text) => {
+    // Clean the text first
+    const cleanedText = cleanTextForSpeech(text);
+    
+    // Split by common sentence endings, but keep the punctuation
+    const sentences = cleanedText.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [cleanedText];
+    return sentences.map(s => s.trim()).filter(s => s.length > 0);
+  };
+
+  // Use ref to track if playback should continue
+  const playbackControlRef = useRef({ 
+    shouldContinue: false, 
+    currentSound: null 
+  });
+
   const speakAIResponse = async (text) => {
     try {
-      console.log('🔊 Speaking AI response...');
+      console.log('🔊 Speaking AI response with streaming...');
+      console.log('📝 Text length:', text.length);
       
       // Stop any currently playing audio first
-      if (currentSound) {
+      playbackControlRef.current.shouldContinue = false;
+      
+      if (playbackControlRef.current.currentSound) {
         console.log('⏹️ Stopping previous audio...');
+        try {
+          await playbackControlRef.current.currentSound.stopAsync();
+          await playbackControlRef.current.currentSound.unloadAsync();
+        } catch (e) {
+          console.log('Warning: Error stopping previous audio:', e);
+        }
+        playbackControlRef.current.currentSound = null;
+      }
+      
+      if (currentSound) {
         try {
           await currentSound.stopAsync();
           await currentSound.unloadAsync();
         } catch (e) {
-          console.log('Warning: Error stopping previous audio:', e);
+          console.log('Sound already stopped');
         }
         setCurrentSound(null);
       }
@@ -432,90 +498,104 @@ const LiveChatAI = ({ navigation, route }) => {
       // Store the full AI response
       setAiResponseText(text);
       
-      // Split text into words for progressive display
-      const words = text.split(' ');
-      let currentIndex = 0;
+      // Split into sentences for streaming playback
+      const sentences = splitIntoSentences(text);
+      console.log('📄 Split into', sentences.length, 'sentences');
       
-      // Calculate timing: distribute words evenly across expected audio duration
-      // Estimate: ~150 words per minute = ~400ms per word
-      const wordsPerMinute = 150;
-      const msPerWord = (60 * 1000) / wordsPerMinute;
-      
-      // Use gTTS for text-to-speech
-      console.log('🌐 Using gTTS for voice...');
-      setTranscribedText(''); // Clear before starting
-      
-      const ttsResponse = await liveChatService.textToSpeech(text);
-      
-      // Convert base64 audio to playable URI
-      const audioBase64 = ttsResponse.audio;
-      const audioUri = `data:audio/mp3;base64,${audioBase64}`;
-      
-      // Start word-by-word display animation
+      // Set playback control
+      playbackControlRef.current.shouldContinue = true;
       setIsAISpeaking(true);
       
-      // Display first word immediately
-      if (words.length > 0) {
-        setTranscribedText(words[0]);
-        currentIndex = 1;
-      }
-      
-      // Create and play audio
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: audioUri },
-        { shouldPlay: true },
-        (status) => {
-          if (status.didJustFinish) {
-            console.log('✅ gTTS playback finished');
-            
-            // Clear word display interval
-            if (wordDisplayInterval.current) {
-              clearInterval(wordDisplayInterval.current);
-              wordDisplayInterval.current = null;
+      // Set audio mode for playback
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+        staysActiveInBackground: false
+      });
+
+      let displayedText = '';
+
+      // Play sentences sequentially with streaming
+      for (let i = 0; i < sentences.length; i++) {
+        // Check if user stopped playback
+        if (!playbackControlRef.current.shouldContinue) {
+          console.log('⏹️ Playback stopped by user');
+          break;
+        }
+
+        console.log(`🔊 Playing sentence ${i + 1}/${sentences.length}`);
+        
+        // Request TTS from backend for this sentence
+        const ttsResponse = await liveChatService.textToSpeech(sentences[i]);
+        
+        console.log(`✅ Sentence ${i + 1} audio received`);
+
+        // Check again if user stopped during the request
+        if (!playbackControlRef.current.shouldContinue) {
+          console.log('⏹️ Playback stopped during request');
+          break;
+        }
+
+        // Update displayed text progressively
+        displayedText += (displayedText ? ' ' : '') + sentences[i];
+        setTranscribedText(displayedText);
+        
+        // Auto-scroll to bottom
+        if (scrollViewRef.current) {
+          setTimeout(() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+          }, 100);
+        }
+
+        // Create and play sound
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: `data:audio/mp3;base64,${ttsResponse.audio}` },
+          { shouldPlay: true }
+        );
+
+        // Store in both state and ref for immediate access
+        setCurrentSound(sound);
+        playbackControlRef.current.currentSound = sound;
+        console.log(`▶️ Playing sentence ${i + 1}/${sentences.length}`);
+
+        // Wait for this sentence to finish before playing the next one
+        await new Promise((resolve) => {
+          sound.setOnPlaybackStatusUpdate((status) => {
+            if (status.didJustFinish) {
+              resolve();
             }
-            
-            // Show complete text briefly before clearing
-            setTranscribedText(text);
-            
-            setTimeout(() => {
-              setIsAISpeaking(false);
-              setTranscribedText('Tap to speak');
-              setAiResponseText('');
-            }, 1500);
-            
-            setCurrentSound(null);
-            sound.unloadAsync(); // Clean up
-          }
-        }
-      );
+            if (status.error) {
+              console.error('❌ Playback error:', status.error);
+              resolve();
+            }
+          });
+        });
+
+        // Clean up this sound before loading the next one
+        await sound.unloadAsync();
+        playbackControlRef.current.currentSound = null;
+        setCurrentSound(null);
+      }
+
+      console.log('✅ All sentences completed');
+      playbackControlRef.current.shouldContinue = false;
+      playbackControlRef.current.currentSound = null;
       
-      setCurrentSound(sound); // Save sound reference for stopping
+      // Show complete text briefly before clearing
+      setTranscribedText(text);
       
-      // Start progressive word display
-      wordDisplayInterval.current = setInterval(() => {
-        if (currentIndex < words.length) {
-          const displayedText = words.slice(0, currentIndex + 1).join(' ');
-          setTranscribedText(displayedText);
-          
-          // Auto-scroll to bottom to show latest words
-          if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToEnd({ animated: true });
-          }
-          
-          currentIndex++;
-        } else {
-          // All words displayed
-          if (wordDisplayInterval.current) {
-            clearInterval(wordDisplayInterval.current);
-            wordDisplayInterval.current = null;
-          }
-        }
-      }, msPerWord);
-      
-      console.log('✅ gTTS audio playing with real-time transcription');
+      setTimeout(() => {
+        setIsAISpeaking(false);
+        setTranscribedText('Tap to speak');
+        setAiResponseText('');
+      }, 1500);
       
     } catch (error) {
       console.error('❌ Error in speakAIResponse:', error);
+      playbackControlRef.current.shouldContinue = false;
+      playbackControlRef.current.currentSound = null;
       setIsAISpeaking(false);
       setTranscribedText('Speech error: ' + error.message);
       setCurrentSound(null);
@@ -547,6 +627,7 @@ const LiveChatAI = ({ navigation, route }) => {
     if (isAISpeaking) {
       // Stop AI speaking if tapped during speech
       console.log('⏹️ Stopping AI speech...');
+      playbackControlRef.current.shouldContinue = false;
       
       // Clear word display interval
       if (wordDisplayInterval.current) {
@@ -554,14 +635,26 @@ const LiveChatAI = ({ navigation, route }) => {
         wordDisplayInterval.current = null;
       }
       
-      // Stop gTTS audio
+      // Stop audio using ref for immediate access
+      if (playbackControlRef.current.currentSound) {
+        try {
+          await playbackControlRef.current.currentSound.stopAsync();
+          await playbackControlRef.current.currentSound.unloadAsync();
+          console.log('✅ Audio stopped via ref');
+        } catch (e) {
+          console.log('Warning: Error stopping audio via ref:', e);
+        }
+        playbackControlRef.current.currentSound = null;
+      }
+      
+      // Also stop via state for safety
       if (currentSound) {
         try {
           await currentSound.stopAsync();
           await currentSound.unloadAsync();
-          console.log('✅ gTTS audio stopped');
+          console.log('✅ Audio stopped via state');
         } catch (e) {
-          console.log('Warning: Error stopping audio:', e);
+          console.log('Warning: Error stopping audio via state:', e);
         }
         setCurrentSound(null);
       }
@@ -652,7 +745,19 @@ const LiveChatAI = ({ navigation, route }) => {
               wordDisplayInterval.current = null;
             }
             
-            // Stop gTTS audio if playing
+            // Stop audio playback
+            playbackControlRef.current.shouldContinue = false;
+            
+            if (playbackControlRef.current.currentSound) {
+              try {
+                await playbackControlRef.current.currentSound.stopAsync();
+                await playbackControlRef.current.currentSound.unloadAsync();
+              } catch (e) {
+                console.log('Warning: Error stopping audio via ref on exit:', e);
+              }
+              playbackControlRef.current.currentSound = null;
+            }
+            
             if (currentSound) {
               try {
                 await currentSound.stopAsync();
@@ -781,6 +886,7 @@ const LiveChatAI = ({ navigation, route }) => {
           onPress={async () => {
             if (isAISpeaking) {
               console.log('⏸️ Pause button pressed - stopping audio...');
+              playbackControlRef.current.shouldContinue = false;
               
               // Clear word display interval
               if (wordDisplayInterval.current) {
@@ -788,14 +894,25 @@ const LiveChatAI = ({ navigation, route }) => {
                 wordDisplayInterval.current = null;
               }
               
-              // Stop gTTS audio
+              // Stop audio using ref
+              if (playbackControlRef.current.currentSound) {
+                try {
+                  await playbackControlRef.current.currentSound.stopAsync();
+                  await playbackControlRef.current.currentSound.unloadAsync();
+                  console.log('✅ Audio stopped via ref');
+                } catch (e) {
+                  console.log('Warning: Error stopping audio via ref:', e);
+                }
+                playbackControlRef.current.currentSound = null;
+              }
+              
+              // Also stop via state
               if (currentSound) {
                 try {
                   await currentSound.stopAsync();
                   await currentSound.unloadAsync();
-                  console.log('✅ gTTS audio stopped');
                 } catch (e) {
-                  console.log('Warning: Error stopping audio:', e);
+                  console.log('Sound already stopped');
                 }
                 setCurrentSound(null);
               }
