@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,10 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
-  Alert
+  Alert,
+  useWindowDimensions
 } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 import { chatStorage, liveChatStorage } from '../services/api';
 
 const { width, height } = Dimensions.get('window');
@@ -31,9 +33,157 @@ const colors = {
 };
 
 const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigation }) => {
+  const { width } = useWindowDimensions();
+  const contentWidth = useMemo(() => width * 0.85, [width]);
+  
   const [allSessions, setAllSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSession, setSelectedSession] = useState(null); // Track selected session for detail view
+
+  // HTML tag styles for assistant messages
+  const assistantTagsStyles = useMemo(() => ({
+    body: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.primary950
+    },
+    p: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.primary950,
+      margin: 0,
+      marginBottom: 8
+    },
+    strong: {
+      fontWeight: '600',
+      color: colors.primary800
+    },
+    h1: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: colors.primary800,
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h2: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: colors.primary800,
+      marginTop: 12,
+      marginBottom: 8
+    },
+    h3: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.primary800,
+      marginTop: 10,
+      marginBottom: 6
+    },
+    h4: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.primary800,
+      marginTop: 8,
+      marginBottom: 4
+    },
+    ul: {
+      marginTop: 8,
+      marginBottom: 8,
+      lineHeight: 24,
+      paddingLeft: 20
+    },
+    ol: {
+      marginTop: 8,
+      marginBottom: 8,
+      paddingLeft: 20
+    },
+    li: {
+      fontSize: 15,
+      lineHeight: 24,
+      color: colors.primary950,
+      marginBottom: 4
+    }
+  }), []);
+
+  // Convert markdown to HTML for better display
+  const convertMarkdownToHtml = useMemo(() => (markdown) => {
+    if (!markdown) return '';
+
+    let html = markdown;
+
+    // Convert headers
+    html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+    // Convert bold text
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+    // Convert unordered lists with nested support
+    html = html.replace(/(?:^[\*\-•] .+$\n?(?:^ {2,8}[\*\-•] .+$\n?)*)+/gm, (match) => {
+      const lines = match.trim().split('\n').filter(line => line.trim());
+      let result = '<ul>';
+      let nestedLevel = 0;
+      
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const spaces = line.search(/[\*\-•]/);
+        const currentLevel = Math.floor(spaces / 2);
+        const content = line.replace(/^[\s]*[\*\-•]\s*/, '');
+        
+        while (nestedLevel < currentLevel) {
+          result += '<ul>';
+          nestedLevel++;
+        }
+        
+        while (nestedLevel > currentLevel) {
+          result += '</ul></li>';
+          nestedLevel--;
+        }
+        
+        if (i < lines.length - 1) {
+          const nextSpaces = lines[i + 1].search(/[\*\-•]/);
+          const nextLevel = Math.floor(nextSpaces / 2);
+          if (nextLevel > currentLevel) {
+            result += `<li>${content}`;
+          } else {
+            result += `<li>${content}</li>`;
+          }
+        } else {
+          result += `<li>${content}</li>`;
+        }
+      }
+      
+      while (nestedLevel > 0) {
+        result += '</ul></li>';
+        nestedLevel--;
+      }
+      
+      result += '</ul>';
+      return result;
+    });
+
+    // Convert numbered lists
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+    // Split by double line breaks to identify paragraphs
+    const blocks = html.split(/\n\n+/);
+    html = blocks.map(block => {
+      block = block.trim();
+      if (!block) return '';
+      
+      // Don't wrap if it's already a block element
+      if (block.match(/^<(h[1-6]|ul|ol|li)/)) {
+        return block;
+      }
+      
+      // Wrap in paragraph and convert single line breaks to <br/>
+      return `<p>${block.replace(/\n/g, '<br/>')}</p>`;
+    }).join('');
+
+    return html;
+  }, []);
 
   useEffect(() => {
     console.log('🔄 [ChatHistory] Component rendered/updated');
@@ -67,7 +217,7 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
       // Load live chat sessions
       const liveSessions = await liveChatStorage.loadAllSessions();
       console.log('🎤 [ChatHistory] Live chat sessions loaded:', liveSessions.length, 'sessions');
-      console.log('📋 [ChatHistory] Live sessions details:', JSON.stringify(liveSessions, null, 2));
+      // console.log('📋 [ChatHistory] Live sessions details:', JSON.stringify(liveSessions, null, 2));
       const liveSessionsWithType = liveSessions.map(session => ({
         ...session,
         type: 'live'
@@ -219,20 +369,37 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
 
             {/* Messages List */}
             <ScrollView style={styles.messagesContainer}>
-              {selectedSession.messages.map((message, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.messageItem,
-                    message.role === 'user' ? styles.messageUser : styles.messageAssistant
-                  ]}
-                >
-                  <Text style={styles.messageRole}>
-                    {message.role === 'user' ? 'You' : 'AI Dermatologist'}
-                  </Text>
-                  <Text style={styles.messageContent}>{message.content}</Text>
-                </View>
-              ))}
+              {selectedSession.messages.map((message, index) => {
+                const messageKey = `msg-${message.timestamp || Date.now()}-${index}`;
+                const html = message.role === 'assistant' 
+                  ? convertMarkdownToHtml(message.content)
+                  : message.content;
+                
+                return (
+                  <View
+                    key={messageKey}
+                    style={[
+                      styles.messageItem,
+                      message.role === 'user' ? styles.messageUser : styles.messageAssistant
+                    ]}
+                  >
+                    <Text style={styles.messageRole}>
+                      {message.role === 'user' ? 'You' : 'AI Dermatologist'}
+                    </Text>
+                    
+                    {message.role === 'assistant' ? (
+                      <RenderHtml
+                        contentWidth={contentWidth}
+                        source={{ html }}
+                        tagsStyles={assistantTagsStyles}
+                        baseStyle={{ color: colors.primary950 }}
+                      />
+                    ) : (
+                      <Text style={styles.messageContent}>{message.content}</Text>
+                    )}
+                  </View>
+                );
+              })}
             </ScrollView>
           </>
         ) : (
