@@ -135,6 +135,9 @@ const LiveChatAI = ({ navigation, route }) => {
       setIsActionInProgress(true);
       console.log('🎤 Starting recording...');
       
+      // Set UI state immediately for instant feedback
+      setIsRecording(true);
+      
       // Stop any ongoing speech
       if (currentSound) {
         console.log('⏹️ Stopping audio...');
@@ -174,13 +177,12 @@ const LiveChatAI = ({ navigation, route }) => {
 
       console.log('✅ Recording started successfully');
       setRecording(newRecording);
-      setIsRecording(true);
-      setTranscribedText('Recording... Speak now');
     } catch (error) {
       console.error('❌ Failed to start recording:', error);
       Alert.alert('Error', 'Failed to start recording. Please try again.');
       setRecording(null);
       setIsRecording(false);
+      setTranscribedText('');
     } finally {
       setIsActionInProgress(false);
     }
@@ -899,7 +901,7 @@ const LiveChatAI = ({ navigation, route }) => {
       <View style={styles.statusContainer}>
         <Text style={styles.statusText}>
           {isRecording
-            ? 'Release to send'
+            ? 'Listening...'
             : isProcessing
               ? 'Processing...'
               : isAISpeaking

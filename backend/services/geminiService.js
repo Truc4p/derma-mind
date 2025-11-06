@@ -99,7 +99,7 @@ CITATION REQUIREMENT (Numbered Reference Style):
 5. ALWAYS cite your sources inline using bracketed numbers when making statements based on the knowledge base
    - Use bracketed superscript format: [1], [2], [3], etc. to reference the source chunks
    - Place citation numbers at the end of sentences or clauses where you use information from that source
-   - For multiple sources, list them together: [1,3] or [1-3] for consecutive numbers
+   - For multiple sources, list them together: [1,3] for consecutive numbers (not [1-3] or [1, 3])
    - Place citations after the final punctuation mark
    - Examples:
      * "The successful treatment of acne scars often requires a combination of treatments.[1,3]"
