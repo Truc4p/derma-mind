@@ -590,6 +590,8 @@ const LiveChatAI = ({ navigation, route }) => {
         setIsAISpeaking(false);
         setTranscribedText('Tap to speak');
         setAiResponseText('');
+        // Reset action flag to allow new recordings
+        setIsActionInProgress(false);
       }, 1500);
       
     } catch (error) {
@@ -600,6 +602,8 @@ const LiveChatAI = ({ navigation, route }) => {
       setTranscribedText('Speech error: ' + error.message);
       setCurrentSound(null);
       setAiResponseText('');
+      // Reset action flag on error
+      setIsActionInProgress(false);
       
       // Clear interval on error
       if (wordDisplayInterval.current) {
@@ -658,6 +662,9 @@ const LiveChatAI = ({ navigation, route }) => {
         }
         setCurrentSound(null);
       }
+      
+      // Reset action flag to allow new recordings
+      setIsActionInProgress(false);
       
       setIsAISpeaking(false);
       setTranscribedText('');
@@ -916,6 +923,9 @@ const LiveChatAI = ({ navigation, route }) => {
                 }
                 setCurrentSound(null);
               }
+              
+              // Reset action flag to allow new recordings
+              setIsActionInProgress(false);
               
               setIsAISpeaking(false);
               setTranscribedText('Audio stopped');
