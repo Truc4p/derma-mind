@@ -31,11 +31,11 @@ const colors = {
 };
 
 const LiveChatAI = ({ navigation, route }) => {
+  const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isAISpeaking, setIsAISpeaking] = useState(false);
   const [transcribedText, setTranscribedText] = useState('');
-  const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [currentSound, setCurrentSound] = useState(null);
@@ -62,21 +62,14 @@ const LiveChatAI = ({ navigation, route }) => {
   useEffect(() => {
     console.log('🔄 [LiveChatAI] Component mounted');
     console.log('📋 [LiveChatAI] Route params:', route?.params);
-    console.log('🔍 [LiveChatAI] Route object available:', !!route);
-
-    // Request audio permissions
-    requestPermissions();
 
     // Load session from route params if available
     if (route?.params?.loadSession) {
       const session = route.params.loadSession;
       console.log('📥 [LiveChatAI] Loading session from route params');
-      console.log('📋 [LiveChatAI] Session ID:', session.id);
-      console.log('📋 [LiveChatAI] Session messages count:', session.messages?.length);
       setConversationHistory(session.messages);
       setSessionId(session.id);
       setTranscribedText('');
-      console.log('✅ [LiveChatAI] Session loaded successfully');
       navigation.setParams({ loadSession: undefined });
     } else {
       const newSessionId = `live-${Date.now()}`;
@@ -87,12 +80,6 @@ const LiveChatAI = ({ navigation, route }) => {
     // Cleanup on unmount
     return () => {
       console.log('🧹 Component unmounting, cleaning up...');
-      
-      if (recording) {
-        recording.stopAndUnloadAsync().catch(e => 
-          console.log('Warning: Error stopping recording:', e)
-        );
-      }
       
       playbackControlRef.current.shouldContinue = false;
       
@@ -137,21 +124,6 @@ const LiveChatAI = ({ navigation, route }) => {
       stopPulseAnimation();
     }
   }, [isRecording, isAISpeaking]);
-
-  const requestPermissions = async () => {
-    try {
-      const { status } = await Audio.requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission Required',
-          'Please grant microphone permission to use live chat.',
-          [{ text: 'OK' }]
-        );
-      }
-    } catch (error) {
-      console.error('Error requesting permissions:', error);
-    }
-  };
 
   const startRecording = async () => {
     if (isActionInProgress) {
@@ -203,7 +175,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('✅ Recording started successfully');
       setRecording(newRecording);
       setIsRecording(true);
-      setTranscribedText('Listening... Speak now');
+      setTranscribedText('Recording... Speak now');
     } catch (error) {
       console.error('❌ Failed to start recording:', error);
       Alert.alert('Error', 'Failed to start recording. Please try again.');
@@ -266,7 +238,7 @@ const LiveChatAI = ({ navigation, route }) => {
       console.log('🔄 Processing audio from:', audioUri);
       setTranscribedText('Transcribing your voice...');
 
-      // Try transcription with backend
+      // Backend transcription
       const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
       const userMessage = transcriptionResult.transcription;
 
@@ -736,6 +708,9 @@ const LiveChatAI = ({ navigation, route }) => {
       ]
     );
   };
+
+  // Web Speech API handlers - removed as we're using expo-av recording instead
+  // (Web Speech API has permission issues in WebView)
   
   return (
     <View style={styles.container}>
