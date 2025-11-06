@@ -2,7 +2,6 @@ require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const DermatologyKnowledge = require('../models/DermatologyKnowledge');
 const fs = require('fs').promises;
-const speechService = require('./speechService');
 const performanceMonitor = require('../utils/performanceMonitor');
 
 // Initialize Gemini AI
@@ -174,65 +173,43 @@ CITATION REQUIREMENT (Numbered Reference Style):
             console.log('📁 [GEMINI SERVICE] Audio file:', audioFilePath);
             
             // Use Gemini's multimodal model for audio transcription
-            try {
-                console.log('🚀 [GEMINI SERVICE] Using Gemini multimodal transcription...');
-                
-                // Read audio file
-                const audioData = await fs.readFile(audioFilePath);
-                const base64Audio = audioData.toString('base64');
-                const mimeType = this.getMimeType(audioFilePath);
-                
-                console.log(`📊 [GEMINI SERVICE] Audio size: ${audioData.length} bytes, MIME: ${mimeType}`);
-                
-                // Use Gemini's multimodal model for transcription
-                const model = genAI.getGenerativeModel({ 
-                    model: 'gemini-2.0-flash-exp' // Supports audio input
-                });
-                
-                const result = await model.generateContent([
-                    {
-                        inlineData: {
-                            data: base64Audio,
-                            mimeType: mimeType
-                        }
-                    },
-                    'Transcribe this audio to text. Provide only the transcription without any additional commentary or formatting.'
-                ]);
-                
-                const response = await result.response;
-                const transcription = response.text().trim();
-                
-                const duration = Date.now() - startTime;
-                console.log(`✅ [GEMINI SERVICE] Gemini transcription completed in ${duration}ms`);
-                console.log('📝 [GEMINI SERVICE] Result:', transcription);
-                console.log('=== ✅ [GEMINI SERVICE] SUCCESS ===\n');
-                
-                return transcription;
-            } catch (geminiError) {
-                const duration = Date.now() - startTime;
-                console.log(`⚠️ [GEMINI SERVICE] Gemini transcription failed after ${duration}ms`);
-                console.log('⚠️ [GEMINI SERVICE] Error:', geminiError.message);
-                
-                // Fallback to AssemblyAI
-                console.log('🔄 [GEMINI SERVICE] Falling back to AssemblyAI...');
-                try {
-                    const transcription = await speechService.transcribeAudio(audioFilePath);
-                    const totalDuration = Date.now() - startTime;
-                    console.log(`✅ [GEMINI SERVICE] AssemblyAI transcription completed in ${totalDuration}ms`);
-                    return transcription;
-                } catch (speechError) {
-                    console.log('⚠️ [GEMINI SERVICE] AssemblyAI also failed:', speechError.message);
-                    console.log('=== ⚠️ [GEMINI SERVICE] TRANSCRIPTION NOT AVAILABLE ===\n');
-                    throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
-                }
-            }
-        } catch (error) {
-            if (error.message === 'TRANSCRIPTION_NOT_AVAILABLE') {
-                throw error;
-            }
+            console.log('🚀 [GEMINI SERVICE] Using Gemini multimodal transcription...');
+            
+            // Read audio file
+            const audioData = await fs.readFile(audioFilePath);
+            const base64Audio = audioData.toString('base64');
+            const mimeType = this.getMimeType(audioFilePath);
+            
+            console.log(`📊 [GEMINI SERVICE] Audio size: ${audioData.length} bytes, MIME: ${mimeType}`);
+            
+            // Use Gemini's multimodal model for transcription
+            const model = genAI.getGenerativeModel({ 
+                model: 'gemini-2.0-flash-exp' // Supports audio input
+            });
+            
+            const result = await model.generateContent([
+                {
+                    inlineData: {
+                        data: base64Audio,
+                        mimeType: mimeType
+                    }
+                },
+                'Transcribe this audio to text. Provide only the transcription without any additional commentary or formatting.'
+            ]);
+            
+            const response = await result.response;
+            const transcription = response.text().trim();
+            
             const duration = Date.now() - startTime;
-            console.error(`❌ [GEMINI SERVICE] Unexpected error after ${duration}ms:`, error.message);
-            throw new Error('Failed to transcribe audio');
+            console.log(`✅ [GEMINI SERVICE] Transcription completed in ${duration}ms`);
+            console.log('📝 [GEMINI SERVICE] Result:', transcription);
+            console.log('=== ✅ [GEMINI SERVICE] SUCCESS ===\n');
+            
+            return transcription;
+        } catch (error) {
+            const duration = Date.now() - startTime;
+            console.error(`❌ [GEMINI SERVICE] Transcription failed after ${duration}ms:`, error.message);
+            throw new Error('Failed to transcribe audio: ' + error.message);
         }
     }
 
