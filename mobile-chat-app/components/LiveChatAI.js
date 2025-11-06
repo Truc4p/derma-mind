@@ -856,7 +856,6 @@ const LiveChatAI = ({ navigation, route }) => {
               setIsActionInProgress(false);
               
               setIsAISpeaking(false);
-              setTranscribedText('Audio stopped');
               setAiResponseText('');
             }
           }}

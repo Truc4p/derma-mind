@@ -383,9 +383,6 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
                       message.role === 'user' ? styles.messageUser : styles.messageAssistant
                     ]}
                   >
-                    <Text style={styles.messageRole}>
-                      {message.role === 'user' ? 'You' : 'AI Dermatologist'}
-                    </Text>
                     
                     {message.role === 'assistant' ? (
                       <RenderHtml
@@ -704,13 +701,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderColor: colors.primary200,
     marginRight: 20
-  },
-  messageRole: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.primary700,
-    marginBottom: 8,
-    textTransform: 'uppercase'
   },
   messageContent: {
     fontSize: 15,
