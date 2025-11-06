@@ -104,7 +104,7 @@ exports.transcribeAudio = async (req, res) => {
         console.log('🎤 [BACKEND] Calling geminiService.transcribeAudio...');
         const transcribeStartTime = Date.now();
         
-        // Transcribe the audio using Gemini/AssemblyAI
+        // Transcribe the audio using Gemini
         const transcribedText = await geminiService.transcribeAudio(tempFilePath);
         
         const transcribeDuration = Date.now() - transcribeStartTime;

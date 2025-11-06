@@ -1,4 +1,4 @@
-const ttsService = require('./services/ttsService');
+const ttsService = require('../services/ttsService');
 const path = require('path');
 
 async function test() {

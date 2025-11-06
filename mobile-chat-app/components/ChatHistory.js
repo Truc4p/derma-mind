@@ -208,11 +208,13 @@ const ChatHistory = ({ visible, onClose, onLoadSession, currentChatType, navigat
             {/* Session Info */}
             <View style={styles.detailHeader}>
               <Text style={styles.detailTitle}>{selectedSession.title}</Text>
-              <Text style={styles.detailDate}>{formatSessionDate(selectedSession.timestamp)}</Text>
-              <View style={styles.detailBadge}>
-                <Text style={styles.detailBadgeText}>Live Chat</Text>
+              <View style={styles.detailMetaRow}>
+                <Text style={styles.detailDate}>{formatSessionDate(selectedSession.timestamp)}</Text>
+                <View style={styles.detailBadge}>
+                  <Text style={styles.detailBadgeText}>Live Chat</Text>
+                </View>
+                <Text style={styles.detailCount}>{selectedSession.messageCount} messages</Text>
               </View>
-              <Text style={styles.detailCount}>{selectedSession.messageCount} messages</Text>
             </View>
 
             {/* Messages List */}
@@ -478,6 +480,7 @@ const styles = StyleSheet.create({
   },
   detailHeader: {
     padding: 20,
+    paddingBottom: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: colors.primary200
@@ -486,28 +489,32 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: colors.primary950,
-    marginBottom: 8
+    marginBottom: 12
+  },
+  detailMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8
   },
   detailDate: {
-    fontSize: 14,
+    fontSize: 13,
     color: colors.primary700,
-    marginBottom: 8
+    flex: 1
   },
   detailBadge: {
-    alignSelf: 'flex-start',
     backgroundColor: colors.primary300,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginBottom: 8
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12
   },
   detailBadgeText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
     color: colors.primary800
   },
   detailCount: {
-    fontSize: 14,
+    fontSize: 13,
     color: colors.primary600,
     fontWeight: '500'
   },

@@ -350,8 +350,8 @@ const LiveChatAI = ({ navigation, route }) => {
     
     let cleanText = text;
     
-    // Remove source citations like [1], [2], [3], etc.
-    cleanText = cleanText.replace(/\[\d+\]/g, '');
+    // Remove source citations like [1], [2], [3], [1,2], [1-3], [10], etc.
+    cleanText = cleanText.replace(/\[\d+(?:[,\-]\d+)*\]/g, '');
     
     // Remove markdown headers (###, ##, #)
     cleanText = cleanText.replace(/^#{1,6}\s+/gm, '');
@@ -708,9 +708,6 @@ const LiveChatAI = ({ navigation, route }) => {
       ]
     );
   };
-
-  // Web Speech API handlers - removed as we're using expo-av recording instead
-  // (Web Speech API has permission issues in WebView)
   
   return (
     <View style={styles.container}>
