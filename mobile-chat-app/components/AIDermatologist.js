@@ -34,8 +34,7 @@ const MessageComponent = memo(({
   convertMarkdownToHtml,
   formatTime,
   handleSpeak,
-  speakingMessageIndex,
-  isSpeaking
+  isThisMessageSpeaking
 }) => {
   const html = useMemo(() => convertMarkdownToHtml(message.content), [message.content, convertMarkdownToHtml]);
   
@@ -69,12 +68,12 @@ const MessageComponent = memo(({
             <TouchableOpacity
               style={[
                 styles.voiceButton,
-                speakingMessageIndex === index && isSpeaking && styles.voiceButtonActive
+                isThisMessageSpeaking && styles.voiceButtonActive
               ]}
               onPress={() => handleSpeak(index)}
             >
               <Text style={styles.voiceButtonIcon}>
-                {speakingMessageIndex === index && isSpeaking ? '⏸' : '🔊'}
+                {isThisMessageSpeaking ? '⏸' : '🔊'}
               </Text>
             </TouchableOpacity>
           )}
@@ -87,8 +86,7 @@ const MessageComponent = memo(({
   return (
     prevProps.message.content === nextProps.message.content &&
     prevProps.message.timestamp === nextProps.message.timestamp &&
-    prevProps.speakingMessageIndex === nextProps.speakingMessageIndex &&
-    prevProps.isSpeaking === nextProps.isSpeaking &&
+    prevProps.isThisMessageSpeaking === nextProps.isThisMessageSpeaking &&
     prevProps.contentWidth === nextProps.contentWidth
   );
 });
@@ -744,7 +742,11 @@ What would you like to know more about?`;
   };
 
   // Use ref to track if playback should continue (avoids stale closure issues)
-  const playbackControlRef = useRef({ shouldContinue: false, currentMessageIndex: null });
+  const playbackControlRef = useRef({ 
+    shouldContinue: false, 
+    currentMessageIndex: null,
+    currentSound: null // Track the current sound object
+  });
 
   // Text-to-speech functions using backend gTTS with sentence-by-sentence streaming
   const handleSpeak = useCallback(async (messageIndex) => {
@@ -754,23 +756,55 @@ What would you like to know more about?`;
     try {
       // If already speaking this message, stop it
       if (speakingMessageIndex === messageIndex && isSpeaking) {
+        console.log('⏸️ Stopping audio playback');
+        playbackControlRef.current.shouldContinue = false;
+        
+        // Stop the current sound immediately
+        if (playbackControlRef.current.currentSound) {
+          try {
+            await playbackControlRef.current.currentSound.stopAsync();
+            await playbackControlRef.current.currentSound.unloadAsync();
+          } catch (e) {
+            console.log('Sound already stopped');
+          }
+          playbackControlRef.current.currentSound = null;
+        }
+        
         if (sound) {
-          console.log('⏸️ Stopping audio playback');
-          playbackControlRef.current.shouldContinue = false;
-          await sound.stopAsync();
-          await sound.unloadAsync();
+          try {
+            await sound.stopAsync();
+            await sound.unloadAsync();
+          } catch (e) {
+            console.log('Sound already stopped');
+          }
           setSound(null);
         }
+        
         setSpeakingMessageIndex(null);
         setIsSpeaking(false);
         return;
       }
 
       // Stop any currently playing audio
+      playbackControlRef.current.shouldContinue = false;
+      
+      if (playbackControlRef.current.currentSound) {
+        try {
+          await playbackControlRef.current.currentSound.stopAsync();
+          await playbackControlRef.current.currentSound.unloadAsync();
+        } catch (e) {
+          console.log('Sound already stopped');
+        }
+        playbackControlRef.current.currentSound = null;
+      }
+      
       if (sound) {
-        playbackControlRef.current.shouldContinue = false;
-        await sound.stopAsync();
-        await sound.unloadAsync();
+        try {
+          await sound.stopAsync();
+          await sound.unloadAsync();
+        } catch (e) {
+          console.log('Sound already stopped');
+        }
         setSound(null);
       }
 
@@ -835,7 +869,9 @@ What would you like to know more about?`;
           { shouldPlay: true }
         );
 
+        // Store in both state and ref for immediate access
         setSound(newSound);
+        playbackControlRef.current.currentSound = newSound;
         console.log(`▶️ [TTS] Playing sentence ${i + 1}/${sentences.length}`);
 
         // Wait for this sentence to finish before playing the next one
@@ -853,22 +889,29 @@ What would you like to know more about?`;
 
         // Clean up this sound before loading the next one
         await newSound.unloadAsync();
+        playbackControlRef.current.currentSound = null;
         setSound(null);
       }
 
       console.log('✅ [TTS] All sentences completed');
       playbackControlRef.current.shouldContinue = false;
+      playbackControlRef.current.currentSound = null;
       setSpeakingMessageIndex(null);
       setIsSpeaking(false);
 
     } catch (error) {
       console.error('❌ [TTS] Error in handleSpeak:', error);
       playbackControlRef.current.shouldContinue = false;
+      playbackControlRef.current.currentSound = null;
       setSpeakingMessageIndex(null);
       setIsSpeaking(false);
       
       if (sound) {
-        await sound.unloadAsync();
+        try {
+          await sound.unloadAsync();
+        } catch (e) {
+          console.log('Sound cleanup failed');
+        }
         setSound(null);
       }
       
@@ -955,6 +998,8 @@ What would you like to know more about?`;
         {messages.map((message, index) => {
           // Create a stable unique key using timestamp and index
           const messageKey = `msg-${message.timestamp || Date.now()}-${index}`;
+          // Only pass true if THIS specific message is speaking
+          const isThisMessageSpeaking = speakingMessageIndex === index && isSpeaking;
           
           return (
             <MessageComponent
@@ -967,8 +1012,7 @@ What would you like to know more about?`;
               convertMarkdownToHtml={convertMarkdownToHtml}
               formatTime={formatTime}
               handleSpeak={handleSpeak}
-              speakingMessageIndex={speakingMessageIndex}
-              isSpeaking={isSpeaking}
+              isThisMessageSpeaking={isThisMessageSpeaking}
             />
           );
         })}
