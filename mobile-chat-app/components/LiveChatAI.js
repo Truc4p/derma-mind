@@ -38,11 +38,11 @@ const LiveChatAI = ({ navigation, route }) => {
   const [recording, setRecording] = useState(null);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionId, setSessionId] = useState(null);
-  const [currentSound, setCurrentSound] = useState(null); // Track current playing audio
-  const [isActionInProgress, setIsActionInProgress] = useState(false); // Prevent race conditions
-  const [aiResponseText, setAiResponseText] = useState(''); // Full AI response for word-by-word display
-  const wordDisplayInterval = useRef(null); // Track word display interval
-  const scrollViewRef = useRef(null); // Ref for ScrollView to auto-scroll
+  const [currentSound, setCurrentSound] = useState(null);
+  const [isActionInProgress, setIsActionInProgress] = useState(false);
+  const [aiResponseText, setAiResponseText] = useState('');
+  const wordDisplayInterval = useRef(null);
+  const scrollViewRef = useRef(null);
 
   // Add logging whenever conversationHistory changes
   useEffect(() => {
@@ -64,7 +64,7 @@ const LiveChatAI = ({ navigation, route }) => {
     console.log('📋 [LiveChatAI] Route params:', route?.params);
     console.log('🔍 [LiveChatAI] Route object available:', !!route);
 
-    // Request audio permissions on mount
+    // Request audio permissions
     requestPermissions();
 
     // Load session from route params if available
@@ -77,10 +77,8 @@ const LiveChatAI = ({ navigation, route }) => {
       setSessionId(session.id);
       setTranscribedText('');
       console.log('✅ [LiveChatAI] Session loaded successfully');
-      // Clear the route param
       navigation.setParams({ loadSession: undefined });
     } else {
-      // Generate new session ID for new session
       const newSessionId = `live-${Date.now()}`;
       setSessionId(newSessionId);
       console.log('🆕 [LiveChatAI] New session created:', newSessionId);
@@ -89,13 +87,13 @@ const LiveChatAI = ({ navigation, route }) => {
     // Cleanup on unmount
     return () => {
       console.log('🧹 Component unmounting, cleaning up...');
+      
       if (recording) {
         recording.stopAndUnloadAsync().catch(e => 
-          console.log('Warning: Error cleaning up recording on unmount:', e)
+          console.log('Warning: Error stopping recording:', e)
         );
       }
       
-      // Stop audio playback
       playbackControlRef.current.shouldContinue = false;
       
       if (playbackControlRef.current.currentSound) {
@@ -108,7 +106,6 @@ const LiveChatAI = ({ navigation, route }) => {
         currentSound.unloadAsync().catch(console.error);
       }
       
-      // Clear word display interval
       if (wordDisplayInterval.current) {
         clearInterval(wordDisplayInterval.current);
       }
@@ -153,6 +150,138 @@ const LiveChatAI = ({ navigation, route }) => {
       }
     } catch (error) {
       console.error('Error requesting permissions:', error);
+    }
+  };
+
+  const startRecording = async () => {
+    if (isActionInProgress) {
+      console.log('⏸️ Action already in progress, skipping...');
+      return;
+    }
+
+    try {
+      setIsActionInProgress(true);
+      console.log('🎤 Starting recording...');
+      
+      // Stop any ongoing speech
+      if (currentSound) {
+        console.log('⏹️ Stopping audio...');
+        try {
+          await currentSound.stopAsync();
+          await currentSound.unloadAsync();
+        } catch (e) {
+          console.log('Warning: Error stopping audio:', e);
+        }
+        setCurrentSound(null);
+      }
+      setIsAISpeaking(false);
+      
+      // Clean up any existing recording
+      if (recording) {
+        console.log('⚠️ Cleaning up existing recording...');
+        try {
+          const status = await recording.getStatusAsync();
+          if (status.isRecording) {
+            await recording.stopAndUnloadAsync();
+          }
+        } catch (e) {
+          console.log('Warning: Error cleaning up recording:', e);
+        }
+        setRecording(null);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true
+      });
+
+      const { recording: newRecording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+
+      console.log('✅ Recording started successfully');
+      setRecording(newRecording);
+      setIsRecording(true);
+      setTranscribedText('Listening... Speak now');
+    } catch (error) {
+      console.error('❌ Failed to start recording:', error);
+      Alert.alert('Error', 'Failed to start recording. Please try again.');
+      setRecording(null);
+      setIsRecording(false);
+    } finally {
+      setIsActionInProgress(false);
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!recording) {
+      console.log('⚠️ No recording to stop');
+      setIsRecording(false);
+      return;
+    }
+
+    if (isActionInProgress) {
+      console.log('⏸️ Action already in progress, skipping stop...');
+      return;
+    }
+
+    try {
+      setIsActionInProgress(true);
+      console.log('🛑 Stopping recording...');
+      setIsRecording(false);
+      setIsProcessing(true);
+      setTranscribedText('Processing your voice...');
+
+      const status = await recording.getStatusAsync();
+      if (status.isRecording) {
+        await recording.stopAndUnloadAsync();
+      }
+      
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false
+      });
+
+      const uri = recording.getURI();
+      console.log('📁 Audio file saved at:', uri);
+      
+      setRecording(null);
+
+      // Send audio to backend for processing
+      await processAudioWithAI(uri);
+
+    } catch (error) {
+      console.error('❌ Failed to stop recording:', error);
+      setIsProcessing(false);
+      setIsRecording(false);
+      setRecording(null);
+      Alert.alert('Error', 'Failed to process recording.');
+    } finally {
+      setIsActionInProgress(false);
+    }
+  };
+
+  const processAudioWithAI = async (audioUri) => {
+    try {
+      console.log('🔄 Processing audio from:', audioUri);
+      setTranscribedText('Transcribing your voice...');
+
+      // Try transcription with backend
+      const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
+      const userMessage = transcriptionResult.transcription;
+
+      if (!userMessage || !userMessage.trim()) {
+        throw new Error('Empty transcription');
+      }
+
+      console.log('✅ Transcription successful:', userMessage);
+      await sendToAI(userMessage.trim());
+
+    } catch (error) {
+      console.error('❌ Error processing audio:', error);
+      setIsProcessing(false);
+      setTranscribedText('Transcription failed. Tap to try again.');
+      Alert.alert('Error', 'Failed to transcribe audio. Please try again.');
     }
   };
 
@@ -204,179 +333,6 @@ const LiveChatAI = ({ navigation, route }) => {
     waveAnim1.setValue(0);
     waveAnim2.setValue(0);
     waveAnim3.setValue(0);
-  };
-
-  const startRecording = async () => {
-    if (isActionInProgress) {
-      console.log('⏸️ Action already in progress, skipping...');
-      return;
-    }
-
-    try {
-      setIsActionInProgress(true);
-      console.log('🎤 Starting recording...');
-      
-      // Stop any ongoing speech
-      if (currentSound) {
-        console.log('⏹️ Stopping gTTS audio...');
-        try {
-          await currentSound.stopAsync();
-          await currentSound.unloadAsync();
-        } catch (e) {
-          console.log('Warning: Error stopping audio:', e);
-        }
-        setCurrentSound(null);
-      }
-      setIsAISpeaking(false);
-      
-      // IMPORTANT: Clean up any existing recording first
-      if (recording) {
-        console.log('⚠️ Cleaning up existing recording...');
-        try {
-          const status = await recording.getStatusAsync();
-          if (status.isRecording) {
-            await recording.stopAndUnloadAsync();
-          } else {
-            await recording._cleanupForUnloadedRecorder();
-          }
-        } catch (e) {
-          console.log('Warning: Error cleaning up recording:', e);
-        }
-        setRecording(null);
-        // Add a small delay to ensure cleanup is complete
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true
-      });
-
-      const { recording: newRecording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
-
-      console.log('✅ Recording started successfully');
-      setRecording(newRecording);
-      setIsRecording(true);
-      setTranscribedText('Listening... Speak now');
-    } catch (error) {
-      console.error('❌ Failed to start recording:', error);
-      Alert.alert('Error', 'Failed to start recording. Please try again.');
-      setRecording(null);
-      setIsRecording(false);
-    } finally {
-      setIsActionInProgress(false);
-    }
-  };
-
-  const stopRecording = async () => {
-    if (!recording) {
-      console.log('⚠️ No recording to stop');
-      setIsRecording(false); // Ensure state is consistent
-      return;
-    }
-
-    if (isActionInProgress) {
-      console.log('⏸️ Action already in progress, skipping stop...');
-      return;
-    }
-
-    try {
-      setIsActionInProgress(true);
-      console.log('🛑 Stopping recording...');
-      setIsRecording(false);
-      setIsProcessing(true);
-      setTranscribedText('Processing your voice...');
-
-      const status = await recording.getStatusAsync();
-      if (status.isRecording) {
-        await recording.stopAndUnloadAsync();
-      }
-      
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false
-      });
-
-      const uri = recording.getURI();
-      console.log('📁 Audio file saved at:', uri);
-      
-      const recordingToProcess = recording;
-      setRecording(null);
-
-      // Send audio to backend for processing
-      await processAudioWithAI(uri);
-
-    } catch (error) {
-      console.error('❌ Failed to stop recording:', error);
-      setIsProcessing(false);
-      setIsRecording(false);
-      setRecording(null);
-      Alert.alert('Error', 'Failed to process recording.');
-    } finally {
-      setIsActionInProgress(false);
-    }
-  };
-
-  const processAudioWithAI = async (audioUri) => {
-    try {
-      console.log('🔄 Processing audio from:', audioUri);
-
-      // Step 1: Try automatic transcription with Gemini
-      setTranscribedText('Transcribing your voice...');
-
-      try {
-        const transcriptionResult = await liveChatService.transcribeAudio(audioUri);
-        const userMessage = transcriptionResult.transcription;
-
-        if (!userMessage || !userMessage.trim()) {
-          throw new Error('Empty transcription');
-        }
-
-        console.log('✅ Auto-transcription successful:', userMessage);
-        await sendToAI(userMessage.trim());
-
-      } catch (transcriptionError) {
-        console.log('⚠️ Auto-transcription failed:', transcriptionError.message);
-
-        // Fall back to manual input
-        console.log('🔄 Falling back to manual input...');
-        setTranscribedText('Transcription failed. Please type your question:');
-
-        Alert.prompt(
-          'Manual Input',
-          'Automatic transcription is not available yet. Please type what you said:',
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel',
-              onPress: () => {
-                setIsProcessing(false);
-                setTranscribedText('');
-              }
-            },
-            {
-              text: 'Send',
-              onPress: async (userMessage) => {
-                if (!userMessage || !userMessage.trim()) {
-                  setIsProcessing(false);
-                  setTranscribedText('');
-                  return;
-                }
-                await sendToAI(userMessage.trim());
-              }
-            }
-          ],
-          'plain-text'
-        );
-      }
-
-    } catch (error) {
-      console.error('❌ Error processing audio:', error);
-      setIsProcessing(false);
-      setTranscribedText('Error occurred. Tap to try again.');
-      Alert.alert('Error', 'Failed to process audio. Please try again.');
-    }
   };
 
   const sendToAI = async (userMessage) => {
