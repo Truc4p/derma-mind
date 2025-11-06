@@ -164,39 +164,67 @@ CITATION REQUIREMENT (Numbered Reference Style):
     }
 
     /**
-     * Transcribe audio file to text using Google Cloud Speech-to-Text API
+     * Transcribe audio file to text using Gemini's multimodal capabilities
      */
     async transcribeAudio(audioFilePath) {
         const startTime = Date.now();
         try {
-            console.log('\n=== �️ [GEMINI SERVICE] TRANSCRIPTION REQUEST ===');
+            console.log('\n=== 🎤️ [GEMINI SERVICE] TRANSCRIPTION REQUEST ===');
             console.log('⏰ [GEMINI SERVICE] Start time:', new Date().toISOString());
             console.log('📁 [GEMINI SERVICE] Audio file:', audioFilePath);
             
-            // Try AssemblyAI Speech-to-Text
+            // Use Gemini's multimodal model for audio transcription
             try {
-                console.log('🚀 [GEMINI SERVICE] Calling speechService.transcribeAudio...');
-                const transcription = await speechService.transcribeAudio(audioFilePath);
+                console.log('🚀 [GEMINI SERVICE] Using Gemini multimodal transcription...');
+                
+                // Read audio file
+                const audioData = await fs.readFile(audioFilePath);
+                const base64Audio = audioData.toString('base64');
+                const mimeType = this.getMimeType(audioFilePath);
+                
+                console.log(`📊 [GEMINI SERVICE] Audio size: ${audioData.length} bytes, MIME: ${mimeType}`);
+                
+                // Use Gemini's multimodal model for transcription
+                const model = genAI.getGenerativeModel({ 
+                    model: 'gemini-2.0-flash-exp' // Supports audio input
+                });
+                
+                const result = await model.generateContent([
+                    {
+                        inlineData: {
+                            data: base64Audio,
+                            mimeType: mimeType
+                        }
+                    },
+                    'Transcribe this audio to text. Provide only the transcription without any additional commentary or formatting.'
+                ]);
+                
+                const response = await result.response;
+                const transcription = response.text().trim();
                 
                 const duration = Date.now() - startTime;
-                console.log(`✅ [GEMINI SERVICE] Transcription completed in ${duration}ms`);
+                console.log(`✅ [GEMINI SERVICE] Gemini transcription completed in ${duration}ms`);
                 console.log('📝 [GEMINI SERVICE] Result:', transcription);
                 console.log('=== ✅ [GEMINI SERVICE] SUCCESS ===\n');
                 
                 return transcription;
-            } catch (speechError) {
+            } catch (geminiError) {
                 const duration = Date.now() - startTime;
-                console.log(`⚠️ [GEMINI SERVICE] AssemblyAI failed after ${duration}ms`);
-                console.log('⚠️ [GEMINI SERVICE] Error:', speechError.message);
+                console.log(`⚠️ [GEMINI SERVICE] Gemini transcription failed after ${duration}ms`);
+                console.log('⚠️ [GEMINI SERVICE] Error:', geminiError.message);
                 
-                // Check if it's missing API key
-                if (speechError.message.includes('ASSEMBLYAI_API_KEY')) {
-                    console.log('📖 [GEMINI SERVICE] Please add ASSEMBLYAI_API_KEY to your .env file');
-                    console.log('📖 [GEMINI SERVICE] Get free API key from: https://www.assemblyai.com/');
+                // Fallback to AssemblyAI
+                console.log('🔄 [GEMINI SERVICE] Falling back to AssemblyAI...');
+                try {
+                    const transcription = await speechService.transcribeAudio(audioFilePath);
+                    const totalDuration = Date.now() - startTime;
+                    console.log(`✅ [GEMINI SERVICE] AssemblyAI transcription completed in ${totalDuration}ms`);
+                    return transcription;
+                } catch (speechError) {
+                    console.log('⚠️ [GEMINI SERVICE] AssemblyAI also failed:', speechError.message);
+                    console.log('=== ⚠️ [GEMINI SERVICE] TRANSCRIPTION NOT AVAILABLE ===\n');
+                    throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
                 }
-                
-                console.log('=== ⚠️ [GEMINI SERVICE] TRANSCRIPTION NOT AVAILABLE ===\n');
-                throw new Error('TRANSCRIPTION_NOT_AVAILABLE');
             }
         } catch (error) {
             if (error.message === 'TRANSCRIPTION_NOT_AVAILABLE') {
