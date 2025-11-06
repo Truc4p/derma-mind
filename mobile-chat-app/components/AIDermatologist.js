@@ -736,7 +736,17 @@ What would you like to know more about?`;
     return cleanText;
   };
 
-  // Text-to-speech functions using backend gTTS
+  // Split text into sentences for faster TTS playback
+  const splitIntoSentences = (text) => {
+    // Split by common sentence endings, but keep the punctuation
+    const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+    return sentences.map(s => s.trim()).filter(s => s.length > 0);
+  };
+
+  // Use ref to track if playback should continue (avoids stale closure issues)
+  const playbackControlRef = useRef({ shouldContinue: false, currentMessageIndex: null });
+
+  // Text-to-speech functions using backend gTTS with sentence-by-sentence streaming
   const handleSpeak = useCallback(async (messageIndex) => {
     const message = messages[messageIndex];
     if (!message || message.role !== 'assistant') return;
@@ -746,6 +756,7 @@ What would you like to know more about?`;
       if (speakingMessageIndex === messageIndex && isSpeaking) {
         if (sound) {
           console.log('⏸️ Stopping audio playback');
+          playbackControlRef.current.shouldContinue = false;
           await sound.stopAsync();
           await sound.unloadAsync();
           setSound(null);
@@ -757,6 +768,7 @@ What would you like to know more about?`;
 
       // Stop any currently playing audio
       if (sound) {
+        playbackControlRef.current.shouldContinue = false;
         await sound.stopAsync();
         await sound.unloadAsync();
         setSound(null);
@@ -769,23 +781,21 @@ What would you like to know more about?`;
       const MAX_SPEECH_LENGTH = 5000;
       if (textToSpeak.length > MAX_SPEECH_LENGTH) {
         textToSpeak = textToSpeak.substring(0, MAX_SPEECH_LENGTH) + '... Message truncated due to length.';
-        Alert.alert(
-          'Long Message',
-          'This message is too long. Only the first part will be spoken.',
-          [{ text: 'OK' }]
-        );
       }
+      
+      // Set playback control
+      playbackControlRef.current.shouldContinue = true;
+      playbackControlRef.current.currentMessageIndex = messageIndex;
       
       setSpeakingMessageIndex(messageIndex);
       setIsSpeaking(true);
 
-      console.log('🔊 [TTS] Requesting audio from backend...');
+      console.log('🔊 [TTS] Starting sentence-by-sentence playback');
       console.log('📝 [TTS] Text length:', textToSpeak.length);
 
-      // Request TTS from backend
-      const response = await liveChatService.textToSpeech(textToSpeak);
-      
-      console.log('✅ [TTS] Audio received, preparing playback...');
+      // Split into sentences for faster initial playback
+      const sentences = splitIntoSentences(textToSpeak);
+      console.log('📄 [TTS] Split into', sentences.length, 'sentences');
 
       // Set audio mode for playback
       await Audio.setAudioModeAsync({
@@ -796,24 +806,64 @@ What would you like to know more about?`;
         staysActiveInBackground: false
       });
 
-      // Create sound from base64 audio
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        { uri: `data:audio/mp3;base64,${response.audio}` },
-        { shouldPlay: true },
-        (status) => {
-          if (status.didJustFinish) {
-            console.log('✅ [TTS] Audio playback finished');
-            setSpeakingMessageIndex(null);
-            setIsSpeaking(false);
-          }
+      // Play sentences sequentially
+      for (let i = 0; i < sentences.length; i++) {
+        // Check if user stopped playback using ref
+        if (!playbackControlRef.current.shouldContinue || 
+            playbackControlRef.current.currentMessageIndex !== messageIndex) {
+          console.log('⏹️ [TTS] Playback stopped by user');
+          break;
         }
-      );
 
-      setSound(newSound);
-      console.log('▶️ [TTS] Audio playback started');
+        console.log(`🔊 [TTS] Requesting sentence ${i + 1}/${sentences.length}`);
+        
+        // Request TTS from backend
+        const response = await liveChatService.textToSpeech(sentences[i]);
+        
+        console.log(`✅ [TTS] Sentence ${i + 1} audio received`);
+
+        // Check again if user stopped during the request
+        if (!playbackControlRef.current.shouldContinue || 
+            playbackControlRef.current.currentMessageIndex !== messageIndex) {
+          console.log('⏹️ [TTS] Playback stopped during request');
+          break;
+        }
+
+        // Create and play sound
+        const { sound: newSound } = await Audio.Sound.createAsync(
+          { uri: `data:audio/mp3;base64,${response.audio}` },
+          { shouldPlay: true }
+        );
+
+        setSound(newSound);
+        console.log(`▶️ [TTS] Playing sentence ${i + 1}/${sentences.length}`);
+
+        // Wait for this sentence to finish before playing the next one
+        await new Promise((resolve) => {
+          newSound.setOnPlaybackStatusUpdate((status) => {
+            if (status.didJustFinish) {
+              resolve();
+            }
+            if (status.error) {
+              console.error('❌ [TTS] Playback error:', status.error);
+              resolve();
+            }
+          });
+        });
+
+        // Clean up this sound before loading the next one
+        await newSound.unloadAsync();
+        setSound(null);
+      }
+
+      console.log('✅ [TTS] All sentences completed');
+      playbackControlRef.current.shouldContinue = false;
+      setSpeakingMessageIndex(null);
+      setIsSpeaking(false);
 
     } catch (error) {
       console.error('❌ [TTS] Error in handleSpeak:', error);
+      playbackControlRef.current.shouldContinue = false;
       setSpeakingMessageIndex(null);
       setIsSpeaking(false);
       
@@ -902,21 +952,26 @@ What would you like to know more about?`;
         )}
 
         {/* Chat Messages */}
-        {messages.map((message, index) => (
-          <MessageComponent
-            key={`${message.timestamp}-${index}`}
-            message={message}
-            index={index}
-            contentWidth={contentWidth}
-            userTagsStyles={userTagsStyles}
-            assistantTagsStyles={assistantTagsStyles}
-            convertMarkdownToHtml={convertMarkdownToHtml}
-            formatTime={formatTime}
-            handleSpeak={handleSpeak}
-            speakingMessageIndex={speakingMessageIndex}
-            isSpeaking={isSpeaking}
-          />
-        ))}
+        {messages.map((message, index) => {
+          // Create a stable unique key using timestamp and index
+          const messageKey = `msg-${message.timestamp || Date.now()}-${index}`;
+          
+          return (
+            <MessageComponent
+              key={messageKey}
+              message={message}
+              index={index}
+              contentWidth={contentWidth}
+              userTagsStyles={userTagsStyles}
+              assistantTagsStyles={assistantTagsStyles}
+              convertMarkdownToHtml={convertMarkdownToHtml}
+              formatTime={formatTime}
+              handleSpeak={handleSpeak}
+              speakingMessageIndex={speakingMessageIndex}
+              isSpeaking={isSpeaking}
+            />
+          );
+        })}
 
         {/* Loading Indicator */}
         {isLoading && (
