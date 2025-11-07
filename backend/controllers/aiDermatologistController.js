@@ -73,6 +73,130 @@ exports.chat = async (req, res) => {
 };
 
 /**
+ * @desc    Analyze skin image with AI Dermatologist
+ * @route   POST /api/ai-dermatologist/analyze-skin
+ * @access  Public
+ */
+exports.analyzeSkinImage = async (req, res) => {
+    let tempFilePath = null;
+    
+    try {
+        const totalStart = performanceMonitor.startTimer();
+        console.log('\n=== 🖼️ [BACKEND] SKIN IMAGE ANALYSIS REQUEST ===');
+        console.log('⏰ [BACKEND] Request time:', new Date().toISOString());
+        
+        // Check if file was uploaded
+        if (!req.file) {
+            console.error('❌ [BACKEND] No image file in request');
+            return res.status(400).json({ error: 'No image file provided' });
+        }
+
+        const { message } = req.body;
+        let conversationHistory = [];
+        
+        // Parse conversation history if provided
+        if (req.body.conversationHistory) {
+            try {
+                conversationHistory = JSON.parse(req.body.conversationHistory);
+            } catch (e) {
+                console.warn('Failed to parse conversation history:', e);
+            }
+        }
+
+        console.log('📁 [BACKEND] Image details:', {
+            originalName: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            path: req.file.path,
+            sizeInMB: (req.file.size / 1024 / 1024).toFixed(2) + ' MB'
+        });
+        console.log('💬 [BACKEND] User message:', message);
+
+        tempFilePath = req.file.path;
+
+        // Use RAG to retrieve relevant context about skin conditions
+        const userQuery = message || 'Analyze this skin image for any conditions or concerns';
+        const ragResult = await vectorService.ragQuery(userQuery, conversationHistory);
+
+        console.log('🎨 [BACKEND] Calling geminiService.analyzeSkinImage...');
+        const analyzeStartTime = Date.now();
+        
+        // Analyze the image using Gemini Vision with RAG context
+        const result = await geminiService.analyzeSkinImage(
+            tempFilePath,
+            userQuery,
+            ragResult.context,
+            conversationHistory
+        );
+        
+        const analyzeDuration = Date.now() - analyzeStartTime;
+        console.log(`✅ [BACKEND] Analysis completed in ${analyzeDuration}ms`);
+
+        // Clean up the temporary file
+        console.log('🗑️ [BACKEND] Cleaning up temp file:', tempFilePath);
+        await fs.unlink(tempFilePath);
+        tempFilePath = null;
+
+        const totalTime = performanceMonitor.endTimer(totalStart);
+        performanceMonitor.record('totalTime', totalTime);
+        
+        // Log this request's performance
+        performanceMonitor.logRequest({
+            totalTime,
+            contextSize: ragResult.context.length,
+            chunksRetrieved: ragResult.sources.length
+        });
+
+        console.log(`✅ [BACKEND] Request completed in ${totalTime}ms`);
+        console.log('=== ✅ [BACKEND] IMAGE ANALYSIS SUCCESS ===\n');
+
+        res.json({
+            response: result.response,
+            sources: ragResult.sources,
+            timestamp: new Date(),
+            _performance: process.env.NODE_ENV === 'development' ? {
+                totalTime,
+                contextSize: ragResult.context.length,
+                chunks: ragResult.sources.length
+            } : undefined
+        });
+    } catch (error) {
+        console.error('\n=== ❌ [BACKEND] IMAGE ANALYSIS ERROR ===');
+        console.error('❌ [BACKEND] Error type:', error.name);
+        console.error('❌ [BACKEND] Error message:', error.message);
+        console.error('❌ [BACKEND] Full error:', error);
+        console.error('=== ❌ [BACKEND] ERROR END ===\n');
+        
+        // Clean up temp file if it exists
+        if (tempFilePath) {
+            try {
+                console.log('🗑️ [BACKEND] Cleaning up temp file after error');
+                await fs.unlink(tempFilePath);
+            } catch (unlinkError) {
+                console.error('Error deleting temp file:', unlinkError);
+            }
+        }
+        
+        // Determine appropriate user-facing error message
+        let userMessage = 'Failed to analyze skin image';
+        let statusCode = 500;
+        
+        if (error.message.includes('overloaded')) {
+            userMessage = 'The AI service is currently experiencing high traffic. Please try again in a moment.';
+            statusCode = 503;
+        } else if (error.message.includes('rate limit')) {
+            userMessage = 'Too many requests. Please wait a moment and try again.';
+            statusCode = 429;
+        }
+        
+        res.status(statusCode).json({ 
+            error: userMessage,
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+
+/**
  * @desc    Transcribe audio to text using Gemini
  * @route   POST /api/ai-dermatologist/transcribe
  * @access  Public

@@ -4,6 +4,42 @@
 
 **Skin Study** is a comprehensive web and mobile platform that leverages artificial intelligence and vector search technology to provide personalized skincare advice, ingredient analysis, and dermatological education. The platform features an AI-powered dermatologist assistant with RAG (Retrieval-Augmented Generation) system, voice-to-text and text-to-speech capabilities, live voice chat, searchable conversation history, and an extensive skincare knowledge base powered by 10 professional dermatology textbooks.
 
+## Platform Compatibility
+
+### Web Application Browser Support
+- **Chrome**: Version 90+ (recommended)
+- **Firefox**: Version 88+
+- **Safari**: Version 14+
+- **Edge**: Version 90+
+- **Opera**: Version 76+
+
+**Minimum Requirements:**
+- JavaScript enabled
+- Cookies and local storage enabled
+- Modern CSS support (Flexbox, Grid)
+- IndexedDB support for offline data
+- WebRTC support for voice features
+- Web Audio API for speech synthesis
+
+### Mobile Application Support
+- **iOS**: Version 13.0 and above
+  - iPhone 6s and newer
+  - iPad 5th generation and newer
+  - iPad Air 2 and newer
+  - iPad Pro (all models)
+  - iPad mini 4 and newer
+- **Android**: Version 5.0 (Lollipop, API Level 21) and above
+  - Minimum 2GB RAM recommended
+  - OpenGL ES 2.0 support
+  - 64-bit and 32-bit architectures supported
+
+**Mobile Features:**
+- Native camera integration
+- Voice recording and playback
+- AsyncStorage for offline data
+- Expo managed workflow support
+- OCR capabilities (Tesseract.js)
+
 ## Technology Stack
 
 ### Backend

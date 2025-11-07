@@ -94,6 +94,9 @@
                 <div v-for="(message, index) in messages" :key="index" 
                      class="message" :class="message.role">
                     <div class="message-content">
+                        <div v-if="message.image" class="message-image">
+                            <img :src="message.image" alt="Uploaded skin image" />
+                        </div>
                         <div class="message-text" v-html="formatMessage(message.content)"></div>
                         <div class="message-time">{{ formatTime(message.timestamp) }}</div>
                     </div>
@@ -114,6 +117,15 @@
 
         <!-- Input Area -->
         <div class="chat-input-container">
+            <!-- Hidden file input -->
+            <input 
+                type="file" 
+                ref="imageInput" 
+                @change="handleImageSelect" 
+                accept="image/*" 
+                style="display: none"
+            />
+            
             <!-- Chat Action Buttons -->
             <div v-if="messages.length > 0" class="chat-actions">
                 <button @click="toggleSidebar" class="action-button history-btn">
@@ -127,15 +139,28 @@
                 </button>
             </div>
             
+            <!-- Image Preview -->
+            <div v-if="imagePreviewUrl" class="image-preview-container">
+                <div class="image-preview">
+                    <img :src="imagePreviewUrl" alt="Selected image" />
+                    <button @click="removeImage" class="remove-image-btn">✕</button>
+                </div>
+            </div>
+            
             <div class="input-wrapper">
+                <button @click="triggerImageUpload" class="image-upload-btn" title="Upload skin image">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
                 <textarea v-model="userInput" 
                           @keydown.enter.prevent="handleEnter"
-                          placeholder="Ask me about skincare, cosmetics, or facial improvements..."
+                          placeholder="Ask me about skincare, cosmetics, or upload a skin image for analysis..."
                           class="chat-input"
                           rows="1"
                           ref="textInput"></textarea>
                 <button @click="sendMessage" 
-                        :disabled="!userInput.trim() || isLoading"
+                        :disabled="(!userInput.trim() && !selectedImage) || isLoading"
                         class="send-button">
                     <span v-if="!isLoading">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -179,7 +204,10 @@ export default {
             currentSessionId: null,
             chatSessions: [],
             sidebarOpen: false,
-            searchQuery: ''
+            searchQuery: '',
+            // Image upload
+            selectedImage: null,
+            imagePreviewUrl: null
         }
     },
 
@@ -251,6 +279,31 @@ export default {
             })
         },
 
+        handleImageSelect(event) {
+            const file = event.target.files[0]
+            if (file && file.type.startsWith('image/')) {
+                this.selectedImage = file
+                this.imagePreviewUrl = URL.createObjectURL(file)
+            }
+        },
+
+        removeImage() {
+            this.selectedImage = null
+            if (this.imagePreviewUrl) {
+                URL.revokeObjectURL(this.imagePreviewUrl)
+                this.imagePreviewUrl = null
+            }
+            // Reset file input
+            const fileInput = this.$refs.imageInput
+            if (fileInput) {
+                fileInput.value = ''
+            }
+        },
+
+        triggerImageUpload() {
+            this.$refs.imageInput.click()
+        },
+
         handleEnter(event) {
             if (!event.shiftKey) {
                 this.sendMessage()
@@ -258,23 +311,28 @@ export default {
         },
 
         async sendMessage() {
-            if (!this.userInput.trim() || this.isLoading) return
+            if ((!this.userInput.trim() && !this.selectedImage) || this.isLoading) return
 
             const userMessage = {
                 role: 'user',
-                content: this.userInput.trim(),
-                timestamp: new Date()
+                content: this.userInput.trim() || 'Please analyze this skin image',
+                timestamp: new Date(),
+                image: this.imagePreviewUrl // Store preview URL for display
             }
 
             console.log('📤 Sending user message:', userMessage.content)
             this.messages.push(userMessage)
+            
+            const messageToSend = this.userInput.trim() || 'Please analyze this skin image'
+            const imageToSend = this.selectedImage
+            
             this.userInput = ''
+            this.removeImage() // Clear image after sending
 
             this.isLoading = true
 
             try {
-                // Simulate AI response (replace with actual API call)
-                await this.getAIResponse(userMessage.content)
+                await this.getAIResponse(messageToSend, imageToSend)
             } catch (error) {
                 console.error('❌ Error getting AI response:', error)
                 this.messages.push({
@@ -287,36 +345,62 @@ export default {
             }
         },
 
-        async getAIResponse(userMessage) {
+        async getAIResponse(userMessage, imageFile = null) {
             try {
                 console.log('🔍 Preparing API request...')
                 console.log('📚 User query:', userMessage)
-                console.log('📝 Conversation history (last 10 messages):', this.messages.slice(-10))
+                console.log('�️ Image attached:', !!imageFile)
+                console.log('�📝 Conversation history (last 10 messages):', this.messages.slice(-10))
                 
-                // Call the real Gemini AI API
-                const requestData = {
-                    message: userMessage,
-                    conversationHistory: this.messages.slice(-10) // Send last 10 messages for context
-                }
-                
-                console.log('📤 Sending request to /ai-dermatologist/chat:', requestData)
-                
-                const response = await api.post('/ai-dermatologist/chat', requestData)
-                
-                console.log('✅ Received API response:', response.data)
-                console.log('📚 Using RAG context for query:', userMessage)
-                console.log('💡 AI Response:', response.data.response)
-                
-                if (response.data.sources) {
-                    console.log('📖 Sources used:', response.data.sources)
-                }
+                if (imageFile) {
+                    // Use FormData for image upload
+                    const formData = new FormData()
+                    formData.append('message', userMessage)
+                    formData.append('image', imageFile)
+                    formData.append('conversationHistory', JSON.stringify(this.messages.slice(-10)))
+                    
+                    console.log('📤 Sending image analysis request to /ai-dermatologist/analyze-skin')
+                    
+                    const response = await api.post('/ai-dermatologist/analyze-skin', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    
+                    console.log('✅ Received image analysis response:', response.data)
+                    
+                    this.messages.push({
+                        role: 'assistant',
+                        content: response.data.response,
+                        sources: response.data.sources,
+                        timestamp: new Date()
+                    })
+                } else {
+                    // Regular text-only request
+                    const requestData = {
+                        message: userMessage,
+                        conversationHistory: this.messages.slice(-10)
+                    }
+                    
+                    console.log('📤 Sending request to /ai-dermatologist/chat:', requestData)
+                    
+                    const response = await api.post('/ai-dermatologist/chat', requestData)
+                    
+                    console.log('✅ Received API response:', response.data)
+                    console.log('📚 Using RAG context for query:', userMessage)
+                    console.log('💡 AI Response:', response.data.response)
+                    
+                    if (response.data.sources) {
+                        console.log('📖 Sources used:', response.data.sources)
+                    }
 
-                this.messages.push({
-                    role: 'assistant',
-                    content: response.data.response,
-                    sources: response.data.sources,
-                    timestamp: new Date()
-                })
+                    this.messages.push({
+                        role: 'assistant',
+                        content: response.data.response,
+                        sources: response.data.sources,
+                        timestamp: new Date()
+                    })
+                }
             } catch (error) {
                 console.error('❌ Error calling AI API:', error)
                 console.error('❌ Error details:', error.response?.data || error.message)
@@ -1237,6 +1321,64 @@ What would you like to know more about?`
     z-index: 100;
 }
 
+/* Image Preview Container */
+.image-preview-container {
+    max-width: 1200px;
+    margin: 0 auto 0.75rem;
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+    max-width: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.remove-image-btn:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: scale(1.1);
+}
+
+/* Message Image */
+.message-image {
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 300px;
+}
+
+.message-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* Chat Action Buttons */
 .chat-actions {
     max-width: 1200px;
@@ -1292,6 +1434,29 @@ What would you like to know more about?`
     display: flex;
     gap: 1rem;
     align-items: flex-end;
+}
+
+.image-upload-btn {
+    padding: 0.75rem;
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-200);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+}
+
+.image-upload-btn:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-color);
+}
+
+.image-upload-btn svg {
+    display: block;
 }
 
 .chat-input {

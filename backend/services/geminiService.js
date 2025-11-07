@@ -229,6 +229,124 @@ CITATION REQUIREMENT (Numbered Reference Style):
         };
         return mimeTypes[extension] || 'audio/mp4';
     }
+
+    /**
+     * Analyze skin image and provide dermatological assessment
+     */
+    async analyzeSkinImage(imageFilePath, userMessage, ragContext, conversationHistory = []) {
+        const startTime = Date.now();
+        try {
+            console.log('\n=== 🖼️ [GEMINI SERVICE] SKIN IMAGE ANALYSIS REQUEST ===');
+            console.log('⏰ [GEMINI SERVICE] Start time:', new Date().toISOString());
+            console.log('📁 [GEMINI SERVICE] Image file:', imageFilePath);
+            console.log('💬 [GEMINI SERVICE] User message:', userMessage);
+            
+            // Read image file
+            const imageData = await fs.readFile(imageFilePath);
+            const base64Image = imageData.toString('base64');
+            const imageMimeType = this.getImageMimeType(imageFilePath);
+            
+            console.log(`📊 [GEMINI SERVICE] Image size: ${imageData.length} bytes, MIME: ${imageMimeType}`);
+            
+            // Build comprehensive prompt for skin analysis
+            let fullPrompt = `You are an expert Virtual Dermatologist analyzing a skin image. Provide a detailed, professional assessment.
+
+=== RELEVANT KNOWLEDGE FROM DERMATOLOGY TEXTBOOK ===
+${ragContext}
+=== END OF KNOWLEDGE BASE ===
+
+ANALYSIS INSTRUCTIONS:
+1. Carefully examine the image for any visible skin conditions, concerns, or features
+2. Describe what you observe in the image (texture, color, lesions, inflammation, etc.)
+3. Provide possible conditions or concerns based on visible features (if any)
+4. Use the knowledge base above to provide evidence-based recommendations
+5. Suggest appropriate skincare routines, products, or treatments
+6. Cite your sources using bracketed numbers [1], [2], etc. when referencing the knowledge base
+7. Include a "### References" section at the end with unique book titles
+
+IMPORTANT DISCLAIMERS:
+- This is an AI assessment and NOT a medical diagnosis
+- Always recommend consulting a dermatologist in-person for proper diagnosis
+- If the image shows concerning features, emphasize the importance of professional evaluation
+
+`;
+            
+            // Add conversation history
+            if (conversationHistory.length > 0) {
+                fullPrompt += 'Previous conversation:\n';
+                conversationHistory.slice(-5).forEach(msg => {
+                    if (msg.role === 'user' && !msg.image) {
+                        fullPrompt += `Patient: ${msg.content}\n`;
+                    } else if (msg.role === 'assistant') {
+                        fullPrompt += `Dermatologist: ${msg.content}\n`;
+                    }
+                });
+            }
+
+            fullPrompt += `\nPatient's question: ${userMessage}\n\nProvide your detailed analysis:`;
+            
+            // Use Gemini's vision model for image analysis
+            const visionModel = genAI.getGenerativeModel({ 
+                model: 'gemini-2.0-flash-exp', // Supports vision input
+                generationConfig: {
+                    temperature: 0.7,
+                    topP: 0.9,
+                    topK: 40,
+                    maxOutputTokens: 4096,
+                }
+            });
+            
+            console.log('🚀 [GEMINI SERVICE] Analyzing image with Gemini Vision...');
+            const genStart = performanceMonitor.startTimer();
+            
+            const result = await visionModel.generateContent([
+                {
+                    inlineData: {
+                        data: base64Image,
+                        mimeType: imageMimeType
+                    }
+                },
+                fullPrompt
+            ]);
+            
+            const response = await result.response;
+            const analysisText = response.text().trim();
+            
+            const genTime = performanceMonitor.endTimer(genStart);
+            const duration = Date.now() - startTime;
+            
+            performanceMonitor.record('imageAnalysis', genTime);
+            console.log(`⏱️ Image Analysis: ${genTime}ms`);
+            console.log(`✅ [GEMINI SERVICE] Analysis completed in ${duration}ms`);
+            console.log('📝 [GEMINI SERVICE] Result (first 500 chars):', analysisText.substring(0, 500));
+            console.log('=== ✅ [GEMINI SERVICE] SUCCESS ===\n');
+            
+            return {
+                response: analysisText,
+                method: 'vision-analysis-with-rag'
+            };
+        } catch (error) {
+            const duration = Date.now() - startTime;
+            console.error(`❌ [GEMINI SERVICE] Image analysis failed after ${duration}ms:`, error.message);
+            throw new Error('Failed to analyze skin image: ' + error.message);
+        }
+    }
+
+    /**
+     * Helper function to determine image MIME type from file path
+     */
+    getImageMimeType(filePath) {
+        const extension = filePath.split('.').pop().toLowerCase();
+        const mimeTypes = {
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'webp': 'image/webp',
+            'bmp': 'image/bmp'
+        };
+        return mimeTypes[extension] || 'image/jpeg';
+    }
 }
 
 module.exports = new GeminiService();
