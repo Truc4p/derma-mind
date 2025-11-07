@@ -9,11 +9,6 @@
             Your trusted companion for healthy, beautiful skin through science-backed education and personalized analysis
           </p>
         </div>
-        <div class="hero-image">
-          <div class="placeholder-image">
-            <span>🧴</span>
-          </div>
-        </div>
       </section>
 
       <!-- Mission Section -->
@@ -26,7 +21,6 @@
           
           <div class="mission-values">
             <div class="value-item">
-              <div class="value-icon">🔬</div>
               <div class="value-content">
                 <h4>Science-Based</h4>
                 <p>All our recommendations are backed by dermatological research and proven skincare science</p>
@@ -34,7 +28,6 @@
             </div>
             
             <div class="value-item">
-              <div class="value-icon">🎯</div>
               <div class="value-content">
                 <h4>Personalized</h4>
                 <p>Every skin is unique. Our analysis provides tailored advice for your specific needs and concerns</p>
@@ -42,7 +35,6 @@
             </div>
             
             <div class="value-item">
-              <div class="value-icon">📚</div>
               <div class="value-content">
                 <h4>Educational</h4>
                 <p>We empower you with knowledge to make informed decisions about your skincare journey</p>
@@ -50,7 +42,6 @@
             </div>
             
             <div class="value-item">
-              <div class="value-icon">🤝</div>
               <div class="value-content">
                 <h4>Accessible</h4>
                 <p>Professional skincare knowledge should be available to everyone, regardless of budget or location</p>
@@ -65,42 +56,36 @@
         <h2>What We Offer</h2>
         <div class="features-grid grid grid-3">
           <div class="feature-card card">
-            <div class="feature-icon">🔍</div>
             <h3>Skin Analysis</h3>
             <p>Take our comprehensive quiz to understand your skin type, concerns, and get personalized recommendations for your unique needs.</p>
             <router-link to="/skin-analysis" class="btn btn-outline">Try Analysis</router-link>
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">📖</div>
             <h3>Education Hub</h3>
             <p>Access our extensive library of articles, guides, and tips from skincare experts and dermatologists.</p>
             <router-link to="/education" class="btn btn-outline">Learn More</router-link>
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">🧪</div>
             <h3>Ingredient Database</h3>
             <p>Explore our comprehensive database of skincare ingredients with safety ratings, benefits, and interactions.</p>
             <router-link to="/ingredients" class="btn btn-outline">Browse Ingredients</router-link>
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">📋</div>
             <h3>Routine Builder</h3>
             <p>Create and customize your perfect skincare routine based on your skin analysis and personal preferences.</p>
             <router-link to="/skincare-routines" class="btn btn-outline">Build Routine</router-link>
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">📊</div>
             <h3>Progress Tracking</h3>
             <p>Monitor your skin's journey with our tracking tools and see how your routine is working over time.</p>
             <button class="btn btn-outline" disabled>Coming Soon</button>
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">👨‍⚕️</div>
             <h3>Expert Insights</h3>
             <p>Get access to tips and advice from certified dermatologists and skincare professionals.</p>
             <button class="btn btn-outline" disabled>Coming Soon</button>
@@ -117,9 +102,6 @@
         
         <div class="team-grid grid grid-3">
           <div class="team-member card">
-            <div class="member-avatar">
-              <span>👩‍💻</span>
-            </div>
             <h4>Dr. Sarah Chen</h4>
             <p class="member-role">Lead Dermatologist</p>
             <p class="member-bio">
@@ -128,9 +110,6 @@
           </div>
           
           <div class="team-member card">
-            <div class="member-avatar">
-              <span>👨‍🔬</span>
-            </div>
             <h4>Dr. Michael Rodriguez</h4>
             <p class="member-role">Cosmetic Chemist</p>
             <p class="member-bio">
@@ -139,9 +118,6 @@
           </div>
           
           <div class="team-member card">
-            <div class="member-avatar">
-              <span>👩‍🎨</span>
-            </div>
             <h4>Emma Johnson</h4>
             <p class="member-role">UX Designer</p>
             <p class="member-bio">
@@ -203,7 +179,6 @@
           
           <div class="privacy-features">
             <div class="privacy-item">
-              <div class="privacy-icon">🔒</div>
               <div class="privacy-text">
                 <h4>Encrypted Data</h4>
                 <p>All personal data is encrypted both in transit and at rest using industry-standard encryption protocols.</p>
@@ -211,7 +186,6 @@
             </div>
             
             <div class="privacy-item">
-              <div class="privacy-icon">🚫</div>
               <div class="privacy-text">
                 <h4>No Data Selling</h4>
                 <p>We never sell your personal information to third parties. Your data belongs to you.</p>
@@ -219,7 +193,6 @@
             </div>
             
             <div class="privacy-item">
-              <div class="privacy-icon">👤</div>
               <div class="privacy-text">
                 <h4>Anonymous Analysis</h4>
                 <p>Our skin analysis can be performed anonymously without creating an account.</p>
@@ -227,7 +200,6 @@
             </div>
             
             <div class="privacy-item">
-              <div class="privacy-icon">🗑️</div>
               <div class="privacy-text">
                 <h4>Data Control</h4>
                 <p>You can delete your account and all associated data at any time with a single click.</p>
@@ -305,7 +277,6 @@
           
           <div class="contact-grid grid grid-2">
             <div class="contact-method">
-              <div class="contact-icon">📧</div>
               <div class="contact-info">
                 <h4>Email Support</h4>
                 <p>support@skinstudy.com</p>
@@ -314,7 +285,6 @@
             </div>
             
             <div class="contact-method">
-              <div class="contact-icon">💬</div>
               <div class="contact-info">
                 <h4>Community Forum</h4>
                 <p>Join our discussion forum</p>
@@ -323,7 +293,6 @@
             </div>
             
             <div class="contact-method">
-              <div class="contact-icon">📱</div>
               <div class="contact-info">
                 <h4>Social Media</h4>
                 <p>@SkinStudyApp</p>
@@ -332,7 +301,6 @@
             </div>
             
             <div class="contact-method">
-              <div class="contact-icon">🐛</div>
               <div class="contact-info">
                 <h4>Bug Reports</h4>
                 <p>bugs@skinstudy.com</p>
@@ -504,21 +472,6 @@ export default {
   max-width: 500px;
 }
 
-.hero-image {
-  display: flex;
-  justify-content: center;
-}
-
-.placeholder-image {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-}
-
 .mission-section {
   margin-bottom: 4rem;
 }
@@ -546,11 +499,6 @@ export default {
   align-items: flex-start;
 }
 
-.value-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
-}
-
 .value-content h4 {
   margin-bottom: 0.5rem;
   color: var(--primary-color);
@@ -569,11 +517,6 @@ export default {
   text-align: center;
   padding: 2rem;
   transition: transform 0.3s ease;
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
 }
 
 .feature-card h3 {
@@ -607,17 +550,6 @@ export default {
 .team-member {
   text-align: center;
   padding: 2rem;
-}
-
-.member-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  margin: 0 auto 1rem;
 }
 
 .member-role {
@@ -705,11 +637,6 @@ export default {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-}
-
-.privacy-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
 }
 
 .privacy-text h4 {
@@ -811,11 +738,6 @@ export default {
   padding: 1.5rem;
   background: var(--background-light);
   border-radius: var(--border-radius);
-}
-
-.contact-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
 }
 
 .contact-info h4 {

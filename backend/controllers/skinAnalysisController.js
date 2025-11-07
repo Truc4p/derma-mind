@@ -72,18 +72,48 @@ const analyzeSkin = (responses) => {
   // Sort concerns by priority
   primaryConcerns.sort((a, b) => a.priority - b.priority);
   
-  // Calculate overall score
-  score = 75;
-  if (['often', 'always'].includes(responses.breakoutFrequency)) score -= 15;
-  if (responses.skinReaction === 'severe') score -= 20;
-  if (responses.lifestyle.stressLevel === 'high') score -= 10;
-  if (responses.lifestyle.sleepQuality === 'poor') score -= 10;
+  // Calculate overall score with improved algorithm
+  score = 100; // Start with perfect score
+  
+  // Deductions based on skin condition
+  if (['often', 'always'].includes(responses.breakoutFrequency)) score -= 20;
+  else if (responses.breakoutFrequency === 'sometimes') score -= 10;
+  else if (responses.breakoutFrequency === 'rarely') score -= 3;
+  
+  if (responses.skinReaction === 'severe') score -= 15;
+  else if (responses.skinReaction === 'moderate') score -= 8;
+  else if (responses.skinReaction === 'mild') score -= 3;
+  
+  // Lifestyle factors
+  if (responses.lifestyle.stressLevel === 'high') score -= 12;
+  else if (responses.lifestyle.stressLevel === 'moderate') score -= 5;
+  
+  if (responses.lifestyle.sleepQuality === 'poor') score -= 12;
+  else if (responses.lifestyle.sleepQuality === 'average') score -= 5;
+  
+  // Skin appearance factors
+  if (['large', 'varied'].includes(responses.poreSize)) score -= 8;
+  else if (responses.poreSize === 'medium') score -= 3;
+  
+  if (['dull', 'patchy'].includes(responses.skinAppearance)) score -= 8;
+  
+  // Severity-based deductions from concerns
+  primaryConcerns.forEach(concern => {
+    if (concern.severity === 'severe') score -= 5;
+    else if (concern.severity === 'moderate') score -= 3;
+  });
+  
+  // Positive adjustments for good habits
+  if (responses.lifestyle.exercise === 'regular') score += 3;
+  if (responses.lifestyle.diet === 'excellent') score += 3;
+  if (responses.skinFeeling === 'comfortable') score += 5;
+  if (responses.poreSize === 'small') score += 3;
   
   return {
     skinType,
     skinTypeConfidence: confidence,
     primaryConcerns,
-    overallScore: Math.max(score, 0)
+    overallScore: Math.min(Math.max(score, 0), 100) // Ensure score is between 0-100
   };
 };
 

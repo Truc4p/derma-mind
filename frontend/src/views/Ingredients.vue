@@ -679,8 +679,8 @@ export default {
 .category-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: var(--secondary-color);
-  color: white;
+  background: var(--secondary-light);
+  color: black;
   border-radius: 20px;
   font-size: 0.8rem;
   margin-bottom: 0.75rem;

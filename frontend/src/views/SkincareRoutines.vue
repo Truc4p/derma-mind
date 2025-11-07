@@ -108,7 +108,7 @@
 
           <!-- Morning Routine -->
           <div class="routine-time-section">
-            <h3>☀️ Morning Routine</h3>
+            <h3>Morning Routine</h3>
             <div class="routine-steps">
               <div 
                 v-for="step in customRoutine.customRoutine.morning" 
@@ -136,7 +136,7 @@
 
           <!-- Evening Routine -->
           <div class="routine-time-section">
-            <h3>🌙 Evening Routine</h3>
+            <h3>Evening Routine</h3>
             <div class="routine-steps">
               <div 
                 v-for="step in customRoutine.customRoutine.evening" 
@@ -164,7 +164,7 @@
 
           <!-- Weekly Treatments -->
           <div v-if="customRoutine.customRoutine.weekly" class="routine-time-section">
-            <h3>📅 Weekly Treatments</h3>
+            <h3>Weekly Treatments</h3>
             <div class="weekly-treatments">
               <div 
                 v-for="treatment in customRoutine.customRoutine.weekly" 
@@ -180,7 +180,7 @@
 
           <!-- Insights -->
           <div v-if="customRoutine.insights" class="insights-section">
-            <h3>💡 Routine Insights</h3>
+            <h3>Routine Insights</h3>
             <div class="insights-grid grid grid-2">
               <div class="insight-card card">
                 <h4>Key Benefits</h4>
@@ -253,32 +253,26 @@
         <h2>Skincare Routine Tips</h2>
         <div class="tips-grid grid grid-3">
           <div class="tip-card card">
-            <div class="tip-icon">🌅</div>
             <h4>Morning Routine</h4>
             <p>Focus on protection and hydration. Always end with sunscreen for UV protection.</p>
           </div>
           <div class="tip-card card">
-            <div class="tip-icon">🌙</div>
             <h4>Evening Routine</h4>
             <p>Time for treatment and repair. Use active ingredients and richer moisturizers.</p>
           </div>
           <div class="tip-card card">
-            <div class="tip-icon">⏰</div>
             <h4>Consistency</h4>
             <p>Stick to your routine for at least 4-6 weeks to see visible improvements.</p>
           </div>
           <div class="tip-card card">
-            <div class="tip-icon">🧪</div>
             <h4>Patch Testing</h4>
             <p>Always patch test new products on a small skin area before full application.</p>
           </div>
           <div class="tip-card card">
-            <div class="tip-icon">📊</div>
             <h4>Start Slowly</h4>
             <p>Introduce new active ingredients gradually to avoid irritation.</p>
           </div>
           <div class="tip-card card">
-            <div class="tip-icon">💧</div>
             <h4>Hydration</h4>
             <p>Even oily skin needs moisturizer. Choose the right formula for your skin type.</p>
           </div>
@@ -477,8 +471,7 @@ export default {
 .step-number {
   width: 40px;
   height: 40px;
-  background: var(--primary-color);
-  color: white;
+  color: var(--primary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -524,8 +517,8 @@ export default {
 .ingredient-tag {
   display: inline-block;
   padding: 0.2rem 0.6rem;
-  background: var(--secondary-color);
-  color: white;
+  background: var(--secondary-light);
+  color: black;
   border-radius: 12px;
   font-size: 0.75rem;
   margin: 0.2rem 0.3rem 0.2rem 0;
@@ -617,11 +610,6 @@ export default {
 .tip-card {
   text-align: center;
   padding: 2rem;
-}
-
-.tip-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
 }
 
 .tip-card h4 {

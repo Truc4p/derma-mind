@@ -18,9 +18,9 @@
           <div class="hero-image">
             <div class="hero-graphic">
               <div class="skin-layers">
-                <div class="layer layer-1">🌸</div>
-                <div class="layer layer-2">✨</div>
-                <div class="layer layer-3">💧</div>
+                <div class="layer layer-1"></div>
+                <div class="layer layer-2"></div>
+                <div class="layer layer-3"></div>
               </div>
             </div>
           </div>
@@ -34,17 +34,14 @@
         <h2 class="section-title">Why Choose SkinStudy?</h2>
         <div class="grid grid-3">
           <div class="feature-card card fade-in-up">
-            <div class="feature-icon">🔬</div>
             <h3>Science-Based Analysis</h3>
             <p>Our skin analysis tool uses scientific principles to assess your skin type, concerns, and provide accurate recommendations.</p>
           </div>
           <div class="feature-card card fade-in-up">
-            <div class="feature-icon">📚</div>
             <h3>Educational Content</h3>
             <p>Learn about skin science, ingredient benefits, and proper skincare techniques from dermatology experts.</p>
           </div>
           <div class="feature-card card fade-in-up">
-            <div class="feature-icon">💄</div>
             <h3>Personalized Routines</h3>
             <p>Get customized skincare routines based on your skin type, concerns, and lifestyle preferences.</p>
           </div>
@@ -243,11 +240,6 @@ export default {
 .feature-card {
   text-align: center;
   padding: 2rem;
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
 }
 
 .feature-card h3 {

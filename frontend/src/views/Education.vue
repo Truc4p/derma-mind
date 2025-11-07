@@ -116,11 +116,9 @@
               <p>{{ article.content.summary }}</p>
               <div class="article-meta">
                 <div class="meta-item">
-                  <span class="icon">⏱️</span>
                   <span>{{ article.metadata?.readingTime || 5 }} min</span>
                 </div>
                 <div class="meta-item">
-                  <span class="icon">📊</span>
                   <span>{{ article.metadata?.difficulty || 'beginner' }}</span>
                 </div>
                 <div class="meta-item" v-if="article.engagement?.rating?.count > 0">
@@ -359,8 +357,8 @@ export default {
 .category-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: var(--primary-color);
-  color: white;
+  background: var(--primary-300);
+  color: var(--primary-dark);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;

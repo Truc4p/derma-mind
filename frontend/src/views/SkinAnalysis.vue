@@ -93,18 +93,25 @@
             <h3>Skin Health Score</h3>
             <div class="score-display">
               <div class="score-circle">
-                <svg viewBox="0 0 100 100">
+                <svg viewBox="0 0 100 100" class="score-svg">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" stroke-width="8" />
-                  <circle cx="50" cy="50" r="45" fill="none" stroke="#ff6b9d" stroke-width="8"
+                  <circle cx="50" cy="50" r="45" fill="none" :stroke="getScoreColor(analysisResults.overallScore)" stroke-width="8"
                     :stroke-dasharray="`${analysisResults.overallScore * 2.83} 283`" stroke-linecap="round"
-                    transform="rotate(-90 50 50)" />
+                    style="transition: stroke-dasharray 1s ease-in-out, stroke 0.5s ease;" />
                 </svg>
                 <div class="score-text">
-                  <span class="score-number">{{ analysisResults.overallScore }}</span>
+                  <span class="score-number" :style="{ color: getScoreColor(analysisResults.overallScore) }">
+                    {{ analysisResults.overallScore }}
+                  </span>
                   <span class="score-label">/ 100</span>
                 </div>
               </div>
-              <p class="score-description">{{ getScoreDescription(analysisResults.overallScore) }}</p>
+              <div class="score-details">
+                <div class="score-badge" :class="getScoreClass(analysisResults.overallScore)">
+                  {{ getScoreLabel(analysisResults.overallScore) }}
+                </div>
+                <p class="score-description">{{ getScoreDescription(analysisResults.overallScore) }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -115,7 +122,7 @@
 
           <!-- Morning Routine -->
           <div class="routine-section">
-            <h4>☀️ Morning Routine</h4>
+            <h4>Morning Routine</h4>
             <div class="routine-steps">
               <div v-for="step in analysisResults.recommendations.routine.morning" :key="step.step"
                 class="routine-step">
@@ -131,7 +138,7 @@
 
           <!-- Evening Routine -->
           <div class="routine-section">
-            <h4>🌙 Evening Routine</h4>
+            <h4>Evening Routine</h4>
             <div class="routine-steps">
               <div v-for="step in analysisResults.recommendations.routine.evening" :key="step.step"
                 class="routine-step">
@@ -147,10 +154,10 @@
 
           <!-- Key Ingredients -->
           <div class="ingredients-section">
-            <h4>🧪 Key Ingredients for You</h4>
+            <h4>Key Ingredients for You</h4>
             <div class="grid grid-2">
               <div class="ingredients-group">
-                <h5>✅ Beneficial Ingredients</h5>
+                <h5 class="green-text">Beneficial Ingredients</h5>
                 <div class="ingredient-list">
                   <div v-for="ingredient in analysisResults.recommendations.ingredients.beneficial"
                     :key="ingredient.name" class="ingredient-item">
@@ -162,7 +169,7 @@
               </div>
 
               <div class="ingredients-group">
-                <h5>❌ Ingredients to Avoid</h5>
+                <h5 class="red-text">Ingredients to Avoid</h5>
                 <div class="ingredient-list">
                   <div v-for="ingredient in analysisResults.recommendations.ingredients.avoid" :key="ingredient.name"
                     class="ingredient-item avoid">
@@ -176,7 +183,7 @@
 
           <!-- Lifestyle Tips -->
           <div class="lifestyle-section">
-            <h4>🌟 Lifestyle Recommendations</h4>
+            <h4>Lifestyle Recommendations</h4>
             <div class="lifestyle-tips">
               <div v-for="tip in analysisResults.recommendations.lifestyle" :key="tip.category" class="lifestyle-tip">
                 <h5>{{ tip.category }}</h5>
@@ -401,6 +408,24 @@ export default {
       if (score >= 60) return 'Good skin health with room for improvement.'
       if (score >= 40) return 'Moderate skin health. Focus on consistent care.'
       return 'Your skin needs attention. Follow the recommendations carefully.'
+    },
+    getScoreColor(score) {
+      if (score >= 80) return '#10b981' // Green
+      if (score >= 60) return '#3b82f6' // Blue
+      if (score >= 40) return '#f59e0b' // Orange
+      return '#ef4444' // Red
+    },
+    getScoreClass(score) {
+      if (score >= 80) return 'score-excellent'
+      if (score >= 60) return 'score-good'
+      if (score >= 40) return 'score-moderate'
+      return 'score-needs-attention'
+    },
+    getScoreLabel(score) {
+      if (score >= 80) return 'Excellent'
+      if (score >= 60) return 'Good'
+      if (score >= 40) return 'Moderate'
+      return 'Needs Attention'
     },
     restartAnalysis() {
       this.currentStep = 1
@@ -674,8 +699,8 @@ export default {
 .skin-type-badge {
   display: inline-block;
   padding: 1rem 2rem;
-  background: var(--gradient-primary);
-  color: white;
+  background: var(--primary-100);
+  color: var(--primary-600);
   border-radius: 50px;
   font-size: 1.5rem;
   font-weight: 600;
@@ -699,7 +724,7 @@ export default {
 
 .score-fill {
   height: 100%;
-  background: var(--primary-color);
+  background: var(--primary-500);
   transition: width 0.8s ease;
 }
 
@@ -745,13 +770,14 @@ export default {
 
 .score-display {
   text-align: center;
+  padding: 1rem;
 }
 
 .score-circle {
   position: relative;
   width: 150px;
   height: 150px;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.5rem;
 }
 
 .score-circle svg {
@@ -770,9 +796,54 @@ export default {
   color: var(--text-dark);
 }
 
+.score-number {
+  transition: color 0.5s ease;
+}
+
 .score-label {
   font-size: 1rem;
   color: var(--text-light);
+}
+
+.score-details {
+  margin-top: 1rem;
+}
+
+.score-badge {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.score-excellent {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.score-good {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.score-moderate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.score-needs-attention {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.score-description {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .recommendations {
@@ -800,8 +871,7 @@ export default {
 .step-number {
   width: 40px;
   height: 40px;
-  background: var(--primary-color);
-  color: white;
+  color: var(--primary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -844,11 +914,6 @@ export default {
   padding: 1rem;
   background: var(--background-light);
   border-radius: var(--border-radius);
-  border-left: 4px solid var(--secondary-color);
-}
-
-.ingredient-item.avoid {
-  border-left-color: #f27d7d;
 }
 
 .result-actions {
@@ -862,6 +927,14 @@ export default {
 .result-card h3 {
   padding: 1rem 1.5rem 0.5rem 1.5rem;
   margin: 0;
+}
+
+.green-text {
+  color: #248046;
+}
+
+.red-text {
+  color: #b5313c;
 }
 
 @media (max-width: 768px) {

@@ -872,8 +872,7 @@ python tools/extract_with_pdfminer.py input.pdf output.txt
 - **User Experience**: Near-instant feedback, similar to Gemini Live
 
 ### Audio Transcription Performance
-- **AssemblyAI (previous)**: 2-3 seconds average transcription time
-- **Gemini Multimodal (current)**: ~850ms average transcription time (65% improvement)
+- **Gemini Multimodal**: ~850ms average transcription time (65% improvement)
 - **Benefit**: Faster voice-to-text conversion, simpler architecture (single API)
 
 ## Testing
@@ -1060,7 +1059,7 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 
 ### Voice & Audio Features
 - **Audio Transcription**: Gemini multimodal API integration for fast, high-quality speech-to-text conversion
-  - **Switched from AssemblyAI to Gemini**: Faster transcription (~850ms vs 2-3s)
+  - **Gemini transcription**: ~850ms
   - **Direct audio processing**: Base64-encoded audio sent to Gemini 2.0 Flash
   - **No external API dependencies**: Single API for both AI responses and transcription
 - **Text-to-Speech Optimization**: Major performance improvements in audio playback
@@ -1115,7 +1114,6 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 - [x] **Clean Speech Output**: Automatic removal of markdown and citations from audio
 - [x] **Search Functionality**: Full-text search across conversation history
 - [x] **Session Management**: Save, load, and search chat sessions
-- [x] **Removed AssemblyAI**: Simplified architecture using only Gemini API
 - [ ] Redis caching layer
 - [ ] GraphQL API
 - [ ] WebSocket real-time updates
