@@ -253,6 +253,14 @@ export default {
         this.adjustTextareaHeight()
     },
 
+    beforeUnmount() {
+        // Clean up any blob URLs when component is destroyed
+        this.cleanupBlobUrls()
+        if (this.imagePreviewUrl) {
+            URL.revokeObjectURL(this.imagePreviewUrl)
+        }
+    },
+
     watch: {
         messages: {
             handler() {
@@ -313,11 +321,14 @@ export default {
         async sendMessage() {
             if ((!this.userInput.trim() && !this.selectedImage) || this.isLoading) return
 
+            // Keep a copy of the image preview URL for the message
+            const imagePreview = this.imagePreviewUrl
+            
             const userMessage = {
                 role: 'user',
                 content: this.userInput.trim() || 'Please analyze this skin image',
                 timestamp: new Date(),
-                image: this.imagePreviewUrl // Store preview URL for display
+                image: imagePreview // Store preview URL for display
             }
 
             console.log('📤 Sending user message:', userMessage.content)
@@ -327,7 +338,14 @@ export default {
             const imageToSend = this.selectedImage
             
             this.userInput = ''
-            this.removeImage() // Clear image after sending
+            
+            // Clear the input preview, but don't revoke the blob yet
+            this.selectedImage = null
+            this.imagePreviewUrl = null
+            const fileInput = this.$refs.imageInput
+            if (fileInput) {
+                fileInput.value = ''
+            }
 
             this.isLoading = true
 
@@ -405,12 +423,24 @@ export default {
                 console.error('❌ Error calling AI API:', error)
                 console.error('❌ Error details:', error.response?.data || error.message)
                 
+                // Check for specific error types
+                const errorDetails = error.response?.data
+                let errorMessage = ''
+                
+                if (errorDetails?.details?.includes('429') || errorDetails?.details?.includes('rate limit')) {
+                    errorMessage = '\n\n*⚠️ The AI service is currently rate-limited. Please wait a moment and try again. Using offline knowledge base for now.*'
+                } else if (errorDetails?.details?.includes('overloaded')) {
+                    errorMessage = '\n\n*⚠️ The AI service is currently experiencing high traffic. Please try again shortly. Using offline knowledge base for now.*'
+                } else {
+                    errorMessage = '\n\n*⚠️ Unable to connect to AI service. Using offline knowledge base. For best results, ensure backend is running.*'
+                }
+                
                 // Fallback to local response if API fails
                 console.log('⚠️ Falling back to local response')
                 let response = this.generateContextualResponse(userMessage)
                 this.messages.push({
                     role: 'assistant',
-                    content: response + '\n\n*Note: Using offline knowledge base. For best results, ensure backend is running.*',
+                    content: response + errorMessage,
                     timestamp: new Date()
                 })
             }
@@ -419,6 +449,43 @@ export default {
         generateContextualResponse(message) {
             console.log('🔄 Generating contextual fallback response for:', message)
             const lowerMessage = message.toLowerCase()
+
+            // Image analysis fallback
+            if (lowerMessage.includes('analyze') || lowerMessage.includes('wrong') || lowerMessage.includes('image')) {
+                console.log('✅ Matched pattern: image analysis')
+                return `I'm unable to analyze the image right now, but here's some general guidance:
+
+**Common Skin Concerns:**
+
+**Acne:**
+- Characterized by pimples, blackheads, whiteheads
+- Treatment: Gentle cleansing, salicylic acid, benzoyl peroxide
+- Consider: Retinoids for persistent acne
+
+**Scarring:**
+- Can be from previous acne or injuries
+- Treatment: Vitamin C serum, retinol, niacinamide
+- Professional: Chemical peels, microneedling, laser therapy
+
+**Hyperpigmentation:**
+- Dark spots or uneven skin tone
+- Treatment: Vitamin C, niacinamide, alpha arbutin
+- Essential: Daily SPF 30+
+
+**Texture Issues:**
+- Rough or uneven skin surface
+- Treatment: Regular gentle exfoliation (AHA/BHA)
+- Consider: Retinol for long-term improvement
+
+**General Recommendations:**
+1. Establish a gentle cleansing routine
+2. Use sunscreen daily (SPF 30+)
+3. Keep skin hydrated
+4. Be patient - skin improvements take 4-12 weeks
+5. For persistent concerns, consult a dermatologist
+
+Would you like specific product recommendations for any of these concerns?`
+            }
 
             // Skincare routine responses
             if (lowerMessage.includes('routine') && lowerMessage.includes('oily')) {
@@ -655,12 +722,25 @@ What would you like to know more about?`
                 this.currentSessionId = this.generateSessionId()
             }
 
+            // Create a copy of messages without blob URLs (they can't be restored)
+            const messagesToSave = this.messages.map(msg => {
+                if (msg.image && msg.image.startsWith('blob:')) {
+                    // Don't save blob URLs - they won't work after reload
+                    return {
+                        ...msg,
+                        image: null,
+                        content: msg.content + ' [Image was uploaded]'
+                    }
+                }
+                return msg
+            })
+
             const session = {
                 id: this.currentSessionId,
                 title: this.generateSessionTitle(this.messages),
                 preview: this.generateSessionPreview(this.messages),
                 timestamp: new Date().toISOString(),
-                messages: this.messages
+                messages: messagesToSave
             }
 
             // Update or add session
@@ -769,6 +849,7 @@ What would you like to know more about?`
             if (this.messages.length > 0) {
                 if (confirm('Start a new chat? Current conversation will be saved.')) {
                     this.saveCurrentSession()
+                    this.cleanupBlobUrls()
                     this.messages = []
                     this.userInput = ''
                     this.currentSessionId = null
@@ -782,11 +863,21 @@ What would you like to know more about?`
                 if (this.currentSessionId) {
                     this.deleteChatSession(this.currentSessionId)
                 }
+                this.cleanupBlobUrls()
                 this.messages = []
                 this.userInput = ''
                 this.currentSessionId = null
                 localStorage.removeItem('aiDermatologistCurrentSession')
             }
+        },
+
+        cleanupBlobUrls() {
+            // Revoke any blob URLs in messages to prevent memory leaks
+            this.messages.forEach(message => {
+                if (message.image && message.image.startsWith('blob:')) {
+                    URL.revokeObjectURL(message.image)
+                }
+            })
         }
     }
 }

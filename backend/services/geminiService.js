@@ -19,6 +19,10 @@ class GeminiService {
             }
         });
         
+        // Retry configuration for rate limiting
+        this.maxRetries = 3;
+        this.retryDelay = 1000; // Start with 1 second
+        
         // System instruction for the dermatologist
         this.systemContext = `You are a Virtual Dermatologist with extensive knowledge in:
 - Dermatology and skin conditions
@@ -299,15 +303,40 @@ IMPORTANT DISCLAIMERS:
             console.log('🚀 [GEMINI SERVICE] Analyzing image with Gemini Vision...');
             const genStart = performanceMonitor.startTimer();
             
-            const result = await visionModel.generateContent([
-                {
-                    inlineData: {
-                        data: base64Image,
-                        mimeType: imageMimeType
+            // Use retry logic for image analysis
+            let result;
+            let retryAttempt = 0;
+            const maxRetries = 3;
+            
+            while (retryAttempt < maxRetries) {
+                try {
+                    result = await visionModel.generateContent([
+                        {
+                            inlineData: {
+                                data: base64Image,
+                                mimeType: imageMimeType
+                            }
+                        },
+                        fullPrompt
+                    ]);
+                    break; // Success, exit retry loop
+                } catch (error) {
+                    const isRateLimitError = error.message.includes('429') || 
+                                            error.message.includes('rate limit') ||
+                                            error.message.includes('RESOURCE_EXHAUSTED') ||
+                                            error.status === 429 ||
+                                            error.status === 503;
+                    
+                    if (!isRateLimitError || retryAttempt >= maxRetries - 1) {
+                        throw error; // Not rate limit or exhausted retries
                     }
-                },
-                fullPrompt
-            ]);
+                    
+                    retryAttempt++;
+                    const delay = 2000 * Math.pow(2, retryAttempt - 1); // 2s, 4s, 8s
+                    console.log(`⏳ [GEMINI SERVICE] Rate limited. Retrying in ${delay}ms (attempt ${retryAttempt}/${maxRetries})...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
             
             const response = await result.response;
             const analysisText = response.text().trim();
