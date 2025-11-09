@@ -75,7 +75,6 @@ Automatic guidance on when to consult professionals:
 
 #### Data Properties Added
 ```javascript
-standardDisclaimer: '...'  // Appended to all normal responses
 urgentCareKeywords: [...]  // Array of emergency-related terms
 ```
 
@@ -169,7 +168,6 @@ urgentCareKeywords: ['pain', 'severe', ...] // Add/remove as needed
 
 ### Modifying Disclaimers
 Update disclaimer text in data() properties:
-- `standardDisclaimer` - For normal responses
 - `getUrgentCareWarning()` method - For emergency situations
 
 ### Styling Updates

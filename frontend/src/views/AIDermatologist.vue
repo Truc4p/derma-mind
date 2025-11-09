@@ -218,7 +218,6 @@ export default {
             selectedImage: null,
             imagePreviewUrl: null,
             // Disclaimers and safety
-            standardDisclaimer: '\n\n---\n\n***Please Note:** This information is for educational purposes only and does not constitute medical advice. For diagnosis or treatment of skin conditions, please consult a qualified dermatologist or healthcare provider.*',
             urgentCareKeywords: ['pain', 'severe', 'infection', 'pus', 'bleeding', 'swelling', 'emergency', 'urgent', 'spreading', 'fever', 'allergic reaction', 'burning', 'blistering']
         }
     },
