@@ -6,18 +6,13 @@
                 <h3>Chat History</h3>
                 <button @click="toggleSidebar" class="close-sidebar-btn">✕</button>
             </div>
-            
+
             <!-- Search Input -->
             <div class="sidebar-search">
-                <input 
-                    v-model="searchQuery" 
-                    type="text" 
-                    placeholder="Search conversations..."
-                    class="search-input"
-                />
+                <input v-model="searchQuery" type="text" placeholder="Search conversations..." class="search-input" />
                 <span v-if="searchQuery" @click="searchQuery = ''" class="clear-search">✕</span>
             </div>
-            
+
             <div class="sidebar-content">
                 <div v-if="filteredChatSessions.length === 0 && !searchQuery" class="no-history">
                     <p>No chat history yet</p>
@@ -26,19 +21,15 @@
                     <p>No results found for "{{ searchQuery }}"</p>
                 </div>
                 <div v-else class="chat-sessions-list">
-                    <div v-for="session in filteredChatSessions" 
-                         :key="session.id"
-                         @click="loadChatSession(session.id)"
-                         class="chat-session-item"
-                         :class="{ 'active': session.id === currentSessionId }">
+                    <div v-for="session in filteredChatSessions" :key="session.id" @click="loadChatSession(session.id)"
+                        class="chat-session-item" :class="{ 'active': session.id === currentSessionId }">
                         <div class="session-info">
                             <div class="session-title">{{ session.title }}</div>
                             <div class="session-date">{{ formatSessionDate(session.timestamp) }}</div>
                             <div class="session-preview">{{ session.preview }}</div>
                         </div>
-                        <button @click.stop="deleteChatSession(session.id)" 
-                                class="delete-session-btn"
-                                title="Delete this conversation">
+                        <button @click.stop="deleteChatSession(session.id)" class="delete-session-btn"
+                            title="Delete this conversation">
                             🗑️
                         </button>
                     </div>
@@ -49,6 +40,21 @@
         <!-- Overlay for mobile -->
         <div v-if="sidebarOpen" @click="toggleSidebar" class="sidebar-overlay"></div>
 
+        <!-- Medical Disclaimer Banner -->
+        <div class="disclaimer-banner">
+            <div class="disclaimer-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span><strong>Medical Disclaimer:</strong> This AI provides educational skincare information only, not
+                    medical diagnosis or treatment. Always consult a qualified dermatologist for medical
+                    concerns.</span>
+            </div>
+        </div>
+
         <!-- Chat Container -->
         <div class="chat-container" ref="chatContainer">
             <!-- Welcome Message -->
@@ -56,43 +62,50 @@
                 <div class="welcome-card">
                     <div class="welcome-header">
                         <h1>AI Dermatologist</h1>
+                        <p class="description">Your virtual skincare consultant powered by advanced AI technology</p>
                     </div>
-                    <p>I'm here to help you with all your skincare concerns. I can assist with:</p>
+
+                    <!-- Important Disclaimer -->
+                    <div class="welcome-disclaimer">
+                        <h3>⚠️ Important Notice</h3>
+                        <p>This AI assistant provides <strong>educational information and general skincare guidance
+                                only</strong>. It does not:</p>
+                        <ul>
+                            <li>Provide medical diagnosis or treatment</li>
+                            <li>Replace consultation with qualified dermatologists</li>
+                            <li>Offer emergency medical advice</li>
+                        </ul>
+                        <p class="disclaimer-highlight">
+                            <strong>Seek immediate medical attention if you experience:</strong> severe pain, rapid
+                            changes, signs of infection, severe allergic reactions, or suspicious skin changes.
+                        </p>
+                    </div>
+
+                    <h2>What I Can Help With</h2>
                     <div class="capabilities-grid">
                         <div class="capability-item">
-                            <span>Skincare routines</span>
+                            <strong>Skin Analysis</strong>
+                            <p>Upload images for personalized skincare insights</p>
                         </div>
                         <div class="capability-item">
-                            <span>Cosmetic advice</span>
+                            <strong>Product Advice</strong>
+                            <p>Get recommendations for your skin type</p>
                         </div>
                         <div class="capability-item">
-                            <span>Product recommendations</span>
+                            <strong>Ingredient Education</strong>
+                            <p>Learn about skincare ingredients and their benefits</p>
                         </div>
                         <div class="capability-item">
-                            <span>Face improvement tips</span>
+                            <strong>Routine Building</strong>
+                            <p>Create customized skincare routines</p>
                         </div>
-                        <div class="capability-item">
-                            <span>Ingredient analysis</span>
-                        </div>
-                        <div class="capability-item">
-                            <span>Skin concerns</span>
-                        </div>
-                    </div>
-                    <div class="sample-questions">
-                        <p class="sample-title">Try asking:</p>
-                        <button v-for="question in sampleQuestions" :key="question" 
-                                @click="askSampleQuestion(question)"
-                                class="sample-question-btn">
-                            {{ question }}
-                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- Chat Messages -->
             <div class="messages-list">
-                <div v-for="(message, index) in messages" :key="index" 
-                     class="message" :class="message.role">
+                <div v-for="(message, index) in messages" :key="index" class="message" :class="message.role">
                     <div class="message-content">
                         <div v-if="message.image" class="message-image">
                             <img :src="message.image" alt="Uploaded skin image" />
@@ -118,14 +131,8 @@
         <!-- Input Area -->
         <div class="chat-input-container">
             <!-- Hidden file input -->
-            <input 
-                type="file" 
-                ref="imageInput" 
-                @change="handleImageSelect" 
-                accept="image/*" 
-                style="display: none"
-            />
-            
+            <input type="file" ref="imageInput" @change="handleImageSelect" accept="image/*" style="display: none" />
+
             <!-- Chat Action Buttons -->
             <div v-if="messages.length > 0" class="chat-actions">
                 <button @click="toggleSidebar" class="action-button history-btn">
@@ -138,7 +145,7 @@
                     Clear Chat
                 </button>
             </div>
-            
+
             <!-- Image Preview -->
             <div v-if="imagePreviewUrl" class="image-preview-container">
                 <div class="image-preview">
@@ -146,25 +153,22 @@
                     <button @click="removeImage" class="remove-image-btn">✕</button>
                 </div>
             </div>
-            
+
             <div class="input-wrapper">
                 <button @click="triggerImageUpload" class="image-upload-btn" title="Upload skin image">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-                <textarea v-model="userInput" 
-                          @keydown.enter.prevent="handleEnter"
-                          placeholder="Ask me about skincare, cosmetics, or upload a skin image for analysis..."
-                          class="chat-input"
-                          rows="1"
-                          ref="textInput"></textarea>
-                <button @click="sendMessage" 
-                        :disabled="(!userInput.trim() && !selectedImage) || isLoading"
-                        class="send-button">
+                <textarea v-model="userInput" @keydown.enter.prevent="handleEnter"
+                    placeholder="Ask me about skincare, cosmetics, or upload a skin image for analysis..."
+                    class="chat-input" rows="1" ref="textInput"></textarea>
+                <button @click="sendMessage" :disabled="(!userInput.trim() && !selectedImage) || isLoading"
+                    class="send-button">
                     <span v-if="!isLoading">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M2 21l21-9L2 3v7l15 2l-15 2z" fill="white"/>
+                            <path d="M2 21l21-9L2 3v7l15 2l-15 2z" fill="white" />
                         </svg>
                     </span>
                     <span v-else class="loading-spinner"></span>
@@ -207,41 +211,44 @@ export default {
             searchQuery: '',
             // Image upload
             selectedImage: null,
-            imagePreviewUrl: null
+            imagePreviewUrl: null,
+            // Disclaimers and safety
+            standardDisclaimer: '\n\n---\n\n*💡 **Please Note:** This information is for educational purposes only and does not constitute medical advice. For diagnosis or treatment of skin conditions, please consult a qualified dermatologist or healthcare provider.*',
+            urgentCareKeywords: ['pain', 'severe', 'infection', 'pus', 'bleeding', 'swelling', 'emergency', 'urgent', 'spreading', 'fever', 'allergic reaction', 'burning', 'blistering']
         }
     },
 
     computed: {
         sortedChatSessions() {
-            return [...this.chatSessions].sort((a, b) => 
+            return [...this.chatSessions].sort((a, b) =>
                 new Date(b.timestamp) - new Date(a.timestamp)
             )
         },
-        
+
         filteredChatSessions() {
             if (!this.searchQuery.trim()) {
                 return this.sortedChatSessions
             }
-            
+
             const query = this.searchQuery.toLowerCase().trim()
             return this.sortedChatSessions.filter(session => {
                 // Search in title
                 if (session.title.toLowerCase().includes(query)) {
                     return true
                 }
-                
+
                 // Search in preview
                 if (session.preview.toLowerCase().includes(query)) {
                     return true
                 }
-                
+
                 // Search in messages
-                if (session.messages && session.messages.some(msg => 
+                if (session.messages && session.messages.some(msg =>
                     msg.content.toLowerCase().includes(query)
                 )) {
                     return true
                 }
-                
+
                 return false
             })
         }
@@ -277,6 +284,15 @@ export default {
     },
 
     methods: {
+        detectUrgentCare(message) {
+            const lowerMessage = message.toLowerCase()
+            return this.urgentCareKeywords.some(keyword => lowerMessage.includes(keyword))
+        },
+
+        getUrgentCareWarning() {
+            return `\n\n---\n\n⚠️ **IMPORTANT MEDICAL NOTICE**\n\nYour message suggests you may be experiencing a condition that requires immediate medical attention.\n\n**Please seek professional medical care if you have:**\n- Severe or worsening pain\n- Signs of infection (pus, warmth, spreading redness)\n- Sudden or rapid skin changes\n- Severe allergic reactions (difficulty breathing, swelling)\n- Persistent bleeding or open wounds\n- Fever accompanying skin symptoms\n- Suspicious moles or skin growths\n\n**Contact:**\n- Your dermatologist or primary care physician\n- Emergency services (911) for severe symptoms\n- Urgent care clinic for same-day evaluation\n\nThis AI cannot diagnose emergencies or replace emergency medical care.`
+        },
+
         adjustTextareaHeight() {
             this.$nextTick(() => {
                 const textarea = this.$refs.textInput
@@ -323,7 +339,7 @@ export default {
 
             // Keep a copy of the image preview URL for the message
             const imagePreview = this.imagePreviewUrl
-            
+
             const userMessage = {
                 role: 'user',
                 content: this.userInput.trim() || 'Please analyze this skin image',
@@ -333,12 +349,12 @@ export default {
 
             console.log('📤 Sending user message:', userMessage.content)
             this.messages.push(userMessage)
-            
+
             const messageToSend = this.userInput.trim() || 'Please analyze this skin image'
             const imageToSend = this.selectedImage
-            
+
             this.userInput = ''
-            
+
             // Clear the input preview, but don't revoke the blob yet
             this.selectedImage = null
             this.imagePreviewUrl = null
@@ -369,27 +385,35 @@ export default {
                 console.log('📚 User query:', userMessage)
                 console.log('�️ Image attached:', !!imageFile)
                 console.log('�📝 Conversation history (last 10 messages):', this.messages.slice(-10))
-                
+
                 if (imageFile) {
                     // Use FormData for image upload
                     const formData = new FormData()
                     formData.append('message', userMessage)
                     formData.append('image', imageFile)
                     formData.append('conversationHistory', JSON.stringify(this.messages.slice(-10)))
-                    
+
                     console.log('📤 Sending image analysis request to /ai-dermatologist/analyze-skin')
-                    
+
                     const response = await api.post('/ai-dermatologist/analyze-skin', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     })
-                    
+
                     console.log('✅ Received image analysis response:', response.data)
-                    
+
+                    // Add appropriate disclaimers
+                    let responseContent = response.data.response
+                    if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
+                        responseContent += this.getUrgentCareWarning()
+                    } else {
+                        responseContent += this.standardDisclaimer
+                    }
+
                     this.messages.push({
                         role: 'assistant',
-                        content: response.data.response,
+                        content: responseContent,
                         sources: response.data.sources,
                         timestamp: new Date()
                     })
@@ -399,22 +423,30 @@ export default {
                         message: userMessage,
                         conversationHistory: this.messages.slice(-10)
                     }
-                    
+
                     console.log('📤 Sending request to /ai-dermatologist/chat:', requestData)
-                    
+
                     const response = await api.post('/ai-dermatologist/chat', requestData)
-                    
+
                     console.log('✅ Received API response:', response.data)
                     console.log('📚 Using RAG context for query:', userMessage)
                     console.log('💡 AI Response:', response.data.response)
-                    
+
                     if (response.data.sources) {
                         console.log('📖 Sources used:', response.data.sources)
                     }
 
+                    // Add appropriate disclaimers
+                    let responseContent = response.data.response
+                    if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
+                        responseContent += this.getUrgentCareWarning()
+                    } else {
+                        responseContent += this.standardDisclaimer
+                    }
+
                     this.messages.push({
                         role: 'assistant',
-                        content: response.data.response,
+                        content: responseContent,
                         sources: response.data.sources,
                         timestamp: new Date()
                     })
@@ -422,11 +454,11 @@ export default {
             } catch (error) {
                 console.error('❌ Error calling AI API:', error)
                 console.error('❌ Error details:', error.response?.data || error.message)
-                
+
                 // Check for specific error types
                 const errorDetails = error.response?.data
                 let errorMessage = ''
-                
+
                 if (errorDetails?.details?.includes('429') || errorDetails?.details?.includes('rate limit')) {
                     errorMessage = '\n\n*⚠️ The AI service is currently rate-limited. Please wait a moment and try again. Using offline knowledge base for now.*'
                 } else if (errorDetails?.details?.includes('overloaded')) {
@@ -434,10 +466,18 @@ export default {
                 } else {
                     errorMessage = '\n\n*⚠️ Unable to connect to AI service. Using offline knowledge base. For best results, ensure backend is running.*'
                 }
-                
+
                 // Fallback to local response if API fails
                 console.log('⚠️ Falling back to local response')
                 let response = this.generateContextualResponse(userMessage)
+
+                // Add appropriate disclaimers to fallback response
+                if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(response)) {
+                    response += this.getUrgentCareWarning()
+                } else {
+                    response += this.standardDisclaimer
+                }
+
                 this.messages.push({
                     role: 'assistant',
                     content: response + errorMessage,
@@ -627,21 +667,30 @@ What's your skin type? I can give you more specific recommendations!`
 
             // Generic response for other questions
             console.log('ℹ️ No specific pattern matched, using generic response')
-            return `Thank you for your question! As a virtual dermatologist, I'm here to help with skincare, cosmetic, and facial improvement advice.
+            return `Thank you for your question! As a virtual skincare consultant, I'm here to help with educational skincare information and general guidance.
 
-To provide you with the most accurate and personalized recommendation, could you tell me more about:
+To provide you with the most helpful information, could you tell me more about:
 
 - Your skin type (oily, dry, combination, sensitive)?
 - Your main skin concerns?
 - Any products you're currently using?
 - Any allergies or sensitivities?
 
-This will help me give you better tailored advice. You can also ask me about:
-- Specific ingredients
-- Product recommendations
-- Skincare routines
-- Treatment options
-- Facial improvement techniques
+This will help me give you better tailored educational advice. You can also ask me about:
+- Specific ingredients and their benefits
+- General product recommendations
+- Basic skincare routines
+- Educational information about treatments
+- Facial care techniques
+
+**When to See a Professional:**
+Please consult a qualified dermatologist or healthcare provider for:
+- Persistent or worsening skin conditions
+- Unusual moles or skin changes
+- Severe acne or skin infections
+- Prescription medication recommendations
+- Medical diagnosis or treatment plans
+- Conditions affecting your health or quality of life
 
 What would you like to know more about?`
         },
@@ -662,7 +711,7 @@ What would you like to know more about?`
                     mangle: false,
                     sanitize: false
                 })
-                
+
                 // Parse the markdown to HTML (no image processing needed)
                 return marked.parse(content)
             } catch (error) {
@@ -677,10 +726,10 @@ What would you like to know more about?`
 
         formatTime(timestamp) {
             const date = new Date(timestamp)
-            return date.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
                 minute: '2-digit',
-                hour12: true 
+                hour12: true
             })
         },
 
@@ -1097,11 +1146,38 @@ What would you like to know more about?`
     .sidebar-overlay {
         display: block;
     }
-    
+
     .history-sidebar {
         width: 280px;
         left: -280px;
     }
+}
+
+/* Medical Disclaimer Banner */
+.disclaimer-banner {
+    background: #fff8e1;
+    padding: 0.75rem 1.5rem;
+    z-index: 100;
+}
+
+.disclaimer-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #856404;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.disclaimer-content svg {
+    flex-shrink: 0;
+    color: #ff9800;
+}
+
+.disclaimer-content strong {
+    color: #d97706;
 }
 
 /* Chat Container */
@@ -1109,7 +1185,8 @@ What would you like to know more about?`
     flex: 1;
     overflow-y: auto;
     padding: 2rem;
-    padding-bottom: 150px; /* Space for fixed input area */
+    padding-bottom: 150px;
+    /* Space for fixed input area */
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
@@ -1147,6 +1224,48 @@ What would you like to know more about?`
     font-weight: 700;
 }
 
+.welcome-disclaimer {
+    background: #fff8e1;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-disclaimer h3 {
+    color: #d97706;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-disclaimer p {
+    color: #856404;
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.welcome-disclaimer ul {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    color: #856404;
+}
+
+.welcome-disclaimer li {
+    margin: 0.5rem 0;
+}
+
+.disclaimer-highlight {
+    padding: 1rem;
+    margin-top: 1rem !important;
+    border-radius: 4px;
+}
+
+.disclaimer-highlight strong {
+    color: #d97706;
+}
+
 .welcome-header {
     color: var(--primary-600);
     font-weight: 600;
@@ -1165,7 +1284,7 @@ What would you like to know more about?`
     margin-bottom: 1rem;
 }
 
-.welcome-card > p {
+.welcome-card>p {
     color: var(--primary-color);
     margin-bottom: 1.5rem;
 }
@@ -1249,6 +1368,7 @@ What would you like to know more about?`
     background: var(--primary-500);
     color: white;
 }
+
 .message.user .message-content,
 .message.user .message-content * {
     color: white !important;
@@ -1276,10 +1396,21 @@ What would you like to know more about?`
     color: white;
 }
 
-.message-text :deep(h1) { font-size: 1.5rem; }
-.message-text :deep(h2) { font-size: 1.3rem; }
-.message-text :deep(h3) { font-size: 1.1rem; }
-.message-text :deep(h4) { font-size: 1rem; }
+.message-text :deep(h1) {
+    font-size: 1.5rem;
+}
+
+.message-text :deep(h2) {
+    font-size: 1.3rem;
+}
+
+.message-text :deep(h3) {
+    font-size: 1.1rem;
+}
+
+.message-text :deep(h4) {
+    font-size: 1rem;
+}
 
 .message-text :deep(ul),
 .message-text :deep(ol) {
@@ -1391,10 +1522,14 @@ What would you like to know more about?`
 }
 
 @keyframes typing {
-    0%, 60%, 100% {
+
+    0%,
+    60%,
+    100% {
         transform: translateY(0);
         opacity: 0.7;
     }
+
     30% {
         transform: translateY(-10px);
         opacity: 1;
@@ -1621,6 +1756,20 @@ What would you like to know more about?`
 
 /* Responsive */
 @media (max-width: 768px) {
+    .disclaimer-banner {
+        padding: 0.5rem 1rem;
+    }
+
+    .disclaimer-content {
+        font-size: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .disclaimer-content svg {
+        width: 16px;
+        height: 16px;
+    }
+
     .chat-container {
         padding: 1rem;
         padding-bottom: 180px; /* Increased space for fixed input area on mobile */
@@ -1632,6 +1781,15 @@ What would you like to know more about?`
 
     .welcome-header {
         font-size: 0.875rem;
+    }
+
+    .welcome-disclaimer {
+        padding: 1rem;
+        font-size: 0.875rem;
+    }
+
+    .welcome-disclaimer h3 {
+        font-size: 1rem;
     }
 
     .message-content {

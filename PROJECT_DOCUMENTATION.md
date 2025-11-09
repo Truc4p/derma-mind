@@ -201,6 +201,8 @@ skin-study/
 - **Optimized TTS**: Sentence-level streaming for faster initial playback (~500ms vs 3-5s)
 - **Clean Speech**: Automatic removal of markdown formatting and citations from spoken text
 - **Live Chat**: Real-time voice conversation with AI (mobile app)
+- **Image Upload & Analysis**: Upload skin images for AI-powered visual analysis with Gemini Vision
+- **Smart Image Handling**: Automatic memory management with blob URL cleanup and temporary backend storage
 
 #### How It Works:
 1. User asks question (text or voice) → converted to 768-dimensional vector embedding
@@ -602,6 +604,47 @@ Convert text to speech audio using gTTS (Google Text-to-Speech).
   - Removes bold/italic markers: `**bold**`, `*italic*`
   - Removes bullet points and list markers
 - **Progressive playback**: Displays text while speaking for better user experience
+
+#### POST `/analyze-skin`
+Analyze skin images with AI dermatologist using Gemini Vision.
+
+**Request:**
+- `multipart/form-data`
+- Field: `image` (image file, max 10MB)
+- Field: `message` (string, optional) - User's question about the image
+- Field: `conversationHistory` (JSON string, optional) - Previous chat context
+- Supported formats: JPEG, PNG, GIF, WebP
+
+**Response:**
+```json
+{
+  "response": "Here's a detailed analysis of the skin in the image:\n\n**Observations:**\n- Texture: Uneven with visible scarring\n- Lesions: Red bumps indicating active acne\n- Color: Uneven tone with hyperpigmentation...",
+  "sources": [
+    {
+      "title": "Acne Treatment Guidelines",
+      "content": "...",
+      "score": 0.87
+    }
+  ],
+  "timestamp": "2025-11-07T...",
+  "_performance": {
+    "totalTime": 10725,
+    "contextSize": 4533,
+    "chunks": 3
+  }
+}
+```
+
+**Features:**
+- **Gemini Vision API**: Advanced AI-powered image analysis
+- **RAG Integration**: Combines visual analysis with dermatology knowledge base
+- **Comprehensive Assessment**: Analyzes texture, color, lesions, concerns
+- **Professional Recommendations**: Evidence-based treatment suggestions
+- **Source Citations**: References to dermatology textbooks used
+- **Automatic Cleanup**: Images deleted after analysis for privacy
+- **Retry Logic**: Automatic retry with exponential backoff for rate limits (2s, 4s, 8s delays)
+- **Error Handling**: Graceful fallback responses when service unavailable
+- **Performance Metrics**: Processing time and context size tracking
 
 ### Education Routes (`/api/education`)
 
@@ -1117,6 +1160,41 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 - **Auto-Generated Titles**: Automatic session titles based on first message
 - **Smart Timestamps**: Relative timestamps (Today, Yesterday, X days ago)
 
+### Image Analysis Features
+- **Gemini Vision Integration**: AI-powered skin image analysis using Google Gemini Vision API
+- **Visual Skin Assessment**: Analyze texture, color, lesions, and skin conditions from uploaded images
+- **RAG-Enhanced Analysis**: Combines computer vision with dermatology knowledge base (10 textbooks)
+- **Comprehensive Reporting**: Detailed observations, possible conditions, and treatment recommendations
+- **Professional Recommendations**: Evidence-based skincare advice with source citations
+- **Image Upload Interface**: Drag-and-drop or click-to-upload with instant preview
+- **Smart Memory Management**: 
+  - Blob URLs for zero-disk preview storage
+  - Automatic cleanup on chat clear/new chat/page leave
+  - Backend temporary storage with auto-delete after analysis
+- **Multi-Format Support**: JPEG, PNG, GIF, WebP up to 10MB
+- **Privacy-First**: Images not permanently stored, deleted immediately after analysis
+- **Error Resilience**: 
+  - Automatic retry with exponential backoff (2s, 4s, 8s) for rate limits
+  - Graceful degradation with helpful fallback responses
+  - Clear user-facing error messages
+- **Session Integration**: Images display in current chat session (not saved to localStorage)
+
+### Image Upload for Skin Analysis
+- **Image Upload Feature**: Upload skin images directly to AI Dermatologist for visual analysis
+- **Gemini Vision Integration**: AI-powered skin image analysis using Google Gemini Vision API
+- **RAG-Enhanced Analysis**: Combines visual analysis with dermatology knowledge base for accurate assessments
+- **Smart Image Handling**: 
+  - Temporary blob URLs for instant preview (no disk usage)
+  - Automatic cleanup to prevent memory leaks
+  - Secure backend storage during processing
+  - Images deleted after analysis (privacy-first approach)
+- **Multiple Format Support**: JPEG, PNG, GIF, WebP (up to 10MB)
+- **Real-time Preview**: Live image preview before sending
+- **Rate Limit Handling**: Automatic retry with exponential backoff for API rate limits
+- **Fallback Responses**: Helpful offline responses when AI unavailable
+- **Chat History Integration**: Images displayed in conversation history (current session only)
+- **Error Recovery**: Graceful error handling with informative user messages
+
 ### Mobile App Enhancements
 - **ChatHistory Component**: Unified history viewer for all chat types
 - **LiveChatAI Component**: Dedicated live voice chat screen with animations
@@ -1159,6 +1237,10 @@ All texts are stored in `backend/knowledge-sources/extracted-content/` and proce
 - [ ] Comprehensive testing suite
 
 ## Documentation Files
+
+### Project Root
+- `PROJECT_DOCUMENTATION.md` - This comprehensive project overview
+- `IMAGE_UPLOAD_DOCUMENTATION.md` - Complete image upload system documentation
 
 ### Backend
 - `README.md` - Complete backend documentation
@@ -1217,7 +1299,7 @@ This project is developed for educational purposes as part of a university final
 ---
 
 **Project**: Skin Study - AI Dermatology Platform  
-**Version**: 1.2.0  
-**Last Updated**: November 6, 2025  
+**Version**: 1.3.0  
+**Last Updated**: November 9, 2025  
 **Repository**: Truc4p/final-project  
 **Type**: Final Year Project (FYP)
