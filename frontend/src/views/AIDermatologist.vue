@@ -174,6 +174,11 @@
                     <span v-else class="loading-spinner"></span>
                 </button>
             </div>
+            
+            <!-- Input Disclaimer -->
+            <div class="input-disclaimer">
+                AI Dermatologist can make mistakes. Check important info.
+            </div>
         </div>
     </div>
 </template>
@@ -213,7 +218,7 @@ export default {
             selectedImage: null,
             imagePreviewUrl: null,
             // Disclaimers and safety
-            standardDisclaimer: '\n\n---\n\n*💡 **Please Note:** This information is for educational purposes only and does not constitute medical advice. For diagnosis or treatment of skin conditions, please consult a qualified dermatologist or healthcare provider.*',
+            standardDisclaimer: '\n\n---\n\n***Please Note:** This information is for educational purposes only and does not constitute medical advice. For diagnosis or treatment of skin conditions, please consult a qualified dermatologist or healthcare provider.*',
             urgentCareKeywords: ['pain', 'severe', 'infection', 'pus', 'bleeding', 'swelling', 'emergency', 'urgent', 'spreading', 'fever', 'allergic reaction', 'burning', 'blistering']
         }
     },
@@ -403,12 +408,10 @@ export default {
 
                     console.log('✅ Received image analysis response:', response.data)
 
-                    // Add appropriate disclaimers
+                    // Add urgent care warning if needed
                     let responseContent = response.data.response
                     if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
                         responseContent += this.getUrgentCareWarning()
-                    } else {
-                        responseContent += this.standardDisclaimer
                     }
 
                     this.messages.push({
@@ -436,12 +439,10 @@ export default {
                         console.log('📖 Sources used:', response.data.sources)
                     }
 
-                    // Add appropriate disclaimers
+                    // Add urgent care warning if needed
                     let responseContent = response.data.response
                     if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
                         responseContent += this.getUrgentCareWarning()
-                    } else {
-                        responseContent += this.standardDisclaimer
                     }
 
                     this.messages.push({
@@ -471,11 +472,9 @@ export default {
                 console.log('⚠️ Falling back to local response')
                 let response = this.generateContextualResponse(userMessage)
 
-                // Add appropriate disclaimers to fallback response
+                // Add urgent care warning if needed for fallback response
                 if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(response)) {
                     response += this.getUrgentCareWarning()
-                } else {
-                    response += this.standardDisclaimer
                 }
 
                 this.messages.push({
@@ -1290,21 +1289,31 @@ What would you like to know more about?`
 }
 
 .capabilities-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
     margin-bottom: 2rem;
 }
 
 .capability-item {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 0.5rem;
-    padding: 0.75rem;
+    padding: 1rem;
     background: var(--primary-50);
     border-radius: 8px;
     color: var(--primary-700);
-    font-weight: 500;
+}
+
+.capability-item strong {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.capability-item p {
+    margin: 0;
+    color: var(--primary-600);
+    font-size: 0.875rem;
 }
 
 .sample-questions {
@@ -1737,6 +1746,15 @@ What would you like to know more about?`
     animation: spin 0.8s linear infinite;
 }
 
+.input-disclaimer {
+    max-width: 1200px;
+    margin: 0.5rem auto 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--primary-800);
+    padding: 0 1rem;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -1796,12 +1814,13 @@ What would you like to know more about?`
         max-width: 85%;
     }
 
-    .capabilities-grid {
-        grid-template-columns: 1fr;
-    }
-
     .chat-input-container {
         padding: 1rem;
+    }
+
+    .input-disclaimer {
+        font-size: 0.7rem;
+        margin-top: 0.25rem;
     }
 
     .chat-actions {
