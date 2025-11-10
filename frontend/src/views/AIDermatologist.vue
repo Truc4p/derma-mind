@@ -68,7 +68,7 @@
 
                     <!-- Sample Questions by Category -->
                     <div class="sample-questions-section">
-                        <h2>Explore Topics</h2>
+                        <h2>Explore Sample Topics</h2>
                         <p class="section-description">Select a category to explore sample questions</p>
                         
                         <div class="category-container">
