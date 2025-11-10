@@ -69,14 +69,17 @@
                     <!-- Sample Questions by Category -->
                     <div class="sample-questions-section">
                         <h2>Explore Topics</h2>
-                        <p class="section-description">Select a question to start learning about dermatology and skincare</p>
+                        <p class="section-description">Select a category to explore sample questions</p>
                         
                         <div class="category-container">
                             <!-- Category 1 -->
-                            <div class="question-category">
-                                <h3 class="category-title">🧬 1. Fundamentals of Cosmetic Dermatology</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 1 }">
+                                <div class="category-header" @click="toggleCategory(1)">
+                                    <h3 class="category-title">1. Fundamentals of Cosmetic Dermatology</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 1 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Core principles, skin structure, and classification systems.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 1" class="questions-list">
                                     <button @click="askSampleQuestion('What are the different types of chemical peels and how do they work?')" class="sample-question-btn">What are the different types of chemical peels and how do they work?</button>
                                     <button @click="askSampleQuestion('What is the difference between superficial, medium, and deep chemical peels?')" class="sample-question-btn">What is the difference between superficial, medium, and deep chemical peels?</button>
                                     <button @click="askSampleQuestion('What is the histology of the skin and how does it relate to aging?')" class="sample-question-btn">What is the histology of the skin and how does it relate to aging?</button>
@@ -89,10 +92,13 @@
                             </div>
 
                             <!-- Category 2 -->
-                            <div class="question-category">
-                                <h3 class="category-title">💧 2. Skincare Science & Active Ingredients</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 2 }">
+                                <div class="category-header" @click="toggleCategory(2)">
+                                    <h3 class="category-title">2. Skincare Science & Active Ingredients</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 2 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Focused on ingredients, mechanisms, and interactions.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 2" class="questions-list">
                                     <button @click="askSampleQuestion('What ingredients should I look for in an anti-aging serum?')" class="sample-question-btn">What ingredients should I look for in an anti-aging serum?</button>
                                     <button @click="askSampleQuestion('How does retinol work and what are the best practices for using it?')" class="sample-question-btn">How does retinol work and what are the best practices for using it?</button>
                                     <button @click="askSampleQuestion('What is the difference between chemical and physical sunscreens?')" class="sample-question-btn">What is the difference between chemical and physical sunscreens?</button>
@@ -108,10 +114,13 @@
                             </div>
 
                             <!-- Category 3 -->
-                            <div class="question-category">
-                                <h3 class="category-title">⚗️ 3. Chemical Peels & Exfoliative Procedures</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 3 }">
+                                <div class="category-header" @click="toggleCategory(3)">
+                                    <h3 class="category-title">3. Chemical Peels & Exfoliative Procedures</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 3 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Mechanisms, preparation, safety, and complications.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 3" class="questions-list">
                                     <button @click="askSampleQuestion('How should I prepare my skin before getting a chemical peel?')" class="sample-question-btn">How should I prepare my skin before getting a chemical peel?</button>
                                     <button @click="askSampleQuestion('What are the potential side effects and complications of chemical peels?')" class="sample-question-btn">What are the potential side effects and complications of chemical peels?</button>
                                     <button @click="askSampleQuestion('Can you explain the mechanism of action of glycolic acid peels?')" class="sample-question-btn">Can you explain the mechanism of action of glycolic acid peels?</button>
@@ -122,10 +131,13 @@
                             </div>
 
                             <!-- Category 4 -->
-                            <div class="question-category">
-                                <h3 class="category-title">💡 4. Energy-Based and Aesthetic Procedures</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 4 }">
+                                <div class="category-header" @click="toggleCategory(4)">
+                                    <h3 class="category-title">4. Energy-Based and Aesthetic Procedures</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 4 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Lasers, radiofrequency, microneedling, fillers, and related techniques.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 4" class="questions-list">
                                     <button @click="askSampleQuestion('What types of lasers are used for hair removal and how do they work?')" class="sample-question-btn">What types of lasers are used for hair removal and how do they work?</button>
                                     <button @click="askSampleQuestion('Can you explain fractional CO₂ laser resurfacing?')" class="sample-question-btn">Can you explain fractional CO₂ laser resurfacing?</button>
                                     <button @click="askSampleQuestion('What is IPL therapy used for?')" class="sample-question-btn">What is IPL therapy used for?</button>
@@ -146,10 +158,13 @@
                             </div>
 
                             <!-- Category 5 -->
-                            <div class="question-category">
-                                <h3 class="category-title">🧴 5. Cosmetics, Cosmeceuticals, and Skin Reactions</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 5 }">
+                                <div class="category-header" @click="toggleCategory(5)">
+                                    <h3 class="category-title">5. Cosmetics, Cosmeceuticals, and Skin Reactions</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 5 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Product classification, sensitivities, and ingredient safety.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 5" class="questions-list">
                                     <button @click="askSampleQuestion('What is the difference between cosmetics and cosmeceuticals?')" class="sample-question-btn">What is the difference between cosmetics and cosmeceuticals?</button>
                                     <button @click="askSampleQuestion('What causes contact dermatitis from cosmetics?')" class="sample-question-btn">What causes contact dermatitis from cosmetics?</button>
                                     <button @click="askSampleQuestion('How can I identify if I am allergic to a skincare ingredient?')" class="sample-question-btn">How can I identify if I'm allergic to a skincare ingredient?</button>
@@ -163,10 +178,13 @@
                             </div>
 
                             <!-- Category 6 -->
-                            <div class="question-category">
-                                <h3 class="category-title">🧠 6. Pathophysiology & Treatment of Skin Conditions</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 6 }">
+                                <div class="category-header" @click="toggleCategory(6)">
+                                    <h3 class="category-title">6. Pathophysiology & Treatment of Skin Conditions</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 6 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Acne, rosacea, melasma, dermatitis, pigmentation, and related disorders.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 6" class="questions-list">
                                     <button @click="askSampleQuestion('What is a comprehensive treatment plan for rosacea?')" class="sample-question-btn">What is a comprehensive treatment plan for rosacea?</button>
                                     <button @click="askSampleQuestion('How should melasma be treated in different skin types?')" class="sample-question-btn">How should melasma be treated in different skin types?</button>
                                     <button @click="askSampleQuestion('What are the best approaches for treating adult acne?')" class="sample-question-btn">What are the best approaches for treating adult acne?</button>
@@ -179,10 +197,13 @@
                             </div>
 
                             <!-- Category 7 -->
-                            <div class="question-category">
-                                <h3 class="category-title">🌿 7. Holistic & Preventive Dermatology</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 7 }">
+                                <div class="category-header" @click="toggleCategory(7)">
+                                    <h3 class="category-title">7. Holistic & Preventive Dermatology</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 7 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Lifestyle, nutrition, environment, and long-term care.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 7" class="questions-list">
                                     <button @click="askSampleQuestion('How does lifestyle affect skin aging and appearance?')" class="sample-question-btn">How does lifestyle affect skin aging and appearance?</button>
                                     <button @click="askSampleQuestion('What role does nutrition play in skin health?')" class="sample-question-btn">What role does nutrition play in skin health?</button>
                                     <button @click="askSampleQuestion('How does sleep affect skin regeneration?')" class="sample-question-btn">How does sleep affect skin regeneration?</button>
@@ -195,10 +216,13 @@
                             </div>
 
                             <!-- Category 8 -->
-                            <div class="question-category">
-                                <h3 class="category-title">⚡ 8. Advanced Science & Mechanisms of Aging</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 8 }">
+                                <div class="category-header" @click="toggleCategory(8)">
+                                    <h3 class="category-title">8. Advanced Science & Mechanisms of Aging</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 8 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Cellular and molecular dermatology concepts.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 8" class="questions-list">
                                     <button @click="askSampleQuestion('What is the molecular mechanism of collagen degradation in aging skin?')" class="sample-question-btn">What is the molecular mechanism of collagen degradation in aging skin?</button>
                                     <button @click="askSampleQuestion('How do different wavelengths of light affect the skin?')" class="sample-question-btn">How do different wavelengths of light affect the skin?</button>
                                     <button @click="askSampleQuestion('What is the role of matrix metalloproteinases (MMPs) in skin aging?')" class="sample-question-btn">What is the role of matrix metalloproteinases (MMPs) in skin aging?</button>
@@ -210,10 +234,13 @@
                             </div>
 
                             <!-- Category 9 -->
-                            <div class="question-category">
-                                <h3 class="category-title">💥 9. Clinical Scenarios & Integrated Care</h3>
+                            <div class="question-category" :class="{ 'expanded': expandedCategory === 9 }">
+                                <div class="category-header" @click="toggleCategory(9)">
+                                    <h3 class="category-title">9. Clinical Scenarios & Integrated Care</h3>
+                                    <span class="toggle-icon">{{ expandedCategory === 9 ? '−' : '+' }}</span>
+                                </div>
                                 <p class="category-description">Case-based, multidisciplinary, and personalized treatment planning.</p>
-                                <div class="questions-list">
+                                <div v-if="expandedCategory === 9" class="questions-list">
                                     <button @click="askSampleQuestion('I have acne scars, hyperpigmentation, and fine lines. What comprehensive treatment approach would you recommend?')" class="sample-question-btn">I have acne scars, hyperpigmentation, and fine lines. What comprehensive treatment approach would you recommend?</button>
                                     <button @click="askSampleQuestion('How do I combine professional treatments (like lasers and peels) with at-home skincare?')" class="sample-question-btn">How do I combine professional treatments (like lasers and peels) with at-home skincare?</button>
                                     <button @click="askSampleQuestion('What is the best protocol for treating photoaging in Asian skin?')" class="sample-question-btn">What is the best protocol for treating photoaging in Asian skin?</button>
@@ -344,7 +371,9 @@ export default {
             selectedImage: null,
             imagePreviewUrl: null,
             // Disclaimers and safety
-            urgentCareKeywords: ['pain', 'severe', 'infection', 'pus', 'bleeding', 'swelling', 'emergency', 'urgent', 'spreading', 'fever', 'allergic reaction', 'burning', 'blistering']
+            urgentCareKeywords: ['pain', 'severe', 'infection', 'pus', 'bleeding', 'swelling', 'emergency', 'urgent', 'spreading', 'fever', 'allergic reaction', 'burning', 'blistering'],
+            // Sample questions categories
+            expandedCategory: null
         }
     },
 
@@ -824,6 +853,14 @@ What would you like to know more about?`
             this.sendMessage()
         },
 
+        toggleCategory(categoryId) {
+            if (this.expandedCategory === categoryId) {
+                this.expandedCategory = null
+            } else {
+                this.expandedCategory = categoryId
+            }
+        },
+
         formatMessage(content) {
             // Use marked to parse markdown
             try {
@@ -1301,7 +1338,7 @@ What would you like to know more about?`
     background: white;
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     max-width: 700px;
 }
 
@@ -1311,7 +1348,7 @@ What would you like to know more about?`
     background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
     border-radius: 12px;
     margin-bottom: 1.5rem;
-    border: 2px solid var(--primary-200);
+    border: 1px solid var(--primary-200);
 }
 
 .welcome-header h1 {
@@ -1389,8 +1426,6 @@ What would you like to know more about?`
 /* Sample Questions Section */
 .sample-questions-section {
     margin-top: 2rem;
-    border-top: 2px solid var(--primary-200);
-    padding-top: 2rem;
 }
 
 .sample-questions-section h2 {
@@ -1419,6 +1454,7 @@ What would you like to know more about?`
     padding: 1.25rem;
     border: 1px solid var(--primary-200);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .question-category:hover {
@@ -1426,27 +1462,73 @@ What would you like to know more about?`
     border-color: var(--primary-300);
 }
 
+.question-category.expanded {
+    background: white;
+    border-color: var(--primary-400);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
 .category-title {
     color: var(--primary-800);
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 0 0 0.5rem 0;
+    margin: 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex: 1;
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--primary-600);
+    transition: transform 0.3s ease;
+    min-width: 24px;
+    text-align: center;
+}
+
+.question-category.expanded .toggle-icon {
+    transform: rotate(180deg);
 }
 
 .category-description {
     color: var(--primary-600);
     font-size: 0.875rem;
-    margin: 0 0 1rem 0;
+    margin: 0.5rem 0 0 0;
     font-style: italic;
+}
+
+.question-category.expanded .category-description {
+    margin-bottom: 1rem;
 }
 
 .questions-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    margin-top: 1rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .sample-question-btn {
@@ -1946,8 +2028,17 @@ What would you like to know more about?`
         padding: 1rem;
     }
 
+    .category-header {
+        gap: 0.5rem;
+    }
+
     .category-title {
         font-size: 1rem;
+    }
+
+    .toggle-icon {
+        font-size: 1.25rem;
+        min-width: 20px;
     }
 
     .category-description {
