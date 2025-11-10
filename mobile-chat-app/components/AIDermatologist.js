@@ -492,7 +492,7 @@ What specific concerns do you have with your sensitive skin?`;
 - Be patient (6-8 weeks for results)
 - Avoid touching your face
 - Change pillowcases regularly
-- Consider seeing a dermatologist for severe acne
+- Consider seeing a dermatologist for persistent acne concerns
 
 Would you like specific product recommendations or have questions about acne scarring?`;
     }

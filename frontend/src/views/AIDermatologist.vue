@@ -40,21 +40,6 @@
         <!-- Overlay for mobile -->
         <div v-if="sidebarOpen" @click="toggleSidebar" class="sidebar-overlay"></div>
 
-        <!-- Medical Disclaimer Banner -->
-        <div class="disclaimer-banner">
-            <div class="disclaimer-content">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <span><strong>Medical Disclaimer:</strong> This AI provides educational skincare information only, not
-                    medical diagnosis or treatment. Always consult a qualified dermatologist for medical
-                    concerns.</span>
-            </div>
-        </div>
-
         <!-- Chat Container -->
         <div class="chat-container" ref="chatContainer">
             <!-- Welcome Message -->
@@ -67,7 +52,7 @@
 
                     <!-- Important Disclaimer -->
                     <div class="welcome-disclaimer">
-                        <h3>⚠️ Important Notice</h3>
+                        <h3>Important Notice</h3>
                         <p>This AI assistant provides <strong>educational information and general skincare guidance
                                 only</strong>. It does not:</p>
                         <ul>
@@ -81,23 +66,164 @@
                         </p>
                     </div>
 
-                    <h2>What I Can Help With</h2>
-                    <div class="capabilities-grid">
-                        <div class="capability-item">
-                            <strong>Skin Analysis</strong>
-                            <p>Upload images for personalized skincare insights</p>
-                        </div>
-                        <div class="capability-item">
-                            <strong>Product Advice</strong>
-                            <p>Get recommendations for your skin type</p>
-                        </div>
-                        <div class="capability-item">
-                            <strong>Ingredient Education</strong>
-                            <p>Learn about skincare ingredients and their benefits</p>
-                        </div>
-                        <div class="capability-item">
-                            <strong>Routine Building</strong>
-                            <p>Create customized skincare routines</p>
+                    <!-- Sample Questions by Category -->
+                    <div class="sample-questions-section">
+                        <h2>Explore Topics</h2>
+                        <p class="section-description">Select a question to start learning about dermatology and skincare</p>
+                        
+                        <div class="category-container">
+                            <!-- Category 1 -->
+                            <div class="question-category">
+                                <h3 class="category-title">🧬 1. Fundamentals of Cosmetic Dermatology</h3>
+                                <p class="category-description">Core principles, skin structure, and classification systems.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What are the different types of chemical peels and how do they work?')" class="sample-question-btn">What are the different types of chemical peels and how do they work?</button>
+                                    <button @click="askSampleQuestion('What is the difference between superficial, medium, and deep chemical peels?')" class="sample-question-btn">What is the difference between superficial, medium, and deep chemical peels?</button>
+                                    <button @click="askSampleQuestion('What is the histology of the skin and how does it relate to aging?')" class="sample-question-btn">What is the histology of the skin and how does it relate to aging?</button>
+                                    <button @click="askSampleQuestion('How do different ethnicities experience skin aging differently?')" class="sample-question-btn">How do different ethnicities experience skin aging differently?</button>
+                                    <button @click="askSampleQuestion('What is the Fitzpatrick skin type classification and why is it important?')" class="sample-question-btn">What is the Fitzpatrick skin type classification and why is it important?</button>
+                                    <button @click="askSampleQuestion('How do dermatologists assess skin type and condition?')" class="sample-question-btn">How do dermatologists assess skin type and condition?</button>
+                                    <button @click="askSampleQuestion('What is the skin barrier function and why is it important?')" class="sample-question-btn">What is the skin barrier function and why is it important?</button>
+                                    <button @click="askSampleQuestion('What factors contribute to premature skin aging?')" class="sample-question-btn">What factors contribute to premature skin aging?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 2 -->
+                            <div class="question-category">
+                                <h3 class="category-title">💧 2. Skincare Science & Active Ingredients</h3>
+                                <p class="category-description">Focused on ingredients, mechanisms, and interactions.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What ingredients should I look for in an anti-aging serum?')" class="sample-question-btn">What ingredients should I look for in an anti-aging serum?</button>
+                                    <button @click="askSampleQuestion('How does retinol work and what are the best practices for using it?')" class="sample-question-btn">How does retinol work and what are the best practices for using it?</button>
+                                    <button @click="askSampleQuestion('What is the difference between chemical and physical sunscreens?')" class="sample-question-btn">What is the difference between chemical and physical sunscreens?</button>
+                                    <button @click="askSampleQuestion('Can you explain what peptides do in skincare products?')" class="sample-question-btn">Can you explain what peptides do in skincare products?</button>
+                                    <button @click="askSampleQuestion('How does vitamin C benefit the skin and how should it be formulated?')" class="sample-question-btn">How does vitamin C benefit the skin and how should it be formulated?</button>
+                                    <button @click="askSampleQuestion('What concentration of niacinamide is most effective?')" class="sample-question-btn">What concentration of niacinamide is most effective?</button>
+                                    <button @click="askSampleQuestion('Can you explain the benefits of hyaluronic acid?')" class="sample-question-btn">Can you explain the benefits of hyaluronic acid?</button>
+                                    <button @click="askSampleQuestion('What are the benefits of ceramides for the skin barrier?')" class="sample-question-btn">What are the benefits of ceramides for the skin barrier?</button>
+                                    <button @click="askSampleQuestion('Can I use retinol and vitamin C together?')" class="sample-question-btn">Can I use retinol and vitamin C together?</button>
+                                    <button @click="askSampleQuestion('What ingredients should not be mixed in a skincare routine?')" class="sample-question-btn">What ingredients should not be mixed in a skincare routine?</button>
+                                    <button @click="askSampleQuestion('How do antioxidants protect the skin from free radical damage?')" class="sample-question-btn">How do antioxidants protect the skin from free radical damage?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 3 -->
+                            <div class="question-category">
+                                <h3 class="category-title">⚗️ 3. Chemical Peels & Exfoliative Procedures</h3>
+                                <p class="category-description">Mechanisms, preparation, safety, and complications.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('How should I prepare my skin before getting a chemical peel?')" class="sample-question-btn">How should I prepare my skin before getting a chemical peel?</button>
+                                    <button @click="askSampleQuestion('What are the potential side effects and complications of chemical peels?')" class="sample-question-btn">What are the potential side effects and complications of chemical peels?</button>
+                                    <button @click="askSampleQuestion('Can you explain the mechanism of action of glycolic acid peels?')" class="sample-question-btn">Can you explain the mechanism of action of glycolic acid peels?</button>
+                                    <button @click="askSampleQuestion('What are the contraindications for TCA peels?')" class="sample-question-btn">What are the contraindications for TCA peels?</button>
+                                    <button @click="askSampleQuestion('How do you treat post-inflammatory hyperpigmentation after a peel?')" class="sample-question-btn">How do you treat post-inflammatory hyperpigmentation after a peel?</button>
+                                    <button @click="askSampleQuestion('How should I care for my skin after a medium-depth chemical peel?')" class="sample-question-btn">How should I care for my skin after a medium-depth chemical peel?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 4 -->
+                            <div class="question-category">
+                                <h3 class="category-title">💡 4. Energy-Based and Aesthetic Procedures</h3>
+                                <p class="category-description">Lasers, radiofrequency, microneedling, fillers, and related techniques.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What types of lasers are used for hair removal and how do they work?')" class="sample-question-btn">What types of lasers are used for hair removal and how do they work?</button>
+                                    <button @click="askSampleQuestion('Can you explain fractional CO₂ laser resurfacing?')" class="sample-question-btn">Can you explain fractional CO₂ laser resurfacing?</button>
+                                    <button @click="askSampleQuestion('What is IPL therapy used for?')" class="sample-question-btn">What is IPL therapy used for?</button>
+                                    <button @click="askSampleQuestion('How do lasers treat pigmentation issues like melasma?')" class="sample-question-btn">How do lasers treat pigmentation issues like melasma?</button>
+                                    <button @click="askSampleQuestion('What are the risks of laser treatments for darker skin tones?')" class="sample-question-btn">What are the risks of laser treatments for darker skin tones?</button>
+                                    <button @click="askSampleQuestion('How do I choose the right laser treatment for acne scars?')" class="sample-question-btn">How do I choose the right laser treatment for acne scars?</button>
+                                    <button @click="askSampleQuestion('What is the recovery time for ablative vs non-ablative laser treatments?')" class="sample-question-btn">What is the recovery time for ablative vs non-ablative laser treatments?</button>
+                                    <button @click="askSampleQuestion('Can lasers treat vascular lesions like spider veins?')" class="sample-question-btn">Can lasers treat vascular lesions like spider veins?</button>
+                                    <button @click="askSampleQuestion('What is microdermabrasion and how does it benefit the skin?')" class="sample-question-btn">What is microdermabrasion and how does it benefit the skin?</button>
+                                    <button @click="askSampleQuestion('How does microneedling stimulate collagen production?')" class="sample-question-btn">How does microneedling stimulate collagen production?</button>
+                                    <button @click="askSampleQuestion('What are dermal fillers and what areas can they be used on?')" class="sample-question-btn">What are dermal fillers and what areas can they be used on?</button>
+                                    <button @click="askSampleQuestion('What is the difference between Botox and fillers?')" class="sample-question-btn">What is the difference between Botox and fillers?</button>
+                                    <button @click="askSampleQuestion('What is thread lifting and how long do results last?')" class="sample-question-btn">What is thread lifting and how long do results last?</button>
+                                    <button @click="askSampleQuestion('How does radiofrequency treatment work for skin rejuvenation?')" class="sample-question-btn">How does radiofrequency treatment work for skin rejuvenation?</button>
+                                    <button @click="askSampleQuestion('What are the principles of facial volume restoration?')" class="sample-question-btn">What are the principles of facial volume restoration?</button>
+                                    <button @click="askSampleQuestion('How do you assess and treat facial asymmetry?')" class="sample-question-btn">How do you assess and treat facial asymmetry?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 5 -->
+                            <div class="question-category">
+                                <h3 class="category-title">🧴 5. Cosmetics, Cosmeceuticals, and Skin Reactions</h3>
+                                <p class="category-description">Product classification, sensitivities, and ingredient safety.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What is the difference between cosmetics and cosmeceuticals?')" class="sample-question-btn">What is the difference between cosmetics and cosmeceuticals?</button>
+                                    <button @click="askSampleQuestion('What causes contact dermatitis from cosmetics?')" class="sample-question-btn">What causes contact dermatitis from cosmetics?</button>
+                                    <button @click="askSampleQuestion('How can I identify if I am allergic to a skincare ingredient?')" class="sample-question-btn">How can I identify if I'm allergic to a skincare ingredient?</button>
+                                    <button @click="askSampleQuestion('What ingredients are most likely to cause skin sensitization?')" class="sample-question-btn">What ingredients are most likely to cause skin sensitization?</button>
+                                    <button @click="askSampleQuestion('How do I treat cosmetic-induced acne (acne cosmetica)?')" class="sample-question-btn">How do I treat cosmetic-induced acne (acne cosmetica)?</button>
+                                    <button @click="askSampleQuestion('What should I do if my skin becomes red and irritated after using a new product?')" class="sample-question-btn">What should I do if my skin becomes red and irritated after using a new product?</button>
+                                    <button @click="askSampleQuestion('How can I rebuild my damaged skin barrier?')" class="sample-question-btn">How can I rebuild my damaged skin barrier?</button>
+                                    <button @click="askSampleQuestion('What causes perioral dermatitis and how is it treated?')" class="sample-question-btn">What causes perioral dermatitis and how is it treated?</button>
+                                    <button @click="askSampleQuestion('Can makeup cause or worsen skin conditions?')" class="sample-question-btn">Can makeup cause or worsen skin conditions?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 6 -->
+                            <div class="question-category">
+                                <h3 class="category-title">🧠 6. Pathophysiology & Treatment of Skin Conditions</h3>
+                                <p class="category-description">Acne, rosacea, melasma, dermatitis, pigmentation, and related disorders.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What is a comprehensive treatment plan for rosacea?')" class="sample-question-btn">What is a comprehensive treatment plan for rosacea?</button>
+                                    <button @click="askSampleQuestion('How should melasma be treated in different skin types?')" class="sample-question-btn">How should melasma be treated in different skin types?</button>
+                                    <button @click="askSampleQuestion('What are the best approaches for treating adult acne?')" class="sample-question-btn">What are the best approaches for treating adult acne?</button>
+                                    <button @click="askSampleQuestion('How does hormonal acne differ from teenage acne?')" class="sample-question-btn">How does hormonal acne differ from teenage acne?</button>
+                                    <button @click="askSampleQuestion('What are the best treatments for hyperpigmentation?')" class="sample-question-btn">What are the best treatments for hyperpigmentation?</button>
+                                    <button @click="askSampleQuestion('How do you treat keratosis pilaris effectively?')" class="sample-question-btn">How do you treat keratosis pilaris effectively?</button>
+                                    <button @click="askSampleQuestion('What causes seborrheic dermatitis and how is it managed?')" class="sample-question-btn">What causes seborrheic dermatitis and how is it managed?</button>
+                                    <button @click="askSampleQuestion('Can diet affect skin conditions like acne and eczema?')" class="sample-question-btn">Can diet affect skin conditions like acne and eczema?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 7 -->
+                            <div class="question-category">
+                                <h3 class="category-title">🌿 7. Holistic & Preventive Dermatology</h3>
+                                <p class="category-description">Lifestyle, nutrition, environment, and long-term care.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('How does lifestyle affect skin aging and appearance?')" class="sample-question-btn">How does lifestyle affect skin aging and appearance?</button>
+                                    <button @click="askSampleQuestion('What role does nutrition play in skin health?')" class="sample-question-btn">What role does nutrition play in skin health?</button>
+                                    <button @click="askSampleQuestion('How does sleep affect skin regeneration?')" class="sample-question-btn">How does sleep affect skin regeneration?</button>
+                                    <button @click="askSampleQuestion('What are the effects of stress on skin conditions?')" class="sample-question-btn">What are the effects of stress on skin conditions?</button>
+                                    <button @click="askSampleQuestion('How can I prevent premature aging of my skin?')" class="sample-question-btn">How can I prevent premature aging of my skin?</button>
+                                    <button @click="askSampleQuestion('What are the most important steps in a daily skincare routine?')" class="sample-question-btn">What are the most important steps in a daily skincare routine?</button>
+                                    <button @click="askSampleQuestion('What is a good anti-aging skincare routine for someone in their 30s?')" class="sample-question-btn">What is a good anti-aging skincare routine for someone in their 30s?</button>
+                                    <button @click="askSampleQuestion('How does pollution affect skin health and how can I protect against it?')" class="sample-question-btn">How does pollution affect skin health and how can I protect against it?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 8 -->
+                            <div class="question-category">
+                                <h3 class="category-title">⚡ 8. Advanced Science & Mechanisms of Aging</h3>
+                                <p class="category-description">Cellular and molecular dermatology concepts.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('What is the molecular mechanism of collagen degradation in aging skin?')" class="sample-question-btn">What is the molecular mechanism of collagen degradation in aging skin?</button>
+                                    <button @click="askSampleQuestion('How do different wavelengths of light affect the skin?')" class="sample-question-btn">How do different wavelengths of light affect the skin?</button>
+                                    <button @click="askSampleQuestion('What is the role of matrix metalloproteinases (MMPs) in skin aging?')" class="sample-question-btn">What is the role of matrix metalloproteinases (MMPs) in skin aging?</button>
+                                    <button @click="askSampleQuestion('Can you explain the difference between chronological and photoaging?')" class="sample-question-btn">Can you explain the difference between chronological and photoaging?</button>
+                                    <button @click="askSampleQuestion('How do growth factors work in anti-aging skincare?')" class="sample-question-btn">How do growth factors work in anti-aging skincare?</button>
+                                    <button @click="askSampleQuestion('What is the role of the skin microbiome in skin health?')" class="sample-question-btn">What is the role of the skin microbiome in skin health?</button>
+                                    <button @click="askSampleQuestion('Can you explain what transepidermal water loss (TEWL) means?')" class="sample-question-btn">Can you explain what transepidermal water loss (TEWL) means?</button>
+                                </div>
+                            </div>
+
+                            <!-- Category 9 -->
+                            <div class="question-category">
+                                <h3 class="category-title">💥 9. Clinical Scenarios & Integrated Care</h3>
+                                <p class="category-description">Case-based, multidisciplinary, and personalized treatment planning.</p>
+                                <div class="questions-list">
+                                    <button @click="askSampleQuestion('I have acne scars, hyperpigmentation, and fine lines. What comprehensive treatment approach would you recommend?')" class="sample-question-btn">I have acne scars, hyperpigmentation, and fine lines. What comprehensive treatment approach would you recommend?</button>
+                                    <button @click="askSampleQuestion('How do I combine professional treatments (like lasers and peels) with at-home skincare?')" class="sample-question-btn">How do I combine professional treatments (like lasers and peels) with at-home skincare?</button>
+                                    <button @click="askSampleQuestion('What is the best protocol for treating photoaging in Asian skin?')" class="sample-question-btn">What is the best protocol for treating photoaging in Asian skin?</button>
+                                    <button @click="askSampleQuestion('Can you create a complete skincare routine for sensitive, acne-prone skin?')" class="sample-question-btn">Can you create a complete skincare routine for sensitive, acne-prone skin?</button>
+                                    <button @click="askSampleQuestion('I am 45 with sun damage, wrinkles, and brown spots. What treatments should I consider?')" class="sample-question-btn">I'm 45 with sun damage, wrinkles, and brown spots. What treatments should I consider?</button>
+                                    <button @click="askSampleQuestion('What is the best treatment sequence for someone wanting to address multiple concerns?')" class="sample-question-btn">What's the best treatment sequence for someone wanting to address multiple concerns?</button>
+                                    <button @click="askSampleQuestion('How long should I wait between different cosmetic procedures?')" class="sample-question-btn">How long should I wait between different cosmetic procedures?</button>
+                                    <button @click="askSampleQuestion('Can you explain the layering order for skincare products?')" class="sample-question-btn">Can you explain the layering order for skincare products?</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -623,7 +749,7 @@ What specific concerns do you have with your sensitive skin?`
 - Be patient (6-8 weeks for results)
 - Avoid touching your face
 - Change pillowcases regularly
-- Consider seeing a dermatologist for severe acne
+- Consider seeing a dermatologist for persistent acne concerns
 
 Would you like specific product recommendations or have questions about acne scarring?`
             }
@@ -1151,33 +1277,6 @@ What would you like to know more about?`
     }
 }
 
-/* Medical Disclaimer Banner */
-.disclaimer-banner {
-    background: #fff8e1;
-    padding: 0.75rem 1.5rem;
-    z-index: 100;
-}
-
-.disclaimer-content {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    color: #856404;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-.disclaimer-content svg {
-    flex-shrink: 0;
-    color: #ff9800;
-}
-
-.disclaimer-content strong {
-    color: #d97706;
-}
-
 /* Chat Container */
 .chat-container {
     flex: 1;
@@ -1202,7 +1301,7 @@ What would you like to know more about?`
     background: white;
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     max-width: 700px;
 }
 
@@ -1223,7 +1322,7 @@ What would you like to know more about?`
 }
 
 .welcome-disclaimer {
-    background: #fff8e1;
+    background: #fdf8e6;
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -1287,43 +1386,67 @@ What would you like to know more about?`
     margin-bottom: 1.5rem;
 }
 
-.capabilities-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+/* Sample Questions Section */
+.sample-questions-section {
+    margin-top: 2rem;
+    border-top: 2px solid var(--primary-200);
+    padding-top: 2rem;
 }
 
-.capability-item {
+.sample-questions-section h2 {
+    color: var(--primary-800);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.section-description {
+    text-align: center;
+    color: var(--primary-600);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.category-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.question-category {
+    background: var(--primary-50);
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid var(--primary-200);
+    transition: all 0.3s ease;
+}
+
+.question-category:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-300);
+}
+
+.category-title {
+    color: var(--primary-800);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.category-description {
+    color: var(--primary-600);
+    font-size: 0.875rem;
+    margin: 0 0 1rem 0;
+    font-style: italic;
+}
+
+.questions-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 1rem;
-    background: var(--primary-50);
-    border-radius: 8px;
-    color: var(--primary-700);
-}
-
-.capability-item strong {
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.capability-item p {
-    margin: 0;
-    color: var(--primary-600);
-    font-size: 0.875rem;
-}
-
-.sample-questions {
-    border-top: 1px solid var(--primary-200);
-    padding-top: 1.5rem;
-}
-
-.sample-title {
-    color: var(--primary-700);
-    font-weight: 600;
-    margin-bottom: 0.75rem;
 }
 
 .sample-question-btn {
@@ -1331,19 +1454,25 @@ What would you like to know more about?`
     width: 100%;
     text-align: left;
     padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    background: var(--primary-50);
+    background: white;
     border: 1px solid var(--primary-200);
     border-radius: 8px;
     color: var(--primary-700);
     cursor: pointer;
     transition: all 0.2s;
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 .sample-question-btn:hover {
     background: var(--primary-100);
-    border-color: var(--primary-300);
+    border-color: var(--primary-400);
     transform: translateX(4px);
+    color: var(--primary-800);
+}
+
+.sample-question-btn:active {
+    transform: translateX(2px);
 }
 
 /* Messages */
@@ -1773,19 +1902,6 @@ What would you like to know more about?`
 
 /* Responsive */
 @media (max-width: 768px) {
-    .disclaimer-banner {
-        padding: 0.5rem 1rem;
-    }
-
-    .disclaimer-content {
-        font-size: 0.75rem;
-        gap: 0.5rem;
-    }
-
-    .disclaimer-content svg {
-        width: 16px;
-        height: 16px;
-    }
 
     .chat-container {
         padding: 1rem;
@@ -1807,6 +1923,40 @@ What would you like to know more about?`
 
     .welcome-disclaimer h3 {
         font-size: 1rem;
+    }
+
+    .sample-questions-section {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .sample-questions-section h2 {
+        font-size: 1.25rem;
+    }
+
+    .section-description {
+        font-size: 0.875rem;
+    }
+
+    .category-container {
+        gap: 1rem;
+    }
+
+    .question-category {
+        padding: 1rem;
+    }
+
+    .category-title {
+        font-size: 1rem;
+    }
+
+    .category-description {
+        font-size: 0.8rem;
+    }
+
+    .sample-question-btn {
+        padding: 0.6rem 0.875rem;
+        font-size: 0.85rem;
     }
 
     .message-content {
