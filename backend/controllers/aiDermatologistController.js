@@ -19,12 +19,19 @@ exports.chat = async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        // Use RAG to retrieve relevant context
-        const ragResult = await vectorService.ragQuery(message, conversationHistory || []);
+        // Detect and translate the query if needed for better RAG results
+        console.log('🌍 Detecting language and translating if needed...');
+        const translationResult = await geminiService.detectAndTranslate(message);
+        const queryForRAG = translationResult.translatedText; // Use English for vector search
+        
+        console.log(`📝 Query for RAG: "${queryForRAG}"`);
 
-        // Generate response using Gemini with retrieved context
+        // Use RAG to retrieve relevant context (using translated English query)
+        const ragResult = await vectorService.ragQuery(queryForRAG, conversationHistory || []);
+
+        // Generate response using Gemini with retrieved context (original message for context)
         const result = await geminiService.generateResponseWithContext(
-            message,
+            message, // Pass original message so AI knows user's language
             ragResult.context,
             conversationHistory || []
         );
@@ -47,7 +54,9 @@ exports.chat = async (req, res) => {
             _performance: process.env.NODE_ENV === 'development' ? {
                 totalTime,
                 contextSize: ragResult.context.length,
-                chunks: ragResult.sources.length
+                chunks: ragResult.sources.length,
+                detectedLanguage: translationResult.languageName,
+                translatedQuery: translationResult.isEnglish ? null : queryForRAG
             } : undefined
         });
     } catch (error) {

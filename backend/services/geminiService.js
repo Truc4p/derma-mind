@@ -19,6 +19,15 @@ class GeminiService {
             }
         });
         
+        // Translation model for non-English queries
+        this.translationModel = genAI.getGenerativeModel({
+            model: 'gemini-2.0-flash',
+            generationConfig: {
+                temperature: 0.1, // Low temperature for accurate translation
+                maxOutputTokens: 500,
+            }
+        });
+        
         // Retry configuration for rate limiting
         this.maxRetries = 3;
         this.retryDelay = 1000; // Start with 1 second
@@ -41,6 +50,62 @@ IMPORTANT RESPONSE RULES:
 
 Always strive to be comprehensive by utilizing all available knowledge base information.
 If unsure about something not in the knowledge base, recommend consulting an in-person dermatologist for proper diagnosis.`;
+    }
+
+    /**
+     * Detect if text is in a non-English language and needs translation
+     */
+    async detectAndTranslate(text) {
+        try {
+            // Quick check: if text contains mostly ASCII characters, likely English
+            const nonAsciiRatio = (text.match(/[^\x00-\x7F]/g) || []).length / text.length;
+            
+            if (nonAsciiRatio < 0.1) {
+                // Likely English, no translation needed
+                return { isEnglish: true, originalText: text, translatedText: text, detectedLanguage: 'en' };
+            }
+            
+            console.log(`🌐 Non-English text detected (${(nonAsciiRatio * 100).toFixed(1)}% non-ASCII chars)`);
+            console.log(`📝 Original text: "${text}"`);
+            
+            // Use Gemini to detect language and translate to English
+            const prompt = `Analyze this text and respond ONLY with a JSON object (no markdown, no code blocks):
+{
+  "language": "<detected language code like 'vi', 'zh', 'ja', etc.>",
+  "languageName": "<language name like 'Vietnamese', 'Chinese', etc.>",
+  "translation": "<English translation of the text>"
+}
+
+Text to analyze: "${text}"
+
+IMPORTANT: Return ONLY the JSON object, nothing else.`;
+
+            const result = await this.translationModel.generateContent(prompt);
+            const response = await result.response;
+            let responseText = response.text().trim();
+            
+            // Remove markdown code blocks if present
+            responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+            
+            console.log('🔍 Translation API response:', responseText);
+            
+            const parsed = JSON.parse(responseText);
+            
+            console.log(`✅ Detected language: ${parsed.languageName} (${parsed.language})`);
+            console.log(`🔄 English translation: "${parsed.translation}"`);
+            
+            return {
+                isEnglish: false,
+                originalText: text,
+                translatedText: parsed.translation,
+                detectedLanguage: parsed.language,
+                languageName: parsed.languageName
+            };
+        } catch (error) {
+            console.error('⚠️ Translation failed, using original text:', error.message);
+            // Fallback: use original text if translation fails
+            return { isEnglish: true, originalText: text, translatedText: text, detectedLanguage: 'unknown' };
+        }
     }
 
     /**
@@ -82,8 +147,18 @@ If unsure about something not in the knowledge base, recommend consulting an in-
         try {
             console.log(`📚 Using RAG context for query: "${userMessage}"`);
             
+            // Detect language and translate if needed
+            const translationResult = await this.detectAndTranslate(userMessage);
+            const queryForRAG = translationResult.translatedText; // Use translated text for better RAG results
+            const shouldTranslateResponse = !translationResult.isEnglish;
+            
             // Build prompt with RAG context
             let fullPrompt = this.systemContext;
+            
+            // Add language instruction if user is using non-English
+            if (shouldTranslateResponse) {
+                fullPrompt += `\n\nIMPORTANT: The user is communicating in ${translationResult.languageName}. You MUST respond in ${translationResult.languageName}, not English.`;
+            }
             
             // Add RAG context
             fullPrompt += '\n\n=== RELEVANT KNOWLEDGE FROM DERMATOLOGY TEXTBOOK ===\n';
