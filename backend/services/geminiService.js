@@ -10,7 +10,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 class GeminiService {
     constructor() {
         this.model = genAI.getGenerativeModel({ 
-            model: 'gemini-2.0-flash-exp', // Using faster experimental model
+            model: 'gemini-2.0-flash', // Using faster experimental model
             generationConfig: {
                 temperature: 0.7,  // Slightly reduced for faster, more focused responses
                 topP: 0.9,
@@ -188,7 +188,7 @@ CITATION REQUIREMENT (Numbered Reference Style):
             
             // Use Gemini's multimodal model for transcription
             const model = genAI.getGenerativeModel({ 
-                model: 'gemini-2.0-flash-exp' // Supports audio input
+                model: 'gemini-2.0-flash' // Supports audio input
             });
             
             const result = await model.generateContent([
@@ -291,7 +291,7 @@ IMPORTANT DISCLAIMERS:
             
             // Use Gemini's vision model for image analysis
             const visionModel = genAI.getGenerativeModel({ 
-                model: 'gemini-2.0-flash-exp', // Supports vision input
+                model: 'gemini-2.0-flash', // Supports vision input
                 generationConfig: {
                     temperature: 0.7,
                     topP: 0.9,

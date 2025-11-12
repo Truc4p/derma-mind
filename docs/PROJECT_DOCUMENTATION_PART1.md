@@ -143,9 +143,10 @@ mobile-chat-app/
   - Chunk overlap: 300 tokens
 
 #### Additional Services
-- **Google Cloud Text-to-Speech** (@google-cloud/speech v7.2.1)
+- **Google Text-to-Speech (gTTS)** (node-gtts v2.0.2)
   - Voice output for AI responses
   - MP3 audio generation
+  - Free Google Translate TTS API
 
 #### Security & Authentication
 - **bcryptjs** (v3.0.2) - Password hashing (12 salt rounds)

@@ -554,8 +554,8 @@ GEMINI_API_KEY=your-gemini-api-key
 QDRANT_URL=http://localhost:6333
 QDRANT_API_KEY=optional-api-key
 
-# Google Cloud (for TTS)
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
+# Note: TTS uses free node-gtts library (Google Translate TTS)
+# No additional credentials required for TTS
 ```
 
 #### 11.1.2 Frontend Environment Variables

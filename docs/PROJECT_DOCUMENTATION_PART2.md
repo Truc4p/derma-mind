@@ -227,7 +227,7 @@ async ragQuery(userQuery, conversationHistory = []) {
 **Model Configuration:**
 ```javascript
 {
-  model: 'gemini-2.0-flash-exp',
+  model: 'gemini-2.0-flash',
   generationConfig: {
     temperature: 0.7,      // Balanced creativity/accuracy
     topP: 0.9,            // Nucleus sampling
@@ -363,7 +363,7 @@ async analyzeSkinImage(imageFilePath, userMessage, ragContext, conversationHisto
   
   // 3. Use Gemini Vision model
   const visionModel = getGenerativeModel({ 
-    model: 'gemini-2.0-flash-exp'
+    model: 'gemini-2.0-flash'
   });
   
   // 4. Generate content with image and prompt
@@ -395,7 +395,7 @@ async transcribeAudio(audioFilePath) {
   const mimeType = getMimeType(audioFilePath);
   
   // 2. Use Gemini multimodal for transcription
-  const model = getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+  const model = getGenerativeModel({ model: 'gemini-2.0-flash' });
   
   // 3. Generate transcription
   const result = await model.generateContent([
