@@ -57,28 +57,23 @@ If unsure about something not in the knowledge base, recommend consulting an in-
      */
     async detectAndTranslate(text) {
         try {
-            // Quick check: if text contains mostly ASCII characters, likely English
-            const nonAsciiRatio = (text.match(/[^\x00-\x7F]/g) || []).length / text.length;
+            console.log(`🌐 Detecting language for text: "${text}"`);
             
-            if (nonAsciiRatio < 0.1) {
-                // Likely English, no translation needed
-                return { isEnglish: true, originalText: text, translatedText: text, detectedLanguage: 'en' };
-            }
-            
-            console.log(`🌐 Non-English text detected (${(nonAsciiRatio * 100).toFixed(1)}% non-ASCII chars)`);
-            console.log(`📝 Original text: "${text}"`);
-            
-            // Use Gemini to detect language and translate to English
+            // Always use Gemini for language detection (more reliable than ASCII check)
+            // This handles German, French, Spanish which use mostly ASCII characters
             const prompt = `Analyze this text and respond ONLY with a JSON object (no markdown, no code blocks):
 {
-  "language": "<detected language code like 'vi', 'zh', 'ja', etc.>",
-  "languageName": "<language name like 'Vietnamese', 'Chinese', etc.>",
-  "translation": "<English translation of the text>"
+  "language": "<detected language code like 'en', 'vi', 'de', 'zh', 'ja', 'fr', 'es', etc.>",
+  "languageName": "<language name like 'English', 'Vietnamese', 'German', 'Chinese', etc.>",
+  "translation": "<English translation of the text if not English, or same text if English>"
 }
 
 Text to analyze: "${text}"
 
-IMPORTANT: Return ONLY the JSON object, nothing else.`;
+IMPORTANT: 
+- Return ONLY the JSON object, nothing else
+- If the text is in English, set language to 'en' and translation to the same text
+- Be accurate with language detection`;
 
             const result = await this.translationModel.generateContent(prompt);
             const response = await result.response;
@@ -91,11 +86,17 @@ IMPORTANT: Return ONLY the JSON object, nothing else.`;
             
             const parsed = JSON.parse(responseText);
             
+            const isEnglish = parsed.language === 'en' || parsed.language === 'eng' || parsed.language.toLowerCase() === 'english';
+            
             console.log(`✅ Detected language: ${parsed.languageName} (${parsed.language})`);
-            console.log(`🔄 English translation: "${parsed.translation}"`);
+            if (!isEnglish) {
+                console.log(`🔄 English translation: "${parsed.translation}"`);
+            } else {
+                console.log(`✅ Text is already in English, no translation needed`);
+            }
             
             return {
-                isEnglish: false,
+                isEnglish: isEnglish,
                 originalText: text,
                 translatedText: parsed.translation,
                 detectedLanguage: parsed.language,
