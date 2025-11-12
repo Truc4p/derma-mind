@@ -1,11 +1,51 @@
-const gtts = require('node-gtts')('en');
+const gttsFactory = require('node-gtts');
 const fs = require('fs').promises;
 const path = require('path');
 
 class TTSService {
     constructor() {
         console.log('✅ gTTS (Google Text-to-Speech) service initialized');
-        console.log('📢 Using free Google Translate TTS API');
+        console.log('📢 Using free Google Translate TTS API with auto language detection');
+    }
+
+    /**
+     * Detect language from text
+     * @param {string} text - Text to analyze
+     * @returns {string} - Language code (e.g., 'en', 'vi', 'zh')
+     */
+    detectLanguage(text) {
+        // Check for Vietnamese characters
+        const vietnamesePattern = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+        if (vietnamesePattern.test(text)) {
+            return 'vi';
+        }
+        
+        // Check for Chinese characters
+        const chinesePattern = /[\u4e00-\u9fa5]/;
+        if (chinesePattern.test(text)) {
+            return 'zh';
+        }
+        
+        // Check for Japanese characters (Hiragana, Katakana, Kanji)
+        const japanesePattern = /[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/;
+        if (japanesePattern.test(text)) {
+            return 'ja';
+        }
+        
+        // Check for Korean characters
+        const koreanPattern = /[\uac00-\ud7af]/;
+        if (koreanPattern.test(text)) {
+            return 'ko';
+        }
+        
+        // Check for Thai characters
+        const thaiPattern = /[\u0e00-\u0e7f]/;
+        if (thaiPattern.test(text)) {
+            return 'th';
+        }
+        
+        // Default to English for Latin scripts
+        return 'en';
     }
 
     /**
@@ -22,13 +62,20 @@ class TTSService {
             console.log('📝 [TTS SERVICE] Text length:', text.length);
             console.log('📁 [TTS SERVICE] Output path:', outputPath);
             
+            // Detect language from text
+            const detectedLang = this.detectLanguage(text);
+            console.log('🌍 [TTS SERVICE] Detected language:', detectedLang);
+            
             // Ensure output directory exists
             const outputDir = path.dirname(outputPath);
             await fs.mkdir(outputDir, { recursive: true });
             
-            console.log('🚀 [TTS SERVICE] Generating speech with gTTS (Google Translate TTS)...');
+            console.log(`🚀 [TTS SERVICE] Generating speech with gTTS (${detectedLang} voice)...`);
             
-            // Generate speech using gTTS
+            // Create gTTS instance with detected language
+            const gtts = gttsFactory(detectedLang);
+            
+            // Generate speech using gTTS with detected language
             await new Promise((resolve, reject) => {
                 gtts.save(outputPath, text, (err) => {
                     if (err) {
@@ -67,15 +114,21 @@ class TTSService {
     getSupportedLanguages() {
         return [
             { code: 'en', name: 'English' },
+            { code: 'vi', name: 'Vietnamese' },
+            { code: 'zh', name: 'Chinese' },
+            { code: 'ja', name: 'Japanese' },
+            { code: 'ko', name: 'Korean' },
+            { code: 'th', name: 'Thai' },
             { code: 'es', name: 'Spanish' },
             { code: 'fr', name: 'French' },
             { code: 'de', name: 'German' },
             { code: 'it', name: 'Italian' },
             { code: 'pt', name: 'Portuguese' },
-            { code: 'ja', name: 'Japanese' },
-            { code: 'ko', name: 'Korean' },
-            { code: 'zh', name: 'Chinese' }
-            // gTTS supports 100+ languages
+            { code: 'ru', name: 'Russian' },
+            { code: 'ar', name: 'Arabic' },
+            { code: 'hi', name: 'Hindi' },
+            { code: 'id', name: 'Indonesian' }
+            // gTTS supports 100+ languages with auto-detection
         ];
     }
 }
