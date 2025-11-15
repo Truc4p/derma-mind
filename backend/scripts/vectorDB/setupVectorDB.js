@@ -41,7 +41,7 @@ async function main() {
         });
         
         console.log('\n✨ Vector database is ready to use!');
-        console.log('You can now start your backend server and use the AI Dermatologist.\n');
+        console.log('You can now start your backend server and use the AI Dermatology Expert.\n');
         
         process.exit(0);
     } catch (error) {

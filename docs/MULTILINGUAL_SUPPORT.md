@@ -1,6 +1,6 @@
 # Multilingual Support - Implementation Guide
 
-**Feature:** Automatic Language Detection and Translation for AI Dermatologist  
+**Feature:** Automatic Language Detection and Translation for AI Dermatology Expert  
 **Status:** ✅ Implemented  
 **Date:** November 12, 2025  
 **Version:** 1.1.0
@@ -9,7 +9,7 @@
 
 ## Overview
 
-The Skin Study AI Dermatologist now supports queries in any language while maintaining high-quality, evidence-based responses from our English knowledge base.
+The Skin Study AI Dermatology Expert now supports queries in any language while maintaining high-quality, evidence-based responses from our English knowledge base.
 
 ### The Problem We Solved
 
@@ -196,7 +196,7 @@ async generateResponseWithContext(userMessage, ragContext, conversationHistory) 
 }
 ```
 
-#### 2. `backend/controllers/aiDermatologistController.js`
+#### 2. `backend/controllers/aiDermatologyExpertController.js`
 
 **Updated Chat Endpoint:**
 ```javascript

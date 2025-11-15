@@ -5,7 +5,7 @@ async function test() {
     try {
         console.log('\n=== 🔊 Testing gTTS Service ===\n');
         
-        const text = "Hello! I am your AI dermatologist. How can I help you with your skincare concerns today? I can provide advice on skincare routines, product recommendations, and answer questions about ingredients.";
+        const text = "Hello! I am your AI dermatology expert. How can I help you with your skincare concerns today? I can provide advice on skincare routines, product recommendations, and answer questions about ingredients.";
         const outputPath = path.join(__dirname, 'test-gtts-output.mp3');
         
         console.log('📝 Text to convert:', text);

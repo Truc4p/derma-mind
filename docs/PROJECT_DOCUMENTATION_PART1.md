@@ -18,7 +18,7 @@ Skin Study is a comprehensive multi-platform application that provides AI-powere
 ### 1.3 Project Scope
 The project consists of three main platforms:
 1. **Web Application** - Full-featured platform for skin analysis, education, and AI consultation
-2. **Mobile Chat App** - React Native mobile application for on-the-go AI dermatologist access
+2. **Mobile Chat App** - React Native mobile application for on-the-go AI dermatology expert access
 3. **Backend API** - RESTful API with AI services, RAG implementation, and database management
 
 ---
@@ -61,7 +61,7 @@ backend/
 ├── controllers/                 # Request handlers
 │   ├── authController.js
 │   ├── skinAnalysisController.js
-│   ├── aiDermatologistController.js
+│   ├── aiDermatologyExpertController.js
 │   ├── educationController.js
 │   ├── ingredientController.js
 │   └── routineController.js
@@ -82,7 +82,7 @@ frontend/
 │   ├── views/                  # Page components
 │   │   ├── Home.vue
 │   │   ├── SkinAnalysis.vue
-│   │   ├── AIDermatologist.vue
+│   │   ├── AIDermatologyExpert.vue
 │   │   └── Education.vue
 │   ├── components/             # Reusable components
 │   ├── services/               # API clients
@@ -93,7 +93,7 @@ frontend/
 ```
 mobile-chat-app/
 ├── components/
-│   ├── AIDermatologist.js      # Text chat interface
+│   ├── AIDermatologyExpert.js      # Text chat interface
 │   ├── LiveChatAI.js           # Voice chat interface
 │   └── ChatHistory.js          # Session management
 ├── services/
@@ -458,7 +458,7 @@ The vector database is populated from authoritative dermatology textbooks:
 - GET `/:sessionId` - Get specific analysis
 - GET `/stats/overview` - Get statistics (admin)
 
-#### AI Dermatologist Routes (`/api/ai-dermatologist`)
+#### AI Dermatology Expert Routes (`/api/ai-dermatology-expert`)
 - POST `/chat` - Text-based AI consultation
 - POST `/analyze-skin` - Image analysis with AI
 - POST `/transcribe` - Audio to text transcription
@@ -486,7 +486,7 @@ The vector database is populated from authoritative dermatology textbooks:
 
 #### Example: AI Chat Request
 ```http
-POST /api/ai-dermatologist/chat
+POST /api/ai-dermatology-expert/chat
 Content-Type: application/json
 
 {

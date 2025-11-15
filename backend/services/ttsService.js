@@ -109,7 +109,7 @@ class TTSService {
 
     /**
      * Get supported languages for gTTS
-     * @returns {Array} - List of supported language codes
+     * @returns {Array} - List of supported language codes - just showing users the 15 most relevant languages for application's target audience
      */
     getSupportedLanguages() {
         return [

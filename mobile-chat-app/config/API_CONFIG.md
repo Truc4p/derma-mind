@@ -50,7 +50,7 @@ const API_BASE_URL = 'https://your-backend-domain.com/api';
 
 2. Test the API endpoint in your browser or Postman:
    ```
-   http://localhost:3004/api/ai-dermatologist/chat
+   http://localhost:3004/api/ai-dermatology-expert/chat
    ```
 
 3. If you get connection errors in the mobile app:

@@ -1,5 +1,5 @@
 /**
- * Performance monitoring utility for tracking AI Dermatologist response times
+ * Performance monitoring utility for tracking AI Dermatology Expert response times
  */
 
 class PerformanceMonitor {

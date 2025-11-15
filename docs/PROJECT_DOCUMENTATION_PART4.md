@@ -481,9 +481,9 @@ const routes = [
     component: () => import('../views/SkinAnalysis.vue')
   },
   {
-    path: '/ai-dermatologist',
-    name: 'AIDermatologist',
-    component: () => import('../views/AIDermatologist.vue')
+    path: '/ai-dermatology-expert',
+    name: 'AIDermatologyExpert',
+    component: () => import('../views/AIDermatologyExpert.vue')
   }
 ];
 ```

@@ -60,10 +60,10 @@ api.interceptors.response.use(
   }
 );
 
-// AI Dermatologist service
-export const aiDermatologistService = {
+// AI Dermatology Expert service
+export const aiDermatologyExpertService = {
   async chat(message, conversationHistory = []) {
-    const response = await api.post('/ai-dermatologist/chat', {
+    const response = await api.post('/ai-dermatology-expert/chat', {
       message,
       conversationHistory
     });
@@ -74,7 +74,7 @@ export const aiDermatologistService = {
 // Live Chat service (same endpoint, can be extended for voice features)
 export const liveChatService = {
   async chat(message, conversationHistory = []) {
-    const response = await api.post('/ai-dermatologist/chat', {
+    const response = await api.post('/ai-dermatology-expert/chat', {
       message,
       conversationHistory
     });
@@ -87,7 +87,7 @@ export const liveChatService = {
       const startTime = Date.now();
       console.log('📤 [FRONTEND] Starting transcription upload at:', new Date().toISOString());
       console.log('📤 [FRONTEND] Audio URI:', audioUri);
-      console.log('📤 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatologist/transcribe`);
+      console.log('📤 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatology-expert/transcribe`);
       
       const formData = new FormData();
       
@@ -107,7 +107,7 @@ export const liveChatService = {
       });
       console.log('🚀 [FRONTEND] Sending POST request...');
       
-      const response = await api.post('/ai-dermatologist/transcribe', formData, {
+      const response = await api.post('/ai-dermatology-expert/transcribe', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -138,9 +138,9 @@ export const liveChatService = {
       const startTime = Date.now();
       console.log('🔊 [FRONTEND] Starting TTS request at:', new Date().toISOString());
       console.log('📝 [FRONTEND] Text length:', text.length);
-      console.log('🚀 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatologist/text-to-speech`);
+      console.log('🚀 [FRONTEND] API URL:', `${API_BASE_URL}/ai-dermatology-expert/text-to-speech`);
       
-      const response = await api.post('/ai-dermatologist/text-to-speech', {
+      const response = await api.post('/ai-dermatology-expert/text-to-speech', {
         text
       }, {
         timeout: 60000 // 60 seconds for TTS
@@ -162,7 +162,7 @@ export const liveChatService = {
 export const chatStorage = {
   async saveChatHistory(messages) {
     try {
-      await AsyncStorage.setItem('aiDermatologistChat', JSON.stringify(messages));
+      await AsyncStorage.setItem('aiDermatologyExpertChat', JSON.stringify(messages));
     } catch (error) {
       console.warn('Failed to save chat history:', error);
     }
@@ -170,7 +170,7 @@ export const chatStorage = {
 
   async loadChatHistory() {
     try {
-      const savedChat = await AsyncStorage.getItem('aiDermatologistChat');
+      const savedChat = await AsyncStorage.getItem('aiDermatologyExpertChat');
       if (savedChat) {
         return JSON.parse(savedChat);
       }
@@ -183,7 +183,7 @@ export const chatStorage = {
 
   async clearChatHistory() {
     try {
-      await AsyncStorage.removeItem('aiDermatologistChat');
+      await AsyncStorage.removeItem('aiDermatologyExpertChat');
     } catch (error) {
       console.warn('Failed to clear chat history:', error);
     }

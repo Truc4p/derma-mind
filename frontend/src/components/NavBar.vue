@@ -9,7 +9,7 @@
 
         <div class="nav-menu" :class="{ 'nav-menu-open': isMenuOpen }">
           <router-link to="/" class="nav-link" @click="closeMenu">Home</router-link>
-          <router-link to="/ai-dermatologist" class="nav-link" @click="closeMenu">AI Doctor</router-link>
+          <router-link to="/ai-dermatology-expert" class="nav-link" @click="closeMenu">AI Doctor</router-link>
           <router-link to="/analysis" class="nav-link" @click="closeMenu">Skin Analysis</router-link>
           <router-link to="/routines" class="nav-link" @click="closeMenu">Routines</router-link>
           <router-link to="/ingredients" class="nav-link" @click="closeMenu">Ingredients</router-link>

@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AIDermatologist from './components/AIDermatologist';
+import AIDermatologyExpert from './components/AIDermatologyExpert';
 import LiveChatAI from './components/LiveChatAI';
 
 // Suppress defaultProps warnings from react-native-render-html library
@@ -50,10 +50,10 @@ export default function App() {
           }}
         >
           <Stack.Screen
-            name="AIDermatologist"
-            component={AIDermatologist}
+            name="AIDermatologyExpert"
+            component={AIDermatologyExpert}
             options={{
-              title: 'AI Dermatologist',
+              title: 'AI Dermatology Expert',
               headerShown: true
             }}
           />

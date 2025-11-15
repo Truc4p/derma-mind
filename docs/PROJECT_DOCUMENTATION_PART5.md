@@ -108,7 +108,7 @@ Expected Response (200 OK):
 
 **Test Case 4: AI Chat**
 ```http
-POST http://localhost:5000/api/ai-dermatologist/chat
+POST http://localhost:5000/api/ai-dermatology-expert/chat
 Content-Type: application/json
 
 {
@@ -132,7 +132,7 @@ Expected Response (200 OK):
 
 **Test Case 5: Image Analysis**
 ```http
-POST http://localhost:5000/api/ai-dermatologist/analyze-skin
+POST http://localhost:5000/api/ai-dermatology-expert/analyze-skin
 Content-Type: multipart/form-data
 
 image: [binary image file]
@@ -267,7 +267,7 @@ console.log('Password comparison works:', isMatch === true);
 - [ ] Score calculation is accurate
 - [ ] Recommendations are relevant
 
-**AI Dermatologist:**
+**AI Dermatology Expert:**
 - [ ] Chat interface loads
 - [ ] Messages send successfully
 - [ ] Markdown renders correctly
@@ -435,7 +435,7 @@ Acceptance Criteria:
 2. **AI Consultation**
    ```
    As a user,
-   I want to chat with an AI dermatologist,
+   I want to chat with an AI dermatology expert,
    So that I can get expert skincare advice.
    
    Acceptance Criteria:
@@ -509,7 +509,7 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 ```
 IMPORTANT MEDICAL DISCLAIMER
 
-This AI Dermatologist is an educational tool and NOT a substitute 
+This AI Dermatology Expert is an educational tool and NOT a substitute 
 for professional medical advice, diagnosis, or treatment.
 
 - This system is NOT a licensed medical professional

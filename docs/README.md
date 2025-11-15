@@ -26,9 +26,9 @@ An intelligent skincare platform that combines advanced AI technology with evide
 
 ## ✨ Features
 
-### 🤖 AI Dermatologist (RAG-Powered)
-- **Multilingual Support** - Ask questions in 50+ languages (Vietnamese, Chinese, Japanese, etc.)
-- **Evidence-based Responses** - Powered by 9 authoritative dermatology textbooks
+### 🤖 AI Dermatology Expert (RAG-Powered)
+- **Multilingual Support** - Ask questions in 100+ languages (Vietnamese, Chinese, Japanese, etc.)
+- **Evidence-based Responses** - Powered by 10 authoritative dermatology textbooks
 - **Smart Citations** - Every answer includes medical references
 - **Voice Chat** - Real-time voice conversations with AI
 - **Image Analysis** - Upload skin photos for professional assessment
@@ -67,7 +67,7 @@ An intelligent skincare platform that combines advanced AI technology with evide
 #### 🌍 Multilingual Support with Automatic Translation
 **Major Feature Addition**
 
-The AI Dermatologist now supports queries in any language while maintaining high-quality responses!
+The AI Dermatology Expert now supports queries in any language while maintaining high-quality responses!
 
 **What Changed:**
 - ✅ Automatic language detection for user queries
@@ -321,12 +321,12 @@ GET    /api/auth/profile         # Get user profile
 PUT    /api/auth/profile         # Update profile
 ```
 
-### AI Dermatologist
+### AI Dermatology Expert
 ```
-POST   /api/ai-dermatologist/chat              # Text chat (multilingual)
-POST   /api/ai-dermatologist/analyze-skin      # Image analysis
-POST   /api/ai-dermatologist/transcribe        # Audio transcription
-POST   /api/ai-dermatologist/text-to-speech    # Generate speech
+POST   /api/ai-dermatology-expert/chat              # Text chat (multilingual)
+POST   /api/ai-dermatology-expert/analyze-skin      # Image analysis
+POST   /api/ai-dermatology-expert/transcribe        # Audio transcription
+POST   /api/ai-dermatology-expert/text-to-speech    # Generate speech
 ```
 
 ### Skin Analysis
@@ -500,7 +500,7 @@ Special thanks to the authors and publishers of the dermatology textbooks that p
 - [ ] Progressive Web App (PWA)
 - [ ] Voice-only mode
 - [ ] Product recommendations with affiliate links
-- [ ] Dermatologist network
+- [ ] Dermatology Expert network
 
 ---
 

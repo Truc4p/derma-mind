@@ -4,7 +4,7 @@
     <main class="main-content">
       <router-view />
     </main>
-  <Footer v-if="$route.name !== 'AIDermatologist'" />
+  <Footer v-if="$route.name !== 'AIDermatologyExpert'" />
   </div>
 </template>
 

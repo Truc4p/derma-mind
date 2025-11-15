@@ -117,7 +117,7 @@
 
 ---
 
-### 6.2 AI Dermatologist with RAG (Retrieval-Augmented Generation)
+### 6.2 AI Dermatology Expert with RAG (Retrieval-Augmented Generation)
 
 #### 6.2.1 RAG System Architecture
 
@@ -239,7 +239,7 @@ async ragQuery(userQuery, conversationHistory = []) {
 
 **System Context:**
 ```
-You are a Virtual Dermatologist with extensive knowledge in:
+You are a Virtual Dermatology Expert with extensive knowledge in:
 - Dermatology and skin conditions
 - Skincare ingredients and formulations
 - Cosmetic procedures and treatments
@@ -277,7 +277,7 @@ async generateResponseWithContext(userMessage, ragContext, conversationHistory) 
     });
   }
   
-  prompt += `\nPatient: ${userMessage}\nDermatologist:`;
+  prompt += `\nPatient: ${userMessage}\nDermatologyExpert:`;
   
   // Generate with retry logic (3 attempts)
   const result = await generateWithRetry(prompt);
@@ -332,7 +332,7 @@ A serial, multimodal approach is essential.[1]
 #### 6.3.1 Multilingual Support with Automatic Translation
 **Status:** ✅ Implemented (November 2025)
 
-**Purpose:** Enable users to interact with the AI dermatologist in their native language while maintaining high-quality RAG retrieval from English knowledge base.
+**Purpose:** Enable users to interact with the AI dermatology expert in their native language while maintaining high-quality RAG retrieval from English knowledge base.
 
 **Problem Solved:**
 - Vietnamese queries (e.g., "Mụn là gì") had poor vector similarity scores (~48%) due to language mismatch
@@ -401,7 +401,7 @@ this.translationModel = genAI.getGenerativeModel({
 });
 ```
 
-3. **Updated RAG Pipeline (aiDermatologistController.js):**
+3. **Updated RAG Pipeline (aiDermatologyExpertController.js):**
 ```javascript
 exports.chat = async (req, res) => {
   const { message, conversationHistory } = req.body;
@@ -497,7 +497,7 @@ Mụn là một tình trạng da phổ biến có thể biểu hiện dưới nh
 ---
 
 #### 6.3.2 Image Analysis
-**Endpoint:** POST `/api/ai-dermatologist/analyze-skin`
+**Endpoint:** POST `/api/ai-dermatology-expert/analyze-skin`
 
 **Capabilities:**
 - Skin condition identification
@@ -514,7 +514,7 @@ async analyzeSkinImage(imageFilePath, userMessage, ragContext, conversationHisto
   const base64Image = imageData.toString('base64');
   
   // 2. Build analysis prompt with RAG context
-  let prompt = `Expert Virtual Dermatologist analyzing skin image...
+  let prompt = `Virtual Dermatology Expert analyzing skin image...
   
   === RELEVANT KNOWLEDGE ===
   ${ragContext}
@@ -549,7 +549,7 @@ async analyzeSkinImage(imageFilePath, userMessage, ragContext, conversationHisto
 - Processed via Multer middleware
 
 #### 6.3.2 Audio Transcription
-**Endpoint:** POST `/api/ai-dermatologist/transcribe`
+**Endpoint:** POST `/api/ai-dermatology-expert/transcribe`
 
 **Purpose:** Convert voice recordings to text for AI consultation
 
@@ -579,7 +579,7 @@ async transcribeAudio(audioFilePath) {
 - Auto-detected MIME type
 
 #### 6.3.3 Text-to-Speech
-**Endpoint:** POST `/api/ai-dermatologist/text-to-speech`
+**Endpoint:** POST `/api/ai-dermatology-expert/text-to-speech`
 
 **Purpose:** Convert AI responses to voice audio
 

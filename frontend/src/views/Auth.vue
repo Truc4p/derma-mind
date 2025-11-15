@@ -246,9 +246,9 @@ export default {
 
                     this.successMessage = 'Login successful! Redirecting...'
 
-                    // Redirect to home or AI Dermatologist
+                    // Redirect to home or AI Dermatology Expert
                     setTimeout(() => {
-                        this.$router.push('/ai-dermatologist')
+                        this.$router.push('/ai-dermatology-expert')
                     }, 1000)
                 }
             } catch (error) {
@@ -293,9 +293,9 @@ export default {
 
                     this.successMessage = 'Account created successfully! Redirecting...'
 
-                    // Redirect to home or AI Dermatologist
+                    // Redirect to home or AI Dermatology Expert
                     setTimeout(() => {
-                        this.$router.push('/ai-dermatologist')
+                        this.$router.push('/ai-dermatology-expert')
                     }, 1000)
                 }
             } catch (error) {
@@ -319,7 +319,7 @@ export default {
         // Check if user is already logged in
         const token = localStorage.getItem('token')
         if (token) {
-            this.$router.push('/ai-dermatologist')
+            this.$router.push('/ai-dermatology-expert')
         }
     }
 }

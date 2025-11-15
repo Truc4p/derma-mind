@@ -12,7 +12,7 @@ const skinAnalysisRoutes = require('./routes/skinAnalysis')
 const educationRoutes = require('./routes/education')
 const ingredientsRoutes = require('./routes/ingredients')
 const routinesRoutes = require('./routes/routines')
-const aiDermatologistRoutes = require('./routes/aiDermatologist')
+const aiDermatologyExpertRoutes = require('./routes/aiDermatologyExpert')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -54,7 +54,7 @@ app.use('/api/skin-analysis', skinAnalysisRoutes)
 app.use('/api/education', educationRoutes)
 app.use('/api/ingredients', ingredientsRoutes)
 app.use('/api/routines', routinesRoutes)
-app.use('/api/ai-dermatologist', aiDermatologistRoutes)
+app.use('/api/ai-dermatology-expert', aiDermatologyExpertRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -77,7 +77,7 @@ app.get('/', (req, res) => {
       education: '/api/education',
       ingredients: '/api/ingredients',
       routines: '/api/routines',
-      aiDermatologist: '/api/ai-dermatologist'
+      aiDermatologyExpert: '/api/ai-dermatology-expert'
     }
   })
 })

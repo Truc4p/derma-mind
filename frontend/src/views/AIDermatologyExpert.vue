@@ -1,5 +1,5 @@
 <template>
-    <div class="ai-dermatologist">
+    <div class="ai-dermatology-expert">
         <!-- History Sidebar -->
         <div class="history-sidebar" :class="{ 'open': sidebarOpen }">
             <div class="sidebar-header">
@@ -46,7 +46,7 @@
             <div v-if="messages.length === 0" class="welcome-section">
                 <div class="welcome-card">
                     <div class="welcome-header">
-                        <h1>AI Dermatologist</h1>
+                        <h1>AI Dermatology Expert</h1>
                         <p class="description">Your virtual skincare consultant powered by advanced AI technology</p>
                     </div>
 
@@ -330,7 +330,7 @@
             
             <!-- Input Disclaimer -->
             <div class="input-disclaimer">
-                AI Dermatologist can make mistakes. Check important info.
+                AI Dermatology Expert can make mistakes. Check important info.
             </div>
         </div>
     </div>
@@ -349,7 +349,7 @@ marked.setOptions({
 })
 
 export default {
-    name: 'AIDermatologist',
+    name: 'AIDermatologyExpert',
     data() {
         return {
             userInput: '',
@@ -552,9 +552,9 @@ export default {
                     formData.append('image', imageFile)
                     formData.append('conversationHistory', JSON.stringify(this.messages.slice(-10)))
 
-                    console.log('📤 Sending image analysis request to /ai-dermatologist/analyze-skin')
+                    console.log('📤 Sending image analysis request to /ai-dermatology-expert/analyze-skin')
 
-                    const response = await api.post('/ai-dermatologist/analyze-skin', formData, {
+                    const response = await api.post('/ai-dermatology-expert/analyze-skin', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -564,7 +564,7 @@ export default {
 
                     // Add urgent care warning if needed
                     let responseContent = response.data.response
-                    if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
+                    if (this.detectUrgentCare(userMessage)) {
                         responseContent += this.getUrgentCareWarning()
                     }
 
@@ -581,9 +581,9 @@ export default {
                         conversationHistory: this.messages.slice(-10)
                     }
 
-                    console.log('📤 Sending request to /ai-dermatologist/chat:', requestData)
+                    console.log('📤 Sending request to /ai-dermatology-expert/chat:', requestData)
 
-                    const response = await api.post('/ai-dermatologist/chat', requestData)
+                    const response = await api.post('/ai-dermatology-expert/chat', requestData)
 
                     console.log('✅ Received API response:', response.data)
                     console.log('📚 Using RAG context for query:', userMessage)
@@ -595,7 +595,7 @@ export default {
 
                     // Add urgent care warning if needed
                     let responseContent = response.data.response
-                    if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(responseContent)) {
+                    if (this.detectUrgentCare(userMessage)) {
                         responseContent += this.getUrgentCareWarning()
                     }
 
@@ -627,7 +627,7 @@ export default {
                 let response = this.generateContextualResponse(userMessage)
 
                 // Add urgent care warning if needed for fallback response
-                if (this.detectUrgentCare(userMessage) || this.detectUrgentCare(response)) {
+                if (this.detectUrgentCare(userMessage)) {
                     response += this.getUrgentCareWarning()
                 }
 
@@ -963,8 +963,8 @@ What would you like to know more about?`
 
             // Save to localStorage
             try {
-                localStorage.setItem('aiDermatologistSessions', JSON.stringify(this.chatSessions))
-                localStorage.setItem('aiDermatologistCurrentSession', this.currentSessionId)
+                localStorage.setItem('aiDermatologyExpertSessions', JSON.stringify(this.chatSessions))
+                localStorage.setItem('aiDermatologyExpertCurrentSession', this.currentSessionId)
             } catch (error) {
                 console.warn('Failed to save chat session:', error)
             }
@@ -972,7 +972,7 @@ What would you like to know more about?`
 
         loadAllSessions() {
             try {
-                const savedSessions = localStorage.getItem('aiDermatologistSessions')
+                const savedSessions = localStorage.getItem('aiDermatologyExpertSessions')
                 if (savedSessions) {
                     this.chatSessions = JSON.parse(savedSessions)
                 }
@@ -984,7 +984,7 @@ What would you like to know more about?`
 
         loadCurrentSession() {
             try {
-                const currentSessionId = localStorage.getItem('aiDermatologistCurrentSession')
+                const currentSessionId = localStorage.getItem('aiDermatologyExpertCurrentSession')
                 if (currentSessionId) {
                     this.currentSessionId = currentSessionId
                     const session = this.chatSessions.find(s => s.id === currentSessionId)
@@ -1002,7 +1002,7 @@ What would you like to know more about?`
             if (session) {
                 this.currentSessionId = sessionId
                 this.messages = session.messages
-                localStorage.setItem('aiDermatologistCurrentSession', sessionId)
+                localStorage.setItem('aiDermatologyExpertCurrentSession', sessionId)
                 this.sidebarOpen = false
                 this.$nextTick(() => {
                     this.scrollToBottom()
@@ -1013,13 +1013,13 @@ What would you like to know more about?`
         deleteChatSession(sessionId) {
             if (confirm('Delete this conversation? This cannot be undone.')) {
                 this.chatSessions = this.chatSessions.filter(s => s.id !== sessionId)
-                localStorage.setItem('aiDermatologistSessions', JSON.stringify(this.chatSessions))
+                localStorage.setItem('aiDermatologyExpertSessions', JSON.stringify(this.chatSessions))
                 
                 // If deleting current session, start a new one
                 if (sessionId === this.currentSessionId) {
                     this.messages = []
                     this.currentSessionId = null
-                    localStorage.removeItem('aiDermatologistCurrentSession')
+                    localStorage.removeItem('aiDermatologyExpertCurrentSession')
                 }
             }
         },
@@ -1063,7 +1063,7 @@ What would you like to know more about?`
                     this.messages = []
                     this.userInput = ''
                     this.currentSessionId = null
-                    localStorage.removeItem('aiDermatologistCurrentSession')
+                    localStorage.removeItem('aiDermatologyExpertCurrentSession')
                 }
             }
         },
@@ -1077,7 +1077,7 @@ What would you like to know more about?`
                 this.messages = []
                 this.userInput = ''
                 this.currentSessionId = null
-                localStorage.removeItem('aiDermatologistCurrentSession')
+                localStorage.removeItem('aiDermatologyExpertCurrentSession')
             }
         },
 
@@ -1094,7 +1094,7 @@ What would you like to know more about?`
 </script>
 
 <style scoped>
-.ai-dermatologist {
+.ai-dermatology-expert {
     display: flex;
     flex-direction: column;
     height: 100vh;

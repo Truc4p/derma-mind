@@ -32,8 +32,8 @@ class GeminiService {
         this.maxRetries = 3;
         this.retryDelay = 1000; // Start with 1 second
         
-        // System instruction for the dermatologist
-        this.systemContext = `You are a Virtual Dermatologist with extensive knowledge in:
+        // System instruction for the Dermatology Expert
+        this.systemContext = `You are a Virtual Dermatology Expert with extensive knowledge in:
 - Dermatology and skin conditions
 - Skincare ingredients and formulations
 - Cosmetic procedures and treatments
@@ -209,11 +209,11 @@ CITATION REQUIREMENT (Numbered Reference Style):
             if (conversationHistory.length > 0) {
                 fullPrompt += 'Previous conversation:\n';
                 conversationHistory.slice(-5).forEach(msg => {
-                    fullPrompt += `${msg.role === 'user' ? 'Patient' : 'Dermatologist'}: ${msg.content}\n`;
+                    fullPrompt += `${msg.role === 'user' ? 'Patient' : 'Dermatology Expert'}: ${msg.content}\n`;
                 });
             }
 
-            fullPrompt += `\nPatient: ${userMessage}\nDermatologist:`;
+            fullPrompt += `\nPatient: ${userMessage}\nDermatology Expert:`;
 
             // Generate response with retry logic
             const genStart = performanceMonitor.startTimer();
@@ -329,7 +329,7 @@ CITATION REQUIREMENT (Numbered Reference Style):
             console.log(`📊 [GEMINI SERVICE] Image size: ${imageData.length} bytes, MIME: ${imageMimeType}`);
             
             // Build comprehensive prompt for skin analysis
-            let fullPrompt = `You are an expert Virtual Dermatologist analyzing a skin image. Provide a detailed, professional assessment.
+            let fullPrompt = `You are an expert Virtual Dermatology Expert analyzing a skin image. Provide a detailed, professional assessment.
 
 === RELEVANT KNOWLEDGE FROM DERMATOLOGY TEXTBOOK ===
 ${ragContext}
@@ -358,7 +358,7 @@ IMPORTANT DISCLAIMERS:
                     if (msg.role === 'user' && !msg.image) {
                         fullPrompt += `Patient: ${msg.content}\n`;
                     } else if (msg.role === 'assistant') {
-                        fullPrompt += `Dermatologist: ${msg.content}\n`;
+                        fullPrompt += `Dermatology Expert: ${msg.content}\n`;
                     }
                 });
             }

@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 🌍 Added - Multilingual Support with Automatic Translation
 
-**Feature:** AI Dermatologist now supports queries in any language while maintaining high-quality RAG retrieval.
+**Feature:** AI Dermatology Expert now supports queries in any language while maintaining high-quality RAG retrieval.
 
 #### What Changed:
 - Added automatic language detection for user queries
@@ -26,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - New `detectAndTranslate()` method
   - Updated `generateResponseWithContext()` for language awareness
   
-- `backend/controllers/aiDermatologistController.js` - Updated chat endpoint
+- `backend/controllers/aiDermatologyExpertController.js` - Updated chat endpoint
   - Added translation step before RAG search
   - Improved performance logging with language info
 
@@ -117,7 +117,7 @@ Mụn là một tình trạng da phổ biến có thể biểu hiện dưới nh
    - JSON-based language identification
    - Fallback to original text on failure
 
-3. **RAG Pipeline** (aiDermatologistController.js):
+3. **RAG Pipeline** (aiDermatologyExpertController.js):
    - Translates query to English
    - Performs vector search with translation
    - Passes original message to AI for language context
@@ -151,7 +151,7 @@ Mụn là một tình trạng da phổ biến có thể biểu hiện dưới nh
 
 #### Core Features:
 - ✅ Intelligent Skin Analysis System
-- ✅ AI Dermatologist with RAG
+- ✅ AI Dermatology Expert with RAG
 - ✅ Education Hub
 - ✅ Ingredient Database
 - ✅ Skincare Routine Generator
@@ -169,7 +169,7 @@ Mụn là một tình trạng da phổ biến có thể biểu hiện dưới nh
 - AI: Google Gemini 2.0 Flash + Text-Embedding-004
 
 #### Knowledge Base:
-- 9 dermatology textbooks
+- 10 dermatology textbooks
 - ~3,000-5,000 knowledge chunks
 - 768-dimensional embeddings
 - Cosine similarity search

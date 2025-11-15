@@ -14,8 +14,8 @@ import {
 } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { Audio } from 'expo-av';
-import { aiDermatologistService, chatStorage, liveChatStorage, liveChatService } from '../services/api';
-import { styles, colors } from './AIDermatologist.styles';
+import { aiDermatologyExpertService, chatStorage, liveChatStorage, liveChatService } from '../services/api';
+import { styles, colors } from './AIDermatologyExpert.styles';
 import ChatHistory from './ChatHistory';
 
 // API base URL - update this based on your setup
@@ -91,7 +91,7 @@ const MessageComponent = memo(({
   );
 });
 
-const AIDermatologist = ({ navigation }) => {
+const AIDermatologyExpert = ({ navigation }) => {
   const { width } = useWindowDimensions();
   // Memoize the content width to prevent frequent re-renders
   const contentWidth = useMemo(() => width * 0.8, [width]);
@@ -107,17 +107,17 @@ const AIDermatologist = ({ navigation }) => {
 
   // Log component mount and navigation availability
   useEffect(() => {
-    console.log('🔄 [AIDermatologist] Component mounted');
-    console.log('🧭 [AIDermatologist] Navigation available on mount:', !!navigation);
-    // console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+    console.log('🔄 [AIDermatologyExpert] Component mounted');
+    console.log('🧭 [AIDermatologyExpert] Navigation available on mount:', !!navigation);
+    // console.log('🧭 [AIDermatologyExpert] Navigation object:', navigation);
   }, []);
 
   // Add logging whenever messages change
   useEffect(() => {
-    console.log('📝 [AIDermatologist] messages updated:', messages.length, 'messages');
+    console.log('📝 [AIDermatologyExpert] messages updated:', messages.length, 'messages');
     if (messages.length > 0) {
-      // console.log('📋 [AIDermatologist] First message:', messages[0]);
-      // console.log('📋 [AIDermatologist] Last message:', messages[messages.length - 1]);
+      // console.log('📋 [AIDermatologyExpert] First message:', messages[0]);
+      // console.log('📋 [AIDermatologyExpert] Last message:', messages[messages.length - 1]);
     }
   }, [messages]);
 
@@ -358,7 +358,7 @@ const AIDermatologist = ({ navigation }) => {
       console.log('📚 User query:', userMessage);
       console.log('📝 Conversation history (last 10 messages):', messages.slice(-10));
 
-      const response = await aiDermatologistService.chat(
+      const response = await aiDermatologyExpertService.chat(
         userMessage,
         messages.slice(-10)
       );
@@ -534,7 +534,7 @@ What's your skin type? I can give you more specific recommendations!`;
 
     // Generic response
     console.log('No specific pattern matched, using generic response');
-    return `Thank you for your question! As a virtual dermatologist, I'm here to help with skincare, cosmetic, and facial improvement advice.
+    return `Thank you for your question! As a virtual dermatology expert, I'm here to help with skincare, cosmetic, and facial improvement advice.
 
 To provide you with the most accurate and personalized recommendation, could you tell me more about:
 
@@ -694,19 +694,19 @@ What would you like to know more about?`;
   };
 
   const handleLoadSession = (session) => {
-    console.log('🔍 [AIDermatologist] handleLoadSession called');
-    console.log('📋 [AIDermatologist] Session type:', session.type);
-    console.log('📋 [AIDermatologist] Session messages:', session.messages?.length);
+    console.log('🔍 [AIDermatologyExpert] handleLoadSession called');
+    console.log('📋 [AIDermatologyExpert] Session type:', session.type);
+    console.log('📋 [AIDermatologyExpert] Session messages:', session.messages?.length);
     
     if (session.type === 'text') {
       // Load text chat
-      console.log('💬 [AIDermatologist] Loading text chat session');
-      // console.log('📝 [AIDermatologist] Setting messages:', session.messages);
+      console.log('💬 [AIDermatologyExpert] Loading text chat session');
+      // console.log('📝 [AIDermatologyExpert] Setting messages:', session.messages);
       setMessages(session.messages);
-      console.log('✅ [AIDermatologist] Messages set successfully');
+      console.log('✅ [AIDermatologyExpert] Messages set successfully');
     } else if (session.type === 'live') {
       // Navigate to LiveChatAI and load live chat session
-      console.log('🎤 [AIDermatologist] Loading live chat session, navigating...');
+      console.log('🎤 [AIDermatologyExpert] Loading live chat session, navigating...');
       navigation.navigate('LiveChatAI', { loadSession: session });
     }
   };
@@ -956,7 +956,7 @@ What would you like to know more about?`;
           <View style={styles.welcomeSection}>
             <View style={styles.welcomeCard}>
               <View style={styles.welcomeHeader}>
-                <Text style={styles.welcomeTitle}>AI Dermatologist</Text>
+                <Text style={styles.welcomeTitle}>AI Dermatology Expert</Text>
               </View>
 
               <Text style={styles.welcomeText}>
@@ -1039,15 +1039,15 @@ What would you like to know more about?`;
           <TouchableOpacity 
             style={styles.actionButton}
             onPress={() => {
-              console.log('🎤 [AIDermatologist] Go Live with AI button pressed');
-              console.log('🧭 [AIDermatologist] Navigation available:', !!navigation);
-              // console.log('🧭 [AIDermatologist] Navigation object:', navigation);
+              console.log('🎤 [AIDermatologyExpert] Go Live with AI button pressed');
+              console.log('🧭 [AIDermatologyExpert] Navigation available:', !!navigation);
+              // console.log('🧭 [AIDermatologyExpert] Navigation object:', navigation);
               if (navigation) {
-                console.log('✅ [AIDermatologist] Calling navigation.navigate("LiveChatAI")');
+                console.log('✅ [AIDermatologyExpert] Calling navigation.navigate("LiveChatAI")');
                 navigation.navigate('LiveChatAI');
-                console.log('✅ [AIDermatologist] Navigation called');
+                console.log('✅ [AIDermatologyExpert] Navigation called');
               } else {
-                console.error('❌ [AIDermatologist] Navigation is undefined!');
+                console.error('❌ [AIDermatologyExpert] Navigation is undefined!');
               }
             }}
           >
@@ -1104,4 +1104,4 @@ What would you like to know more about?`;
   );
 };
 
-export default AIDermatologist;
+export default AIDermatologyExpert;

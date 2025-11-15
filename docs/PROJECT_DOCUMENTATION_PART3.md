@@ -25,7 +25,7 @@ frontend/src/
 ├── views/
 │   ├── Home.vue           # Landing page
 │   ├── SkinAnalysis.vue   # Skin analysis tool
-│   ├── AIDermatologist.vue # AI chat interface
+│   ├── AIDermatologyExpert.vue # AI chat interface
 │   ├── Education.vue      # Education hub
 │   ├── EducationArticle.vue # Article reader
 │   ├── Ingredients.vue    # Ingredient database
@@ -56,7 +56,7 @@ frontend/src/
     <HeroSection />
     <FeaturesGrid>
       <FeatureCard title="Skin Analysis" />
-      <FeatureCard title="AI Dermatologist" />
+      <FeatureCard title="AI Dermatology Expert" />
       <FeatureCard title="Education" />
       <FeatureCard title="Ingredients" />
     </FeaturesGrid>
@@ -143,7 +143,7 @@ export default {
 7. Primary concerns (multi-select)
 8. Lifestyle factors (stress, sleep, exercise, diet)
 
-#### 7.2.3 AI Dermatologist Chat (AIDermatologist.vue)
+#### 7.2.3 AI Dermatology Expert Chat (AIDermatologyExpert.vue)
 **Purpose:** Real-time AI consultation interface
 
 **Features:**
@@ -158,7 +158,7 @@ export default {
 <template>
   <div class="ai-chat">
     <ChatHeader>
-      <h2>AI Dermatologist</h2>
+      <h2>AI Dermatology Expert</h2>
       <button @click="startNewChat">New Chat</button>
     </ChatHeader>
     
@@ -375,9 +375,9 @@ export default {
   analyzeSkin: (responses) => apiClient.post('/skin-analysis/analyze', { responses }),
   getAnalysisHistory: () => apiClient.get('/skin-analysis/history'),
   
-  // AI Dermatologist
-  chatWithAI: (data) => apiClient.post('/ai-dermatologist/chat', data),
-  analyzeSkinImage: (formData) => apiClient.post('/ai-dermatologist/analyze-skin', 
+  // AI Dermatology Expert
+  chatWithAI: (data) => apiClient.post('/ai-dermatology-expert/chat', data),
+  analyzeSkinImage: (formData) => apiClient.post('/ai-dermatology-expert/analyze-skin', 
     formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   
   // Education
@@ -405,8 +405,8 @@ mobile-chat-app/
 ├── App.js                          # Root component
 ├── index.js                        # Entry point
 ├── components/
-│   ├── AIDermatologist.js         # Text chat screen
-│   ├── AIDermatologist.styles.js  # Styles for chat
+│   ├── AIDermatologyExpert.js         # Text chat screen
+│   ├── AIDermatologyExpert.styles.js  # Styles for chat
 │   ├── LiveChatAI.js              # Voice chat screen
 │   └── ChatHistory.js             # Session management
 ├── services/
@@ -415,7 +415,7 @@ mobile-chat-app/
     └── API_CONFIG.md              # API configuration
 ```
 
-### 8.2 Text Chat Component (AIDermatologist.js)
+### 8.2 Text Chat Component (AIDermatologyExpert.js)
 
 **Key Features:**
 - Real-time messaging
@@ -519,7 +519,7 @@ const sendMessage = useCallback(async () => {
   setIsLoading(true);
 
   try {
-    const response = await aiDermatologistService.chat(
+    const response = await aiDermatologyExpertService.chat(
       userMessage.content,
       messages.slice(-10)
     );
@@ -611,7 +611,7 @@ Key ingredients: Niacinamide, Salicylic Acid, Hyaluronic Acid`;
 
   // Additional pattern matching for common queries...
   
-  return "As a virtual dermatologist, I can help with skincare advice...";
+  return "As a virtual dermatology expert, I can help with skincare advice...";
 };
 ```
 
@@ -722,9 +722,9 @@ const apiClient = axios.create({
   timeout: 60000
 });
 
-export const aiDermatologistService = {
+export const aiDermatologyExpertService = {
   chat: async (message, conversationHistory = []) => {
-    const response = await apiClient.post('/ai-dermatologist/chat', {
+    const response = await apiClient.post('/ai-dermatology-expert/chat', {
       message,
       conversationHistory
     });
@@ -741,7 +741,7 @@ export const aiDermatologistService = {
     formData.append('message', message);
     formData.append('conversationHistory', JSON.stringify(conversationHistory));
 
-    const response = await apiClient.post('/ai-dermatologist/analyze-skin', 
+    const response = await apiClient.post('/ai-dermatology-expert/analyze-skin', 
       formData, 
       { headers: { 'Content-Type': 'multipart/form-data' } }
     );
@@ -751,7 +751,7 @@ export const aiDermatologistService = {
 
 export const liveChatService = {
   transcribe: async (audioFormData) => {
-    const response = await apiClient.post('/ai-dermatologist/transcribe', 
+    const response = await apiClient.post('/ai-dermatology-expert/transcribe', 
       audioFormData,
       { headers: { 'Content-Type': 'multipart/form-data' } }
     );
@@ -759,7 +759,7 @@ export const liveChatService = {
   },
 
   textToSpeech: async (text) => {
-    const response = await apiClient.post('/ai-dermatologist/text-to-speech', 
+    const response = await apiClient.post('/ai-dermatology-expert/text-to-speech', 
       { text }
     );
     return response.data;

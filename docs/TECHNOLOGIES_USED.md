@@ -162,7 +162,7 @@
 - ✅ Text-to-speech conversion
 - ✅ Multi-modal input processing
 - ✅ Source citation system
-- ✅ **Supports 50+ languages** including Vietnamese, Chinese, Japanese, Korean, Spanish, French, German
+- ✅ **Supports 100+ languages** including Vietnamese, Chinese, Japanese, Korean, Spanish, French, German, etc.
 
 #### Multilingual RAG Pipeline (New Feature)
 **Added:** November 2025

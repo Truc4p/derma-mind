@@ -286,7 +286,7 @@
 - Rewards system
 
 **3. Expert Integration**
-- Dermatologist verification
+- Dermatology Expert verification
 - Professional consultations
 - Expert content contributions
 - Certified recommendations

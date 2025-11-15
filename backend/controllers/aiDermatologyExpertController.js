@@ -6,8 +6,8 @@ const path = require('path');
 const performanceMonitor = require('../utils/performanceMonitor');
 
 /**
- * @desc    Send a message to the AI Dermatologist
- * @route   POST /api/ai-dermatologist/chat
+ * @desc    Send a message to the AI Dermatology Expert
+ * @route   POST /api/ai-dermatology-expert/chat
  * @access  Public
  */
 exports.chat = async (req, res) => {
@@ -82,8 +82,8 @@ exports.chat = async (req, res) => {
 };
 
 /**
- * @desc    Analyze skin image with AI Dermatologist
- * @route   POST /api/ai-dermatologist/analyze-skin
+ * @desc    Analyze skin image with AI Dermatology Expert
+ * @route   POST /api/ai-dermatology-expert/analyze-skin
  * @access  Public
  */
 exports.analyzeSkinImage = async (req, res) => {
@@ -207,7 +207,7 @@ exports.analyzeSkinImage = async (req, res) => {
 
 /**
  * @desc    Transcribe audio to text using Gemini
- * @route   POST /api/ai-dermatologist/transcribe
+ * @route   POST /api/ai-dermatology-expert/transcribe
  * @access  Public
  */
 exports.transcribeAudio = async (req, res) => {
@@ -283,7 +283,7 @@ exports.transcribeAudio = async (req, res) => {
 
 /**
  * @desc    Convert text to speech using Google Cloud TTS
- * @route   POST /api/ai-dermatologist/text-to-speech
+ * @route   POST /api/ai-dermatology-expert/text-to-speech
  * @access  Public
  */
 exports.textToSpeech = async (req, res) => {

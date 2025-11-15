@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const auth = require('../middleware/auth');
-const aiDermatologistController = require('../controllers/aiDermatologistController');
+const aiDermatologyExpertController = require('../controllers/aiDermatologyExpertController');
 
 // Configure multer for audio file uploads
 const audioStorage = multer.diskStorage({
@@ -76,27 +76,27 @@ const imageUpload = multer({
 });
 
 /**
- * POST /api/ai-dermatologist/chat
- * Send a message to the AI Dermatologist
+ * POST /api/ai-dermatology-expert/chat
+ * Send a message to the AI Dermatology Expert
  */
-router.post('/chat', aiDermatologistController.chat);
+router.post('/chat', aiDermatologyExpertController.chat);
 
 /**
- * POST /api/ai-dermatologist/analyze-skin
- * Analyze skin image with AI Dermatologist
+ * POST /api/ai-dermatology-expert/analyze-skin
+ * Analyze skin image with AI Dermatology Expert
  */
-router.post('/analyze-skin', imageUpload.single('image'), aiDermatologistController.analyzeSkinImage);
+router.post('/analyze-skin', imageUpload.single('image'), aiDermatologyExpertController.analyzeSkinImage);
 
 /**
- * POST /api/ai-dermatologist/transcribe
+ * POST /api/ai-dermatology-expert/transcribe
  * Transcribe audio to text
  */
-router.post('/transcribe', audioUpload.single('audio'), aiDermatologistController.transcribeAudio);
+router.post('/transcribe', audioUpload.single('audio'), aiDermatologyExpertController.transcribeAudio);
 
 /**
- * POST /api/ai-dermatologist/text-to-speech
+ * POST /api/ai-dermatology-expert/text-to-speech
  * Convert text to speech using Google Cloud TTS
  */
-router.post('/text-to-speech', aiDermatologistController.textToSpeech);
+router.post('/text-to-speech', aiDermatologyExpertController.textToSpeech);
 
 module.exports = router;
