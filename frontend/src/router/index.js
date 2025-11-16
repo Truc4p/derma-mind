@@ -53,7 +53,7 @@ const routes = [
     component: IngredientStudy
   },
   {
-    path: '/ai-dermatologist',
+    path: '/ai-dermatology-expert',
     name: 'AIDermatologyExpert',
     component: AIDermatologyExpert,
     meta: { requiresAuth: true }
