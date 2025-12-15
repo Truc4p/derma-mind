@@ -777,7 +777,11 @@ const ingredientsData = [
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI environment variable is not set')
+    }
+    
+    await mongoose.connect(process.env.MONGODB_URI)
     console.log('✅ Connected to MongoDB')
 
     // Clear existing ingredients

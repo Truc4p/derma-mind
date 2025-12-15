@@ -1178,7 +1178,12 @@ Understanding the science behind skincare helps you make informed decisions and 
 ]
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://mongo-api:7TZYsdhwiXhiKRp9@cluster0.18pi3.mongodb.net/skinStudyWeb?retryWrites=true&w=majority')
+if (!process.env.MONGODB_URI) {
+  console.error('❌ MONGODB_URI environment variable is not set')
+  process.exit(1)
+}
+
+mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('✅ Connected to MongoDB')
     
