@@ -22,8 +22,24 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }))
 
+// Allow requests from frontend and mobile app
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5175',
+  'http://localhost:5175',
+  'http://192.168.88.55:8081', // Mobile app (Expo)
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5175',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('192.168.')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }))
 
@@ -107,8 +123,9 @@ app.use((req, res) => {
   })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server is running on port ${PORT}`)
-  console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3004'}`)
+  console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5175'}`)
   console.log(`🔗 API URL: http://localhost:${PORT}`)
+  console.log(`📱 Mobile API URL: http://192.168.88.55:${PORT}`)
 })

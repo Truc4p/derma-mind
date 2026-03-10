@@ -15,6 +15,11 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
+// Log API configuration on startup
+console.log('🔧 [API CONFIG] Platform:', Platform.OS);
+console.log('🔧 [API CONFIG] Base URL:', API_BASE_URL);
+console.log('🔧 [API CONFIG] Full chat endpoint:', `${API_BASE_URL}/ai-dermatology-expert/chat`);
+
 // Create axios instance with base configuration
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -27,35 +32,73 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   async (config) => {
+    console.log('📤 [API REQUEST] Method:', config.method?.toUpperCase());
+    console.log('📤 [API REQUEST] URL:', config.url);
+    console.log('📤 [API REQUEST] Full URL:', config.baseURL + config.url);
+    console.log('📤 [API REQUEST] Headers:', JSON.stringify(config.headers, null, 2));
+    if (config.data) {
+      console.log('📤 [API REQUEST] Data:', JSON.stringify(config.data, null, 2));
+    }
+    
     try {
       // Get token from AsyncStorage (React Native equivalent of localStorage)
       const token = await AsyncStorage.getItem('authToken');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+        console.log('📤 [API REQUEST] Auth token added');
+      } else {
+        console.log('📤 [API REQUEST] No auth token found');
       }
     } catch (error) {
-      console.error('Error getting auth token:', error);
+      console.error('❌ [API REQUEST] Error getting auth token:', error);
     }
     return config;
   },
   (error) => {
+    console.error('❌ [API REQUEST] Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
 
 // Response interceptor for error handling
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('✅ [API RESPONSE] Status:', response.status);
+    console.log('✅ [API RESPONSE] URL:', response.config.url);
+    console.log('✅ [API RESPONSE] Data:', JSON.stringify(response.data, null, 2));
+    return response;
+  },
   async (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      try {
-        await AsyncStorage.removeItem('authToken');
-        await AsyncStorage.removeItem('user');
-      } catch (e) {
-        console.error('Error removing auth data:', e);
+    console.error('❌ [API ERROR] Full error:', error);
+    console.error('❌ [API ERROR] Message:', error.message);
+    console.error('❌ [API ERROR] Code:', error.code);
+    
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      console.error('❌ [API ERROR] Response Status:', error.response.status);
+      console.error('❌ [API ERROR] Response Data:', JSON.stringify(error.response.data, null, 2));
+      console.error('❌ [API ERROR] Response Headers:', JSON.stringify(error.response.headers, null, 2));
+      
+      if (error.response.status === 401) {
+        // Handle unauthorized access
+        try {
+          await AsyncStorage.removeItem('authToken');
+          await AsyncStorage.removeItem('user');
+          console.log('🔓 [API ERROR] Cleared auth data due to 401');
+        } catch (e) {
+          console.error('❌ [API ERROR] Error removing auth data:', e);
+        }
       }
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('❌ [API ERROR] No response received');
+      console.error('❌ [API ERROR] Request:', error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error('❌ [API ERROR] Setup error:', error.message);
     }
+    
+    console.error('❌ [API ERROR] Config:', JSON.stringify(error.config, null, 2));
     return Promise.reject(error);
   }
 );
@@ -63,11 +106,19 @@ api.interceptors.response.use(
 // AI Dermatology Expert service
 export const aiDermatologyExpertService = {
   async chat(message, conversationHistory = []) {
-    const response = await api.post('/ai-dermatology-expert/chat', {
-      message,
-      conversationHistory
-    });
-    return response.data;
+    console.log('💬 [CHAT SERVICE] Sending message:', message);
+    console.log('💬 [CHAT SERVICE] Conversation history length:', conversationHistory.length);
+    try {
+      const response = await api.post('/ai-dermatology-expert/chat', {
+        message,
+        conversationHistory
+      });
+      console.log('💬 [CHAT SERVICE] Response received successfully');
+      return response.data;
+    } catch (error) {
+      console.error('💬 [CHAT SERVICE] Error:', error.message);
+      throw error;
+    }
   }
 };
 
